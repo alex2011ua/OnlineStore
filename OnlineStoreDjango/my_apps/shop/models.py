@@ -23,13 +23,8 @@ class Product(models.Model):
         return self.name
 
 
-class Customer(User):
-    def __str__(self):
-        return f"{self.first_name} {self.last_name}"
-
-
 class Order(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customer = models.ForeignKey(User, on_delete=models.CASCADE)
     products = models.ManyToManyField(Product, through='OrderItem')
     order_date = models.DateTimeField(auto_now_add=True)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
