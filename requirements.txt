@@ -1,0 +1,5 @@
+Django==4.2.3
+djangorestframework==3.14.0
+markdown==3.4.4
+django-filter
+Pillow==10.0.0
