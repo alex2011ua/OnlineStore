@@ -26,7 +26,7 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY") or 'django-insecure-u#koj3@4+s+#nns0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", True)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', "0.0.0.0", 'alex-online-store.fly.dev']
 
 
 # Application definition
@@ -79,16 +79,16 @@ WSGI_APPLICATION = 'OnlineStoreDjango.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME':     os.getenv("POSTGRES_DB"),
-        'USER':     os.getenv("POSTGRES_USER"),
-        'PASSWORD': os.getenv("POSTGRES_PASSWORD"),
-        'HOST':     os.getenv("DB_HOST"),
-        'PORT':     os.getenv("PORT_DB", 5432),
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME':     os.getenv("POSTGRES_DB"),
+#         'USER':     os.getenv("POSTGRES_USER"),
+#         'PASSWORD': os.getenv("POSTGRES_PASSWORD"),
+#         'HOST':     os.getenv("DB_HOST"),
+#         'PORT':     os.getenv("PORT_DB", 5432),
+#     }
+# }
 
 DATABASES = {
     'default': {
