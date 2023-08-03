@@ -24,11 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY") or 'django-insecure-u#koj3@4+s+#nns0j6lk!+jxi6n8r))l1nejiyhkw*9mbf*u9x'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", True)
+debug: str | bool = os.getenv("DEBUG", True)
+DEBUG = int(os.getenv('DEBUG', 1))
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', "0.0.0.0", 'alex-online-store.fly.dev']
+ALLOWED_HOSTS = [os.getenv("ALLOWED_HOSTS", 'localhost')]
 
-
+CSRF_TRUSTED_ORIGINS = [os.getenv("CSRF_TRUSTED_ORIGINS")] if os.getenv("CSRF_TRUSTED_ORIGINS") else []
 # Application definition
 
 INSTALLED_APPS = [
@@ -40,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     #
     'rest_framework',
+    'rest_framework_simplejwt',
     #  my app
     'my_apps.accounts',
     'my_apps.shop',
@@ -76,27 +78,22 @@ TEMPLATES = [
 WSGI_APPLICATION = 'OnlineStoreDjango.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME':     os.getenv("POSTGRES_DB"),
-#         'USER':     os.getenv("POSTGRES_USER"),
-#         'PASSWORD': os.getenv("POSTGRES_PASSWORD"),
-#         'HOST':     os.getenv("DB_HOST"),
-#         'PORT':     os.getenv("PORT_DB", 5432),
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME':     os.getenv("POSTGRES_DB", "online_store_db"),
+        'USER':     os.getenv("POSTGRES_USER", "AlexUA"),
+        'PASSWORD': os.getenv("POSTGRES_PASSWORD", "online_store"),
+        'HOST':     os.getenv("DB_HOST", "172.19.0.3",),
+        'PORT':     str(os.getenv("PORT_DB", 5432)),
     }
 }
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -133,7 +130,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
-
+STATIC_ROOT = "static"
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 

@@ -2,22 +2,48 @@ version: '3.8'
 
 services:
   web:
+    container_name: online_store
     build: .
     volumes:
-      - .:/code
+      - $PWD/OnlineStoreDjango:/code
     ports:
       - "8000:8000"
-    depends_on:
-      - db
+    environment:
+      DB_HOST: "postgres"
+      POSTGRES_DB: "online_store_db"
+      POSTGRES_USER: "AlexUA"
+      POSTGRES_PASSWORD: "online_store"
+      DEBUG: 1
 
-  db:
-    image: postgres:latest
+    depends_on:
+      - postgres
+  postgres:
+    container_name: online_store_db
+    image: postgres:13.8
     environment:
       POSTGRES_USER: AlexUA
-      POSTGRES_PASSWORD: your_postgres_password
-      POSTGRES_DB: your_postgres_db
+      POSTGRES_PASSWORD: online_store
+      POSTGRES_DB: online_store_db
     volumes:
       - postgres_data:/var/lib/postgresql/data
-
+  pgadmin:
+    container_name: online_store_pgadmin
+    depends_on:
+      - postgres
+    image: dpage/pgadmin4:6.14
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "uonline_store@example.com"
+      PGADMIN_DEFAULT_PASSWORD: "online_store"
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    volumes:
+      - ./pgadmin:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 1G
 volumes:
   postgres_data:

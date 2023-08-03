@@ -15,6 +15,8 @@ RUN set -ex && \
     pip install -r requirements.txt && \
     rm -rf /root/.cache/
 COPY OnlineStoreDjango /code
+RUN python manage.py collectstatic --no-input
+
 
 EXPOSE 8000
 CMD ["gunicorn", "OnlineStoreDjango.wsgi:application","--bind", "0.0.0.0:8000"]
