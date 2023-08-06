@@ -1,3 +1,7 @@
-from django.shortcuts import render
+from django.http import FileResponse
 
-# Create your views here.
+
+def get_foto(request, image_path):
+    img = open(f'shop/media/products/{image_path}', 'rb')
+    response = FileResponse(img)
+    return response

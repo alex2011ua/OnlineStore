@@ -5,7 +5,7 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-
+from phonenumber_field.modelfields import PhoneNumberField
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **other):
@@ -62,7 +62,7 @@ class User(AbstractUser):
     last_name = models.CharField(_("last name"),blank=True, null=True, max_length=100)
 
     email = models.EmailField(_("email address"), unique=True)
-    mobile = models.IntegerField(_("mobile phone"),blank=True, null=True)
+    mobile = PhoneNumberField(null=True, blank=True, unique=True)
 
     address = models.CharField(_("delivery address"), max_length=255, blank=True)
     dob = models.DateField(_("Date of birthday"), blank=True, null=True)

@@ -15,13 +15,13 @@ class Category(models.Model):
 
 class Product(models.Model):
     name = models.CharField(_("product name"), max_length=200)
-    slug = models.SlugField(_("product slub"),unique=True)
+    slug = models.SlugField(_("product slub"), unique=True)
     description = models.TextField(_("product description"), blank=True)
     category = models.ForeignKey(Category, related_name="product", on_delete=models.CASCADE)
     price = models.DecimalField(_("price"), max_digits=10, decimal_places=2)
     discount = models.DecimalField(_("discount"), max_digits=5, decimal_places=2, default=0)
     quantity = models.PositiveIntegerField(_("count of product"),default=0)
-    image = models.ImageField(_("product image"),upload_to='products/', blank=True, null=True)  # todo ask about pictures
+    image = models.ImageField(_("product image"), upload_to='products/', blank=True, null=True)
     created_at = models.DateTimeField(_("created"), auto_now_add=True)
     updated_at = models.DateTimeField(_("update"), auto_now=True)
 

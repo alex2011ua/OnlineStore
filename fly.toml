@@ -6,6 +6,10 @@
 app = "alex-online-store"
 primary_region = "mad"
 
+[mounts]
+  source="volume_shop_mad"
+  destination="/code/shop"
+
 
 [http_service]
   internal_port = 8000
@@ -15,5 +19,5 @@ primary_region = "mad"
   processes = ["app"]
 
 [[statics]]
-  guest_path = "/code/static"
+  guest_path = "/code/shop/static"
   url_prefix = "/static/"
