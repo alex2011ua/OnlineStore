@@ -2,7 +2,6 @@ from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
-
 from my_apps.accounts.models import User
 
 
@@ -10,7 +9,9 @@ class UserCreationForm(forms.ModelForm):
     """A form for creating new users(in admin and other)."""
 
     password1 = forms.CharField(label="Password", widget=forms.PasswordInput)
-    password2 = forms.CharField(label="Password confirmation", widget=forms.PasswordInput)
+    password2 = forms.CharField(
+        label="Password confirmation", widget=forms.PasswordInput
+    )
 
     class Meta:
         """Class Meta."""
@@ -43,7 +44,9 @@ class UserChangeForm(forms.ModelForm):
 
     password = ReadOnlyPasswordHashField(
         label=_("Password"),
-        help_text=_('You can change the password using <a href="../password">this form</a>.'),
+        help_text=_(
+            'You can change the password using <a href="../password">this form</a>.'
+        ),
     )
 
     class Meta:

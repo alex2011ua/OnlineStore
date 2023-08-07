@@ -1,8 +1,6 @@
 from django.contrib import admin
-from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-
-
+from django.contrib.auth.models import Group
 from my_apps.accounts.form import UserChangeForm, UserCreationForm
 from my_apps.accounts.models import User
 
@@ -14,13 +12,32 @@ class UserAdmin(BaseUserAdmin):
     add_form = UserCreationForm
 
     list_display = (
-    "first_name", "middle_name", "last_name", "email", "password", "mobile", "gender", "role", "notice", "created_at",
-    "updated_at")
+        "first_name",
+        "middle_name",
+        "last_name",
+        "email",
+        "password",
+        "mobile",
+        "gender",
+        "role",
+        "notice",
+        "created_at",
+        "updated_at",
+    )
     list_filter = ("dob", "created_at", "gender")
     fieldsets = (
         (None, {"fields": ("email", "password", "mobile")}),
         ("Personal info", {"fields": ("first_name", "middle_name", "last_name")}),
-        ("Some info", {"fields": ("gender", "role", "notice",)}),
+        (
+            "Some info",
+            {
+                "fields": (
+                    "gender",
+                    "role",
+                    "notice",
+                )
+            },
+        ),
     )
 
     add_fieldsets = (
