@@ -4,12 +4,13 @@ from my_apps.shop.models import Category, Order, OrderItem, Product, Rating, Rev
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ("name", "slug", "description", "created_at", "updated_at")
+    list_display = ("id", "name", "slug", "description", "created_at", "updated_at")
 
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = (
+
         "name",
         "slug",
         "description",
@@ -26,6 +27,7 @@ class ProductAdmin(admin.ModelAdmin):
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = (
+        "id",
         "status",
         "customer",
         "manager",
@@ -33,6 +35,7 @@ class OrderAdmin(admin.ModelAdmin):
         "updated_at",
         "total_amount",
     )
+    raw_id_fields = ("products",)
 
 
 @admin.register(OrderItem)

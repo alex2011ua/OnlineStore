@@ -27,7 +27,7 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY") or 'django-insecure-u#koj3@4+s+#nns0
 debug: str | bool = os.getenv("DEBUG", True)
 DEBUG = int(os.getenv('DEBUG', 1))
 
-ALLOWED_HOSTS = [os.getenv("ALLOWED_HOSTS", 'localhost')]
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", 'localhost').split()
 
 CSRF_TRUSTED_ORIGINS = [os.getenv("CSRF_TRUSTED_ORIGINS")] if os.getenv("CSRF_TRUSTED_ORIGINS") else []
 # Application definition
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     #
     'rest_framework',
     'rest_framework_simplejwt',
+    'django_extensions',
     "phonenumber_field",
     #  my app
     'my_apps.accounts',
@@ -85,7 +86,7 @@ DATABASES = {
         'NAME':     os.getenv("POSTGRES_DB", "online_store_db"),
         'USER':     os.getenv("POSTGRES_USER", "AlexUA"),
         'PASSWORD': os.getenv("POSTGRES_PASSWORD", "online_store"),
-        'HOST':     os.getenv("DB_HOST", "172.19.0.3",),
+        'HOST':     os.getenv("DB_HOST", "172.25.0.2",),
         'PORT':     str(os.getenv("PORT_DB", 5432)),
     }
 }

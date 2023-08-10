@@ -1,5 +1,20 @@
+from rest_framework_simplejwt.tokens import RefreshToken
+
 from my_apps.accounts.models import User
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    """Add some info about user in token response"""
+    def validate(self, attrs):
+        data = super().validate(attrs)
+
+        data["email"] = self.user.email
+        data["full_name"] = self.user.get_full_name()
+        data["role"] = self.user.role
+        data["id"] = self.user.pk
+        return data
 
 
 class UserUrlSerializer(serializers.ModelSerializer):

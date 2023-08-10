@@ -1,6 +1,8 @@
-from my_apps.shop.models import Category, Order, Product, Rating, Review
-from rest_framework import permissions, viewsets
+from rest_framework.mixins import DestroyModelMixin
 
+from my_apps.shop.models import Category, Order, Product, Rating, Review
+from rest_framework import permissions, viewsets, status
+from rest_framework.response import Response
 from .serializers import (
     CategorySerializer,
     OrderSerializer,
@@ -10,9 +12,19 @@ from .serializers import (
 )
 
 
-class CategoryViewSet(viewsets.ModelViewSet):
+class MyDestroyModelMixin(DestroyModelMixin):
+    """Add additional info in response when instance deleted"""
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        data = {"detail": "Deleted", "code": "deleted"}
+        return Response(status=status.HTTP_204_NO_CONTENT, data=data)
+
+
+class CategoryViewSet(viewsets.ModelViewSet, MyDestroyModelMixin):
     """
-    API endpoint that allows users to be viewed or edited.
+    API endpoint that allows made CRUD operations with Category.
     """
 
     queryset = Category.objects.all()
@@ -20,9 +32,9 @@ class CategoryViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
 
 
-class ProductViewSet(viewsets.ModelViewSet):
+class ProductViewSet(viewsets.ModelViewSet, MyDestroyModelMixin):
     """
-    API endpoint that allows users to be viewed or edited.
+    API endpoint that allows made CRUD operations with Product.
     """
 
     queryset = Product.objects.all()
@@ -30,9 +42,9 @@ class ProductViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
 
 
-class OrderViewSet(viewsets.ModelViewSet):
+class OrderViewSet(viewsets.ModelViewSet, MyDestroyModelMixin):
     """
-    API endpoint that allows users to be viewed or edited.
+    .
     """
 
     queryset = Order.objects.all()
@@ -40,9 +52,9 @@ class OrderViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
 
 
-class ReviewViewSet(viewsets.ModelViewSet):
+class ReviewViewSet(viewsets.ModelViewSet, MyDestroyModelMixin):
     """
-    API endpoint that allows users to be viewed or edited.
+    API endpoint that allows made CRUD operations with users reviews.
     """
 
     queryset = Review.objects.all()
@@ -50,9 +62,9 @@ class ReviewViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
 
 
-class RatingViewSet(viewsets.ModelViewSet):
+class RatingViewSet(viewsets.ModelViewSet, MyDestroyModelMixin):
     """
-    API endpoint that allows users to be viewed or edited.
+    API endpoint that allows made CRUD operations with Rating.
     """
 
     queryset = Rating.objects.all()

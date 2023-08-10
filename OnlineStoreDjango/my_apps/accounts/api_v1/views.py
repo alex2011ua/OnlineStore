@@ -4,12 +4,18 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
-
+from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import (
     PasswordChangeSerializer,
     RegistrationSerializer,
     UserUrlSerializer,
+    MyTokenObtainPairSerializer,
 )
+
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    """Custom clas for add user info in tocken response"""
+    serializer_class = MyTokenObtainPairSerializer
 
 
 class UserViewSet(
@@ -27,6 +33,11 @@ class UserViewSet(
     serializer_class = UserUrlSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        data = {"detail": "Deleted", "code": "deleted"}
+        return Response(status=status.HTTP_204_NO_CONTENT, data=data)
 
 class CreateUserView(generics.CreateAPIView):
     """
