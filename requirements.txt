@@ -8,3 +8,9 @@ psycopg2-binary==2.9.6
 djangorestframework-simplejwt==5.2.2
 django-phonenumber-field[phonenumberslite]
 django-extensions
+faker
+pytest
+pytest-django
+
+black
+isort
