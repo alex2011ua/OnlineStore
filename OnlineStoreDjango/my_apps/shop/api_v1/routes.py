@@ -15,4 +15,5 @@ router.register(r"rating", views.RatingViewSet)
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     path("", include(router.urls)),
+    path("na/", include("my_apps.shop.api_v1.na_routes")),
 ]

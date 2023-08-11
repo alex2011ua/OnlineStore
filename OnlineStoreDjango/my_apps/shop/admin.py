@@ -1,5 +1,7 @@
 from django.contrib import admin
-from my_apps.shop.models import Category, Order, OrderItem, Product, Rating, Review
+
+from my_apps.shop.models import (Category, Order, OrderItem, Product, Rating,
+                                 Review)
 
 
 @admin.register(Category)

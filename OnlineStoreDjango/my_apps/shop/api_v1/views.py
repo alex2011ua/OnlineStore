@@ -1,15 +1,12 @@
+from rest_framework import permissions, status, viewsets
 from rest_framework.mixins import DestroyModelMixin
+from rest_framework.response import Response
 
 from my_apps.shop.models import Category, Order, Product, Rating, Review
-from rest_framework import permissions, viewsets, status
-from rest_framework.response import Response
-from .serializers import (
-    CategorySerializer,
-    OrderSerializer,
-    ProductSerializer,
-    RatingSerializer,
-    ReviewSerializer,
-)
+
+from .serializers import (CategorySerializer, OrderSerializer,
+                          ProductSerializer, RatingSerializer,
+                          ReviewSerializer)
 
 
 class MyDestroyModelMixin(DestroyModelMixin):

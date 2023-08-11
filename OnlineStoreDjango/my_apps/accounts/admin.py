@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group
+
 from my_apps.accounts.form import UserChangeForm, UserCreationForm
 from my_apps.accounts.models import User
 
