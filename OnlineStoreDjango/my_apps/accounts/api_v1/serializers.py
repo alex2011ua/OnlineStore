@@ -12,7 +12,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         data["email"] = self.user.email
         data["full_name"] = self.user.get_full_name()
-        data["role"] = self.user.role
+        data["role"] = self.user.get_role_display()
         data["id"] = self.user.pk
         return data
 
@@ -20,7 +20,9 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 class UserUrlSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
+
         fields = [
+            "id",
             "url",
             "email",
             "first_name",
@@ -33,6 +35,8 @@ class UserUrlSerializer(serializers.ModelSerializer):
             "notice",
             "get_age",
         ]
+    gender = serializers.CharField(source="get_gender_display")
+    role = serializers.CharField(source="get_role_display")
 
 
 class RegistrationSerializer(serializers.ModelSerializer):

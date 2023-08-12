@@ -32,6 +32,7 @@ class OrderSerializer(serializers.HyperlinkedModelSerializer):
         model = Order
         fields = [
             "id", "url", "customer", "manager", "status", "order_date", "total_amount"]
+    status = serializers.CharField(source="get_status_display")
 
 
 class ReviewSerializer(serializers.HyperlinkedModelSerializer):
