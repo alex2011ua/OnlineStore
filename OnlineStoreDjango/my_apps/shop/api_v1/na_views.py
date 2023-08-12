@@ -1,6 +1,7 @@
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from .paginators import SmallResultsSetPagination
 
 from my_apps.shop.models import Product
 from my_apps.shop.models import Settings
@@ -8,7 +9,7 @@ from my_apps.shop.models import Settings
 from .serializers import ProductSerializer
 
 
-class ListPopularGifts(APIView):
+class ListPopularGifts(APIView, SmallResultsSetPagination):
     """
     List most popular products with rate > RED_LINE.
     """
@@ -23,5 +24,7 @@ class ListPopularGifts(APIView):
         products = Product.objects.filter(global_rating__gt=self.red_line).order_by(
             "-sold"
         )
-        serializer = ProductSerializer(products, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        results = self.paginate_queryset(products, request, view=self)
+        serializer = ProductSerializer(results, many=True)
+        return self.get_paginated_response(serializer.data)
+

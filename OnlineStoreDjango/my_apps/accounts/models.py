@@ -46,14 +46,15 @@ class UserManager(BaseUserManager):
 class User(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     GENDER_CHOICES = [
-        ("M", "Male"),
-        ("F", "Female"),
-        ("O", "Other"),
+        ("M", "male"),
+        ("F", "female"),
+        ("O", "other"),
     ]
     ROLE_CHOICES = [
-        ("A", "Admin"),
-        ("M", "Manager"),
-        ("U", "User"),
+        ("A", "admin"),
+        ("M", "manager"),
+        ("U", "auth_user"),
+        ("G", "guest_user"),
     ]
     USERNAME_FIELD: str = "email"
     REQUIRED_FIELDS: list[str] = []
