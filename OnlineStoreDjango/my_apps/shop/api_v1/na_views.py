@@ -1,6 +1,6 @@
-from rest_framework import status
-from rest_framework.response import Response
 from rest_framework.views import APIView
+from .paginators import SmallResultsSetPagination
+from django.db.models import Q
 
 from my_apps.shop.models import Product
 from my_apps.shop.models import Settings
@@ -8,7 +8,7 @@ from my_apps.shop.models import Settings
 from .serializers import ProductSerializer
 
 
-class ListPopularGifts(APIView):
+class ListPopularGifts(APIView, SmallResultsSetPagination):
     """
     List most popular products with rate > RED_LINE.
     """
@@ -23,5 +23,17 @@ class ListPopularGifts(APIView):
         products = Product.objects.filter(global_rating__gt=self.red_line).order_by(
             "-sold"
         )
-        serializer = ProductSerializer(products, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        results = self.paginate_queryset(products, request, view=self)
+        serializer = ProductSerializer(results, many=True)
+        return self.get_paginated_response(serializer.data)
+
+
+class ListSearchGifts(APIView, SmallResultsSetPagination):
+    def get(self, request, format=None):
+        search_string = request.query_params["search"]
+        products = Product.objects.filter(
+            Q(slug__icontains=search_string) and Q(name__icontains=search_string)
+        )
+        results = self.paginate_queryset(products, request, view=self)
+        serializer = ProductSerializer(results, many=True)
+        return self.get_paginated_response(serializer.data)

@@ -94,7 +94,8 @@ DATABASES = {
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'my_apps.shop.api_v1.paginators.StandardResultsSetPagination',
 }
 
 # Password validation

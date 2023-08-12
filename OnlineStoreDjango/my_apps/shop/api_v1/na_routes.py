@@ -4,5 +4,6 @@ from . import na_views
 
 urlpatterns = [
     path("popular/", na_views.ListPopularGifts.as_view(), name="list_popular"),
+    path("search/", na_views.ListSearchGifts.as_view(), name="search"),
 
 ]
