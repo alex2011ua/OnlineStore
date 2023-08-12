@@ -37,3 +37,12 @@ class ListSearchGifts(APIView, SmallResultsSetPagination):
         results = self.paginate_queryset(products, request, view=self)
         serializer = ProductSerializer(results, many=True)
         return self.get_paginated_response(serializer.data)
+
+
+class ListNewGifts(APIView, SmallResultsSetPagination):
+    def get(self, request, format=None):
+
+        products = Product.objects.all().order_by("-created_at")[:30]
+        results = self.paginate_queryset(products, request, view=self)
+        serializer = ProductSerializer(results, many=True)
+        return self.get_paginated_response(serializer.data)
