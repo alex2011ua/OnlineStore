@@ -24,6 +24,7 @@ class ProductSerializer(serializers.ModelSerializer):
             "quantity",
             "sold",
             "global_rating",
+            "created_at",
         ]
 
 

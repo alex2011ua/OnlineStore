@@ -31,9 +31,9 @@ class ListPopularGifts(APIView, SmallResultsSetPagination):
 class ListSearchGifts(APIView, SmallResultsSetPagination):
     def get(self, request, format=None):
         search_string = request.query_params["search"]
-        products = Product.objects.filter(
-            Q(slug__icontains=search_string) and Q(name__icontains=search_string)
-        )
+        products1 = Product.objects.filter(slug__icontains=search_string)
+        products2 = Product.objects.filter(name__icontains=search_string)
+        products = products1 | products2
         results = self.paginate_queryset(products, request, view=self)
         serializer = ProductSerializer(results, many=True)
         return self.get_paginated_response(serializer.data)
