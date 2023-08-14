@@ -4,7 +4,6 @@ from rest_framework import status
 from rest_framework.test import APIClient
 from django.urls import reverse
 from my_apps.shop.models import Category, Product, Settings
-import datetime
 
 fake = Faker()
 client = APIClient()
@@ -72,6 +71,7 @@ def test_list_search_gifts():
     assert response.status_code == status.HTTP_200_OK
     assert response.data["count"] == 3
 
+
 @pytest.mark.django_db
 def test_list_new_gifts():
     category = Category.objects.get()
@@ -80,7 +80,8 @@ def test_list_new_gifts():
     )
 
     p_third = Product.objects.create(
-        name="product3", slug="slug_3", category=category, price=10.00)
+        name="product3", slug="slug_3", category=category, price=10.00
+    )
 
     p_second = Product.objects.create(
         name="product2", slug="slug_2", category=category, price=10.00
@@ -91,3 +92,24 @@ def test_list_new_gifts():
     assert response.status_code == status.HTTP_200_OK
     assert response.data["count"] == 3
     assert response.data["results"][0]["name"] == "product2"
+
+
+@pytest.mark.django_db
+def test_random_gift():
+    category = Category.objects.get()
+    # create 10 products with different rating and counts of sailing
+    for i in range(1000):
+        Product.objects.create(
+            name=i,
+            slug=i,
+            category=category,
+            price=i,
+            quantity=i,
+            sold=i,
+            global_rating=i,
+        )
+    url = reverse("random_gift")
+    response1 = client.get(url, {"from": 20, "to": 50})
+    response2 = client.get(url, {"from": 20, "to": 50})
+    assert response1.data == response1.data
+    assert response1.data != response2.data
