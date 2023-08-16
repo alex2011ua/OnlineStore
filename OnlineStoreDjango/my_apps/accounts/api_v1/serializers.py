@@ -7,6 +7,7 @@ from my_apps.accounts.models import User
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     """Add some info about user in token response"""
+
     def validate(self, attrs):
         data = super().validate(attrs)
         data["id"] = self.user.pk
@@ -48,26 +49,45 @@ class UserUrlSerializer(serializers.ModelSerializer):
             "notice",
             "get_age",
         ]
+
     gender = serializers.CharField(source="get_gender_display")
     role = serializers.CharField(source="get_role_display")
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
+    role = serializers.CharField(source="get_role_display")
+
+    def validate_role(self, value):
+        ROLE_CHOICES = {
+            "admin": "A",
+            "manager": "M",
+            "auth_user": "U",
+            "guest_user": "G",
+        }
+        if value in ROLE_CHOICES:
+            return ROLE_CHOICES[value]
+        else:
+            raise serializers.ValidationError({"detail": "wrong role field"})
+
     class Meta:
         model = User
-        fields = ["email", "password"]
+        fields = ["email", "password", "role"]
         extra_kwargs = {"password": {"write_only": True}}
 
-    def create(self, validated_data):
-        user = User.objects.create(
-            email=validated_data["email"],
-        )
-        user.set_password(validated_data["password"])
-        user.save()
-        return user
+    # def create(self, validated_data):
+    #     user = User.objects.create(
+    #         email=validated_data["email"],
+    #     )
+    #     user.set_password(validated_data["password"])
+    #     user.save()
+    #     return user
 
     def save(self):
-        user = User(email=self.validated_data["email"])
+
+        user = User(
+            email=self.validated_data["email"],
+            role=self.validated_data["get_role_display"],
+        )
         password = self.validated_data["password"]
 
         user.set_password(password)
