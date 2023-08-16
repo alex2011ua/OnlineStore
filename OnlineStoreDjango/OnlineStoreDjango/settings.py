@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'django_extensions',
     "phonenumber_field",
+    'drf_yasg',
     #  my app
     'my_apps.accounts',
     'my_apps.shop',
