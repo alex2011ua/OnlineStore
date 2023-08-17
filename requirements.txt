@@ -11,6 +11,7 @@ django-extensions
 faker
 pytest
 pytest-django
+drf-spectacular
 
 black
 isort

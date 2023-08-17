@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework import permissions, status, viewsets
 from rest_framework.mixins import DestroyModelMixin
 from rest_framework.response import Response
@@ -18,7 +19,7 @@ class MyDestroyModelMixin(DestroyModelMixin):
         data = {"detail": "Deleted", "code": "deleted"}
         return Response(status=status.HTTP_204_NO_CONTENT, data=data)
 
-
+@extend_schema(tags=["Category"])
 class CategoryViewSet(viewsets.ModelViewSet, MyDestroyModelMixin):
     """
     API endpoint that allows made CRUD operations with Category.
@@ -28,7 +29,7 @@ class CategoryViewSet(viewsets.ModelViewSet, MyDestroyModelMixin):
     serializer_class = CategorySerializer
     permission_classes = [permissions.AllowAny]
 
-
+@extend_schema(tags=["Product"])
 class ProductViewSet(viewsets.ModelViewSet, MyDestroyModelMixin):
     """
     API endpoint that allows made CRUD operations with Product.

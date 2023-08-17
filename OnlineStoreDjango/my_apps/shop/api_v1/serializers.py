@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from my_apps.shop.models import Category, Order, Product, Rating, Review
+from my_apps.shop.models import Category, Order, Product, Rating, Review, Banner
 
 
 class CategorySerializer(serializers.HyperlinkedModelSerializer):
@@ -46,3 +46,9 @@ class RatingSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Rating
         fields = ["id", "url", "product", "customer", "value", "created_at"]
+
+
+class BannerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Banner
+        fields = ["id", "name", "title", "slug", "description", "image",  "created_at", "updated_at"]

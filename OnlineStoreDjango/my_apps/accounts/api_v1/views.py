@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework import generics, mixins, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -20,7 +21,7 @@ class MyTokenObtainPairView(TokenObtainPairView):
 
     serializer_class = MyTokenObtainPairSerializer
 
-
+@extend_schema(tags=["User"])
 class UserViewSet(
     mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
@@ -45,6 +46,7 @@ class UserViewSet(
         return Response(status=status.HTTP_204_NO_CONTENT, data=data)
 
 
+@extend_schema(tags=["User"])
 class CreateUserView(generics.CreateAPIView):
     """
     API endpoint that allows to create user.
@@ -85,6 +87,7 @@ class CreateUserView(generics.CreateAPIView):
         return True
 
 
+@extend_schema(tags=["User"])
 class ChangePasswordView(APIView):
     """
     API endpoint that allows to change user password.

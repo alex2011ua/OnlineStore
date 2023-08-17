@@ -110,3 +110,4 @@ class User(AbstractUser):
         return self.get_full_name()
 
     objects: Any = UserManager()
+

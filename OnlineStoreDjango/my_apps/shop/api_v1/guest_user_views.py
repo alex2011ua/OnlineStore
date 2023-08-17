@@ -1,24 +1,30 @@
+from drf_spectacular.utils import extend_schema, extend_schema_view
+from rest_framework.generics import ListAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .paginators import SmallResultsSetPagination
 from random import randint
 from random import sample
-from my_apps.shop.models import Product
+from my_apps.shop.models import Product, Banner
 from my_apps.shop.models import Settings
 from .permissions import GuestUserPermission
 
-from .serializers import ProductSerializer
+from .serializers import ProductSerializer, BannerSerializer
 from rest_framework import status
 
 
+@extend_schema(tags=["Guest_user"])
 class TestGuestUser(APIView):
     """Return product according to input price"""
+
     permission_classes = [IsAuthenticated, GuestUserPermission]
 
     def get(self, request):
         return Response({"detail": "Test_OK", "code": "Test permission OK"})
 
+
+@extend_schema(tags=["Guest_user"])
 class ListPopularGifts(APIView, SmallResultsSetPagination):
     """
     List most popular products with rate > RED_LINE.
@@ -39,6 +45,7 @@ class ListPopularGifts(APIView, SmallResultsSetPagination):
         return self.get_paginated_response(serializer.data)
 
 
+@extend_schema(tags=["Guest_user"])
 class ListSearchGifts(APIView, SmallResultsSetPagination):
     """Search by name and slug."""
 
@@ -56,6 +63,7 @@ class ListSearchGifts(APIView, SmallResultsSetPagination):
         return self.get_paginated_response(serializer.data)
 
 
+@extend_schema(tags=["Guest_user"])
 class ListNewGifts(APIView, SmallResultsSetPagination):
     """Return products ordered by date of creation."""
 
@@ -66,6 +74,7 @@ class ListNewGifts(APIView, SmallResultsSetPagination):
         return self.get_paginated_response(serializer.data)
 
 
+@extend_schema(tags=["Guest_user"])
 class RandomGift(APIView):
     """Return product according to input price"""
 
@@ -76,7 +85,10 @@ class RandomGift(APIView):
         # get quantity of products according to price filter and choose random index
         random_index = randint(
             0,
-            Product.objects.filter(price__gte=float(from_price), price__lte=to_price).count() - 1,
+            Product.objects.filter(
+                price__gte=float(from_price), price__lte=to_price
+            ).count()
+            - 1,
         )
         product = Product.objects.filter(
             price__gte=float(from_price), price__lte=to_price
@@ -85,6 +97,7 @@ class RandomGift(APIView):
         return Response(serializer.data)
 
 
+@extend_schema(tags=["Guest_user"])
 class ListRandomGifts(APIView):
     """Return list of products according to input price"""
 
@@ -93,8 +106,26 @@ class ListRandomGifts(APIView):
         to_price = request.query_params.get("to", 1000000)
         count = int(request.query_params.get("quantity", 4))
 
-        products = list(Product.objects.filter(price__gte=float(from_price), price__lte=to_price))
+        products = list(
+            Product.objects.filter(price__gte=float(from_price), price__lte=to_price)
+        )
 
         serializer = ProductSerializer(sample(products, count), many=True)
         return Response(serializer.data)
 
+
+@extend_schema(tags=["Guest_user"])
+@extend_schema_view(
+    list=extend_schema(
+            summary="get all banners",
+            responses={
+            status.HTTP_200_OK: BannerSerializer,
+        },
+        ),
+)
+class ListBanners(ListAPIView):
+    """Return list of products according to input price"""
+    pagination_class = None
+    model = Banner
+    serializer_class = BannerSerializer
+    queryset = Banner.objects.all()
