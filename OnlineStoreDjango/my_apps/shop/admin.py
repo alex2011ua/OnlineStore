@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from my_apps.shop.models import (Category, Order, OrderItem, Product, Rating,
-                                 Review)
+                                 Review, Banner)
 
 
 @admin.register(Category)
@@ -75,3 +75,7 @@ class RatingItemAdmin(admin.ModelAdmin):
         "created_at",
         "updated_at",
     )
+
+@admin.register(Banner)
+class RatingItemAdmin(admin.ModelAdmin):
+    list_display = ("id", "title", "description", "img", "link")

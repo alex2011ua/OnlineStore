@@ -1,4 +1,4 @@
-from drf_spectacular.utils import extend_schema, extend_schema_view
+from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter
 from rest_framework.generics import ListAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -116,15 +116,18 @@ class ListRandomGifts(APIView):
 
 @extend_schema(tags=["Guest_user"])
 @extend_schema_view(
-    list=extend_schema(
-            summary="get all banners",
-            responses={
+    get=extend_schema(
+        summary="get all banners",
+        responses={
             status.HTTP_200_OK: BannerSerializer,
         },
-        ),
+    ),
 )
 class ListBanners(ListAPIView):
-    """Return list of products according to input price"""
+    """
+    Return list of banners.
+    """
+
     pagination_class = None
     model = Banner
     serializer_class = BannerSerializer

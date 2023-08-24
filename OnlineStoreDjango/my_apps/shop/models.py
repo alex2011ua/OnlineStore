@@ -49,10 +49,10 @@ class Product(models.Model):
     )
     quantity = models.PositiveIntegerField(_("count of product"), default=0)
     image = models.ImageField(
-        _("product image"), upload_to="products/", blank=True, null=True
+        _("product image"), upload_to="product/", blank=True, null=True
     )
     image_small = models.ImageField(
-        _("product image small"), upload_to="products/", blank=True, null=True
+        _("product image small"), upload_to="product/", blank=True, null=True
     )
     created_at = models.DateTimeField(_("created"), auto_now_add=True)
     updated_at = models.DateTimeField(_("update"), auto_now=True)
@@ -221,18 +221,17 @@ class Rating(models.Model):
 
 class Banner(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(_("product name"), max_length=100)
-    title = models.CharField(_("product name"), max_length=100, blank=True)
-    slug = models.SlugField(_("product slug"), unique=True)
-    description = models.TextField(_("product description"), blank=True)
-    image = models.ImageField(
-        _("banner image"), upload_to="banner/", blank=True, null=True
+    title = models.CharField(_("title"), max_length=200)
+    description = models.TextField(_("description"), blank=True)
+    img = models.ImageField(
+        _("banner image"), upload_to="foto/banners/", blank=True, null=True,
     )
+    link = models.CharField(_("link"), default="/catalog")
     created_at = models.DateTimeField(_("created"), auto_now_add=True)
     updated_at = models.DateTimeField(_("update"), auto_now=True)
 
     def __str__(self):
-        return self.name
+        return self.title
 
     def __repr__(self) -> str:
         return f"Baner ID - {self.id}"
