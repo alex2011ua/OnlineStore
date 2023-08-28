@@ -29,7 +29,10 @@ debug: str | bool = os.getenv("DEBUG", True)
 DEBUG = int(os.getenv('DEBUG', 1))
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", 'localhost').split()
-
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
+]
+CORS_ALLOW_ALL_ORIGINS = True
 CSRF_TRUSTED_ORIGINS = [os.getenv("CSRF_TRUSTED_ORIGINS")] if os.getenv("CSRF_TRUSTED_ORIGINS") else []
 # Application definition
 
@@ -46,12 +49,16 @@ INSTALLED_APPS = [
     'django_extensions',
     "phonenumber_field",
     'drf_spectacular',
+    'corsheaders',
     #  my app
     'my_apps.accounts',
     'my_apps.shop',
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -59,6 +66,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+
 ]
 
 ROOT_URLCONF = 'OnlineStoreDjango.urls'
@@ -100,7 +109,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'my_apps.shop.api_v1.paginators.StandardResultsSetPagination',
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     'DEFAULT_PERMISSION_CLASSES': (
-            'rest_framework.permissions.IsAuthenticated', )
+            'rest_framework.permissions.AllowAny', )
 }
 
 # Password validation

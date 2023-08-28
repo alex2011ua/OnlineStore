@@ -18,8 +18,6 @@ from rest_framework import status
 class TestGuestUser(APIView):
     """Return product according to input price"""
 
-    permission_classes = [IsAuthenticated, GuestUserPermission]
-
     def get(self, request):
         return Response({"detail": "Test_OK", "code": "Test permission OK"})
 

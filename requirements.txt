@@ -12,6 +12,7 @@ faker
 pytest
 pytest-django
 drf-spectacular
+django-cors-headers
 
 black
 isort
