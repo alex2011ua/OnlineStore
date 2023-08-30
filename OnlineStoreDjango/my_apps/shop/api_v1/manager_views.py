@@ -1,11 +1,10 @@
 from drf_spectacular.utils import extend_schema
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
-
+from my_apps.shop.api_v1.permissions import ManagerPermission
 from my_apps.shop.api_v1.serializers import ProductSerializer
 from my_apps.shop.models import Product
-from my_apps.shop.api_v1.permissions import ManagerPermission
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 
 @extend_schema(tags=["Manager"])

@@ -1,17 +1,17 @@
-from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter
+from random import randint, sample
+
+from drf_spectacular.utils import (OpenApiParameter, extend_schema,
+                                   extend_schema_view)
+from my_apps.shop.models import Banner, Product, Settings
+from rest_framework import status
 from rest_framework.generics import ListAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .paginators import SmallResultsSetPagination
-from random import randint
-from random import sample
-from my_apps.shop.models import Product, Banner
-from my_apps.shop.models import Settings
-from .permissions import GuestUserPermission
 
-from .serializers import ProductSerializer, BannerSerializer
-from rest_framework import status
+from .paginators import SmallResultsSetPagination
+from .permissions import GuestUserPermission
+from .serializers import BannerSerializer, ProductSerializer
 
 
 @extend_schema(tags=["Guest_user"])
@@ -23,6 +23,22 @@ class TestGuestUser(APIView):
 
 
 @extend_schema(tags=["Guest_user"])
+@extend_schema_view(
+    get=extend_schema(
+        summary="most popular products with rate > RED_LINE",
+        responses={
+            status.HTTP_200_OK: ProductSerializer,
+        },
+        parameters=[
+            OpenApiParameter(
+                name="page",
+                location=OpenApiParameter.QUERY,
+                description="page of pagination",
+                type=int,
+            ),
+        ],
+    ),
+)
 class ListPopularGifts(APIView, SmallResultsSetPagination):
     """
     List most popular products with rate > RED_LINE.
@@ -44,8 +60,30 @@ class ListPopularGifts(APIView, SmallResultsSetPagination):
 
 
 @extend_schema(tags=["Guest_user"])
+@extend_schema_view(
+    get=extend_schema(
+        summary="Search by name and slug",
+        responses={
+            status.HTTP_200_OK: ProductSerializer,
+        },
+        parameters=[
+            OpenApiParameter(
+                name="page",
+                location=OpenApiParameter.QUERY,
+                description="page of pagination",
+                type=int,
+            ),
+            OpenApiParameter(
+                name="search",
+                location=OpenApiParameter.QUERY,
+                description="search string",
+                type=str,
+            ),
+        ],
+    ),
+)
 class ListSearchGifts(APIView, SmallResultsSetPagination):
-    """Search by name and slug."""
+    """Search products by name and slug."""
 
     def get(self, request, format=None):
         search_string = request.query_params.get("search", None)
@@ -62,8 +100,24 @@ class ListSearchGifts(APIView, SmallResultsSetPagination):
 
 
 @extend_schema(tags=["Guest_user"])
+@extend_schema_view(
+    get=extend_schema(
+        summary="Return products ordered by date of creation.",
+        responses={
+            status.HTTP_200_OK: ProductSerializer,
+        },
+        parameters=[
+            OpenApiParameter(
+                name="page",
+                location=OpenApiParameter.QUERY,
+                description="page of pagination",
+                type=int,
+            )
+        ],
+    ),
+)
 class ListNewGifts(APIView, SmallResultsSetPagination):
-    """Return products ordered by date of creation."""
+    """Return products ordered by date of creation with pagination and limit=30"""
 
     def get(self, request, format=None):
         products = Product.objects.all().order_by("-created_at")[:30]
@@ -73,6 +127,30 @@ class ListNewGifts(APIView, SmallResultsSetPagination):
 
 
 @extend_schema(tags=["Guest_user"])
+@extend_schema_view(
+    get=extend_schema(
+        summary="get random product",
+        responses={
+            status.HTTP_200_OK: ProductSerializer,
+        },
+        parameters=[
+            OpenApiParameter(
+                name="from_price",
+                location=OpenApiParameter.QUERY,
+                description="start price of product, default=0",
+                required=False,
+                type=int,
+            ),
+            OpenApiParameter(
+                name="to_price",
+                location=OpenApiParameter.QUERY,
+                description="end price of product, default=1000000",
+                required=False,
+                type=int,
+            ),
+        ],
+    ),
+)
 class RandomGift(APIView):
     """Return product according to input price"""
 
@@ -96,6 +174,37 @@ class RandomGift(APIView):
 
 
 @extend_schema(tags=["Guest_user"])
+@extend_schema_view(
+    get=extend_schema(
+        summary="get random products",
+        responses={
+            status.HTTP_200_OK: ProductSerializer,
+        },
+        parameters=[
+            OpenApiParameter(
+                name="from_price",
+                location=OpenApiParameter.QUERY,
+                description="start price of product, default=0",
+                required=False,
+                type=int,
+            ),
+            OpenApiParameter(
+                name="to_price",
+                location=OpenApiParameter.QUERY,
+                description="end price of product, default=1000000",
+                required=False,
+                type=int,
+            ),
+            OpenApiParameter(
+                name="count",
+                location=OpenApiParameter.QUERY,
+                description="quantity of products to return, default=4",
+                required=False,
+                type=int,
+            ),
+        ],
+    ),
+)
 class ListRandomGifts(APIView):
     """Return list of products according to input price"""
 

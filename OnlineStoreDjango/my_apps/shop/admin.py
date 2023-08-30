@@ -1,26 +1,28 @@
 from django.contrib import admin
-
-from my_apps.shop.models import (Category, Order, OrderItem, Product, Rating,
-                                 Review, Banner)
+from my_apps.shop.models import (Banner, Category, Order, OrderItem, Product,
+                                 Rating, Review)
 
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ("id", "name", "slug", "description", "created_at", "updated_at")
+    list_display = ("id", "name","category", "slug", "description", "created_at", "updated_at")
 
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = (
-
+        "id",
         "name",
         "slug",
+        "type",
         "description",
         "category",
         "price",
         "image",
         "discount",
         "quantity",
+        "sold",
+        "global_rating",
         "created_at",
         "updated_at",
     )

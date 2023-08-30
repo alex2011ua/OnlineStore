@@ -1,9 +1,9 @@
-from django.urls import path, include
+from django.urls import include, path
+from my_apps.shop.models import Banner
+from rest_framework import routers
 
 from . import admin_views
-from my_apps.shop.models import Banner
 from .serializers import BannerSerializer
-from rest_framework import routers
 
 router = routers.DefaultRouter()
 router.register(r"banner", admin_views.BannerViewSet)
