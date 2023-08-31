@@ -135,14 +135,14 @@ class ListNewGifts(APIView, SmallResultsSetPagination):
         },
         parameters=[
             OpenApiParameter(
-                name="from_price",
+                name="from",
                 location=OpenApiParameter.QUERY,
                 description="start price of product, default=0",
                 required=False,
                 type=int,
             ),
             OpenApiParameter(
-                name="to_price",
+                name="to",
                 location=OpenApiParameter.QUERY,
                 description="end price of product, default=1000000",
                 required=False,
@@ -182,21 +182,21 @@ class RandomGift(APIView):
         },
         parameters=[
             OpenApiParameter(
-                name="from_price",
+                name="from",
                 location=OpenApiParameter.QUERY,
                 description="start price of product, default=0",
                 required=False,
                 type=int,
             ),
             OpenApiParameter(
-                name="to_price",
+                name="to",
                 location=OpenApiParameter.QUERY,
                 description="end price of product, default=1000000",
                 required=False,
                 type=int,
             ),
             OpenApiParameter(
-                name="count",
+                name="quantity",
                 location=OpenApiParameter.QUERY,
                 description="quantity of products to return, default=4",
                 required=False,
@@ -216,7 +216,8 @@ class ListRandomGifts(APIView):
         products = list(
             Product.objects.filter(price__gte=float(from_price), price__lte=to_price)
         )
-
+        if len(products) < count:
+            count = len(products)
         serializer = ProductSerializer(sample(products, count), many=True)
         return Response(serializer.data)
 

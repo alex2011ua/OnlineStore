@@ -1,17 +1,15 @@
 import csv
 import os
-import random
 
 from django.core.management.base import BaseCommand
-from my_apps.accounts.models import User
 from my_apps.shop.models import Banner, Category, Product
 
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
         """Create content in DB"""
-        self.create_categories()
-        self.create_banners()
+        # self.create_categories()
+        # self.create_banners()
         self.create_products()
 
     def create_categories(self):
@@ -228,28 +226,30 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS("Start creating products"))
         current_file = os.path.realpath(__file__)
         current_directory = os.path.dirname(current_file)
+        cout_products = 0
         with open(current_directory + "/1.csv") as csvfile:
             reader = csv.reader(csvfile)
+            reader.__next__()
             for row in reader:
+                # Get category
                 category_str = row[3].strip().capitalize()
                 category_eng = cat.get(category_str)
-                if (
-                    category_eng
-                    and Category.get_category(category_eng)
-                    and len(row[5]) > 0
-                ):
+                name = row[6]
+                if len(name) == 0:
+                    continue
+                slug = row[0]
+                image = "foto/products/" + slug + ".webp"
+
+                type_product = row[7]
+                description = row[8]
+                try:
                     category = Category.get_category(category_eng)
-                    try:
-                        price = float(row[5].replace(" ", ""))
-                    except ValueError:
-                        print(category)
-                        continue
-                    name = row[6]
-                    type = row[7]
-                    description = row[8]
-                    slug = row[0]
-                    image = "foto/products/" + slug+ ".webp"
-                    Product.objects.get_or_create(
+                    price = float(row[5].replace(" ", ""))
+                    quantity = int(row[9]) if row[9].isdigit() else 0
+                    sold = int(row[10]) if row[10].isdigit() else 0
+                    global_rating = int(row[11]) if row[11].isdigit() else None
+                    discount = int(row[12]) if row[12].isdigit() else 0
+                    product, created = Product.objects.update_or_create(
                         slug=slug,
                         defaults={
                             "category": category,
@@ -257,7 +257,20 @@ class Command(BaseCommand):
                             "name": name,
                             "description": description,
                             "image": image,
-                            "type": type
+                            "type": type_product,
+                            "quantity": quantity,
+                            "sold": sold,
+                            "global_rating": global_rating,
+                            "discount": discount,
                         },
                     )
+                    cout_products += 1
+                except Exception as ex:
+                    self.stdout.write(
+                        self.style.WARNING(f"Error read from csv file: {ex}")
+                    )
+                    self.stdout.write(self.style.WARNING(f"slug: {slug}, name: {name}, category: {category_str}"))
 
+            self.stdout.write(
+                self.style.SUCCESS("count products:" + str(cout_products))
+            )

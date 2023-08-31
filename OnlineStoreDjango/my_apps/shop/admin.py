@@ -15,7 +15,6 @@ class ProductAdmin(admin.ModelAdmin):
         "name",
         "slug",
         "type",
-        "description",
         "category",
         "price",
         "image",
