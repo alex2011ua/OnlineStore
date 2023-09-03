@@ -6,25 +6,23 @@ from rest_framework import serializers
 class CategorySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Category
-        fields = ["id", "category", "url",  "name", "slug", "description", "image_small", "image"]
+        fields = ["id", "category", "url",  "name", "slug", "description", "img_small", "img"]
 
 
 class ProductSerializer(serializers.ModelSerializer):
+    category = serializers.CharField(source="get_category_name")
+
     class Meta:
         model = Product
         fields = [
             "id",
             "name",
-            "image",
-            "slug",
-            "description",
+            "img",
             "category",
             "price",
             "discount",
-            "quantity",
-            "sold",
             "global_rating",
-            "created_at",
+
         ]
 
 

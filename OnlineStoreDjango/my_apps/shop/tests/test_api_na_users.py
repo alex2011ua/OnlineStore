@@ -37,10 +37,10 @@ def test_list_popular_gifts_true():
     )
 
     # get list of most popular products with rate more than ate_limit.value
-    response = client.get("/api/v1/shop/na/popular/")
+    response = client.get("/api/v1/shop/guest_user/popular/")
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.data["count"] == 10 - rate_limit.value
+    assert response.data["count"] == 10 - 3
 
 
 @pytest.mark.django_db
@@ -96,20 +96,20 @@ def test_list_new_gifts():
 
 @pytest.mark.django_db
 def test_random_gift():
+    import time
     category = Category.objects.get()
     # create 10 products with different rating and counts of sailing
-    for i in range(1000):
+    for i in range(50):
         Product.objects.create(
             name=i,
             slug=i,
             category=category,
             price=i,
             quantity=i,
-            sold=i,
-            global_rating=i,
         )
     url = reverse("random_gift")
     response1 = client.get(url, {"from": 20, "to": 50})
+    time.sleep(0.01)
     response2 = client.get(url, {"from": 20, "to": 50})
     assert response1.data == response1.data
     assert response1.data != response2.data

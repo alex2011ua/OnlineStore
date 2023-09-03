@@ -13,6 +13,6 @@ def get_foto_banner(request, image_path):
 
 
 def get_foto_category(request, image_path):
-    img = open(f"shop/media/foto/category/{image_path}", "rb")
+    img = open(f"shop/media/foto/categoies/{image_path}", "rb")
     response = FileResponse(img)
     return response

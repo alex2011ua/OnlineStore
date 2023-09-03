@@ -27,7 +27,7 @@ class Command(BaseCommand):
         for slug, name in main_category.items():
             cat, created = Category.objects.get_or_create(
                 slug=slug,
-                defaults={"name": name, "image_small": f"foto/category/{slug}.jpg"},
+                defaults={"name": name, "img_small": f"foto/categories/{slug}.jpg"},
             )
             self.stdout.write(slug)
             if not created:
@@ -50,7 +50,7 @@ class Command(BaseCommand):
                 defaults={
                     "name": name,
                     "category": main_category_list[0],
-                    "image": f"foto/category/{slug}.jpg",
+                    "img": f"foto/categories/{slug}.jpg",
                 },
             )
             self.stdout.write(slug)
@@ -72,7 +72,7 @@ class Command(BaseCommand):
                 defaults={
                     "name": name,
                     "category": main_category_list[1],
-                    "image": f"foto/category/{slug}.jpg",
+                    "img": f"foto/categories/{slug}.jpg",
                 },
             )
             self.stdout.write(slug)
@@ -95,7 +95,7 @@ class Command(BaseCommand):
                 defaults={
                     "name": name,
                     "category": main_category_list[2],
-                    "image": f"foto/category/{slug}.jpg",
+                    "img": f"foto/categories/{slug}.jpg",
                 },
             )
             self.stdout.write(slug)
@@ -112,7 +112,7 @@ class Command(BaseCommand):
                 defaults={
                     "name": name,
                     "category": main_category_list[3],
-                    "image": f"foto/category/{slug}.jpg",
+                    "img": f"foto/categories/{slug}.jpg",
                 },
             )
             self.stdout.write(slug)
@@ -135,7 +135,7 @@ class Command(BaseCommand):
                 defaults={
                     "name": name,
                     "category": main_category_list[4],
-                    "image": f"foto/category/{slug}.jpg",
+                    "img": f"foto/categories/{slug}.jpg",
                 },
             )
             self.stdout.write(slug)
@@ -157,7 +157,7 @@ class Command(BaseCommand):
                 defaults={
                     "name": name,
                     "category": main_category_list[5],
-                    "image": f"foto/category/{slug}.jpg",
+                    "img": f"foto/categories/{slug}.jpg",
                 },
             )
             self.stdout.write(slug)
@@ -179,7 +179,7 @@ class Command(BaseCommand):
                 defaults={
                     "name": name,
                     "category": main_category_list[6],
-                    "image": f"foto/category/{slug}.jpg",
+                    "img": f"foto/categories/{slug}.jpg",
                 },
             )
             self.stdout.write(slug)
@@ -256,7 +256,7 @@ class Command(BaseCommand):
                             "price": price,
                             "name": name,
                             "description": description,
-                            "image": image,
+                            "img": image,
                             "type": type_product,
                             "quantity": quantity,
                             "sold": sold,

@@ -20,11 +20,11 @@ class Category(models.Model):
     name = models.CharField(_("category name"), max_length=100)
     slug = models.SlugField(_("category slug"), unique=True, blank=True, null=True)
     description = models.TextField(_("category description"), blank=True, null=True)
-    image_small = models.ImageField(
-        _("category icon image small"), upload_to="foto/category/", blank=True, null=True
+    img_small = models.ImageField(
+        _("category icon image small"), upload_to="foto/categories/", blank=True, null=True
     )
-    image = models.ImageField(
-        _("category image"), upload_to="foto/category/", blank=True, null=True
+    img = models.ImageField(
+        _("category image"), upload_to="foto/categories/", blank=True, null=True
     )
     created_at = models.DateTimeField(_("created"), auto_now_add=True)
     updated_at = models.DateTimeField(_("update"), auto_now=True)
@@ -61,18 +61,18 @@ class Product(models.Model):
         _("discount"), max_digits=5, decimal_places=2, default=0
     )
     quantity = models.PositiveIntegerField(_("count of product"), default=0)
-    image = models.ImageField(
-        _("product image"), upload_to="foto/product/", blank=True, null=True
+    img = models.ImageField(
+        _("product image"), upload_to="foto/products/", blank=True, null=True
     )
-    image_small = models.ImageField(
-        _("product image small"), upload_to="foto/product/", blank=True, null=True
+    img_small = models.ImageField(
+        _("product image small"), upload_to="foto/products/", blank=True, null=True
     )
     created_at = models.DateTimeField(_("created"), auto_now_add=True)
     updated_at = models.DateTimeField(_("update"), auto_now=True)
     sold = models.PositiveIntegerField(_("number sold"), default=0)
     global_rating = models.IntegerField(
         _("global rating"),
-        choices=[(i, i) for i in range(1, 11)],
+        choices=[(i, i) for i in range(0, 6)],
         blank=True,
         null=True,
     )
@@ -100,6 +100,9 @@ class Product(models.Model):
 
     def __repr__(self) -> str:
         return f"Product ID - {self.pk}"
+
+    def get_category_name(self):
+        return self.category.name
 
     class Meta:
         ordering = ["category"]
@@ -190,7 +193,7 @@ class Rating(models.Model):
     customer = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     global_value = models.IntegerField(
         _("global rating"),
-        choices=[(i, i) for i in range(1, 11)],
+        choices=[(i, i) for i in range(0, 6)],
         blank=True,
         null=True,
     )
@@ -237,6 +240,12 @@ class Banner(models.Model):
     description = models.TextField(_("description"), blank=True)
     img = models.ImageField(
         _("banner image"),
+        upload_to="foto/banners/",
+        blank=True,
+        null=True,
+    )
+    mobileImg = models.ImageField(
+        _("banner for mobile"),
         upload_to="foto/banners/",
         blank=True,
         null=True,

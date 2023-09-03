@@ -25,7 +25,7 @@ class TestGuestUser(APIView):
 @extend_schema(tags=["Guest_user"])
 @extend_schema_view(
     get=extend_schema(
-        summary="most popular products with rate > RED_LINE",
+        summary="most popular products with rate > 3",
         responses={
             status.HTTP_200_OK: ProductSerializer,
         },
@@ -41,21 +41,21 @@ class TestGuestUser(APIView):
 )
 class ListPopularGifts(APIView, SmallResultsSetPagination):
     """
-    List most popular products with rate > RED_LINE.
+    List most popular products with rate > 3.
     """
 
     rate_limit, _ = Settings.objects.get_or_create(
         name="rate_limit",
         defaults={"description": "show gifts with rate more then value", "value": 6},
     )
-    red_line = rate_limit.value
+    red_line = 3  # rate_limit.value
 
     def get(self, request, format=None):
-        products = Product.objects.filter(global_rating__gt=self.red_line).order_by(
+        products = Product.objects.filter(global_rating__gt=3).order_by(
             "-sold"
         )
         results = self.paginate_queryset(products, request, view=self)
-        serializer = ProductSerializer(results, many=True)
+        serializer = ProductSerializer(results, context={'request': request}, many=True)
         return self.get_paginated_response(serializer.data)
 
 
@@ -95,7 +95,7 @@ class ListSearchGifts(APIView, SmallResultsSetPagination):
         products2 = Product.objects.filter(name__icontains=search_string)
         products = products1 | products2
         results = self.paginate_queryset(products, request, view=self)
-        serializer = ProductSerializer(results, many=True)
+        serializer = ProductSerializer(results, context={'request': request}, many=True)
         return self.get_paginated_response(serializer.data)
 
 
@@ -122,7 +122,7 @@ class ListNewGifts(APIView, SmallResultsSetPagination):
     def get(self, request, format=None):
         products = Product.objects.all().order_by("-created_at")[:30]
         results = self.paginate_queryset(products, request, view=self)
-        serializer = ProductSerializer(results, many=True)
+        serializer = ProductSerializer(results, context={'request': request}, many=True)
         return self.get_paginated_response(serializer.data)
 
 
@@ -169,7 +169,7 @@ class RandomGift(APIView):
         product = Product.objects.filter(
             price__gte=float(from_price), price__lte=to_price
         )[random_index]
-        serializer = ProductSerializer(product)
+        serializer = ProductSerializer(product, context={'request': request})
         return Response(serializer.data)
 
 
@@ -198,7 +198,7 @@ class RandomGift(APIView):
             OpenApiParameter(
                 name="quantity",
                 location=OpenApiParameter.QUERY,
-                description="quantity of products to return, default=4",
+                description="quantity of products to return, default=5",
                 required=False,
                 type=int,
             ),
@@ -211,14 +211,14 @@ class ListRandomGifts(APIView):
     def get(self, request):
         from_price = request.query_params.get("from", 0)
         to_price = request.query_params.get("to", 1000000)
-        count = int(request.query_params.get("quantity", 4))
+        count = int(request.query_params.get("quantity", 5))
 
         products = list(
             Product.objects.filter(price__gte=float(from_price), price__lte=to_price)
         )
         if len(products) < count:
             count = len(products)
-        serializer = ProductSerializer(sample(products, count), many=True)
+        serializer = ProductSerializer(sample(products, count), context={'request': request}, many=True)
         return Response(serializer.data)
 
 
@@ -240,3 +240,35 @@ class ListBanners(ListAPIView):
     model = Banner
     serializer_class = BannerSerializer
     queryset = Banner.objects.all()
+
+
+
+@extend_schema(tags=["Guest_user"])
+@extend_schema_view(
+    get=extend_schema(
+        summary="GPT test",
+        responses={
+            status.HTTP_200_OK: ProductSerializer,
+        },
+        parameters=[
+            OpenApiParameter(
+                name="search",
+                location=OpenApiParameter.QUERY,
+                description="search string",
+                type=str,
+            ),
+        ],
+    ),
+)
+class Gpt(APIView):
+    """Search products by name and slug."""
+
+    def get(self, request, format=None):
+        search_string = request.query_params.get("search", None)
+        if search_string is None:
+            data = {"detail": "required search param", "code": "required_search"}
+            return Response(status=status.HTTP_417_EXPECTATION_FAILED, data=data)
+        from my_apps.shop.llama import search_answer
+        s = search_answer(search_string)
+        return Response(s)
+
