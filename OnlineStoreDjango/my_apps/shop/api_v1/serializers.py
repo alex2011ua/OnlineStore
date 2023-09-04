@@ -49,4 +49,4 @@ class RatingSerializer(serializers.HyperlinkedModelSerializer):
 class BannerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Banner
-        fields = ["id", "title", "description", "img", "link"]
+        fields = ["id", "title", "description", "img", "mobileImg", "link"]

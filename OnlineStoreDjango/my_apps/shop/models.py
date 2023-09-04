@@ -235,7 +235,9 @@ class Rating(models.Model):
 
 
 class Banner(models.Model):
+    import uuid
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    slug = models.SlugField(_("product slug"), unique=True)
     title = models.CharField(_("title"), max_length=200)
     description = models.TextField(_("description"), blank=True)
     img = models.ImageField(

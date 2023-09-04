@@ -9,7 +9,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         """Create content in DB"""
         # self.create_categories()
-        # self.create_banners()
+        self.create_banners()
         self.create_products()
 
     def create_categories(self):
@@ -190,6 +190,27 @@ class Command(BaseCommand):
 
     def create_banners(self):
         self.stdout.write(self.style.SUCCESS("Start creating banners"))
+        Banner.objects.update_or_create(slug="banner150", defaults={
+            "title": "Sales",
+            "description": "get ready to save up to 150",
+            "img": "foto/banners/banner150.jpg",
+            "mobileImg": "foto/banners/banner150_mobile.jpg",
+            "link": "/catalog"
+        })
+        Banner.objects.update_or_create(slug="banner250", defaults={
+            "title": "Sales",
+            "description": "get ready to save up to 250",
+            "img": "foto/banners/banner250.jpg",
+            "mobileImg": "foto/banners/banner250_mobile.jpg",
+            "link": "/catalog"
+        })
+        Banner.objects.update_or_create(slug="banner360", defaults={
+            "title": "Sales",
+            "description": "get ready to save up to 360",
+            "img": "foto/banners/banner360.jpg",
+            "mobileImg": "foto/banners/banner360_mobile.jpg",
+            "link": "/catalog"
+        })
 
     def create_products(self):
         cat = {

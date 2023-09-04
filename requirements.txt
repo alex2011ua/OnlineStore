@@ -13,6 +13,9 @@ pytest
 pytest-django
 drf-spectacular
 django-cors-headers
+llama_index
+nltk
+llama-cpp-python
 
 black
 isort
