@@ -14,8 +14,7 @@ try:
     storage_context = StorageContext.from_defaults(persist_dir="./storage")
     index = load_index_from_storage(storage_context)
 
-except Exception as ex:
-    print(ex)
+except FileNotFoundError as ex:
     products = Product.objects.all()
     documents = []
     for product in products:
@@ -29,10 +28,10 @@ except Exception as ex:
                 },
             )
         )
-        parser = SimpleNodeParser.from_defaults()
-        nodes = parser.get_nodes_from_documents(documents)
-        index = VectorStoreIndex(nodes)
-        index.storage_context.persist()
+    parser = SimpleNodeParser.from_defaults()
+    nodes = parser.get_nodes_from_documents(documents)
+    index = VectorStoreIndex(nodes)
+    index.storage_context.persist()
 
 
 def search_answer(text):

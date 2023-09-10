@@ -37,6 +37,7 @@ CSRF_TRUSTED_ORIGINS = [os.getenv("CSRF_TRUSTED_ORIGINS")] if os.getenv("CSRF_TR
 # Application definition
 
 INSTALLED_APPS = [
+    "modeltranslation",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -50,6 +51,7 @@ INSTALLED_APPS = [
     "phonenumber_field",
     'drf_spectacular',
     'corsheaders',
+
     #  my app
     'my_apps.accounts',
     'my_apps.shop',
@@ -61,6 +63,7 @@ MIDDLEWARE = [
 
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -97,7 +100,7 @@ DATABASES = {
         'NAME':     os.getenv("POSTGRES_DB", "online_store_db"),
         'USER':     os.getenv("POSTGRES_USER", "AlexUA"),
         'PASSWORD': os.getenv("POSTGRES_PASSWORD", "online_store"),
-        'HOST':     os.getenv("DB_HOST", "172.21.0.2",),
+        'HOST':     os.getenv("DB_HOST", "172.21.0.3",),
         'PORT':     str(os.getenv("PORT_DB", 5432)),
     }
 }
@@ -134,7 +137,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ua'
 
 TIME_ZONE = 'UTC'
 
@@ -142,6 +145,13 @@ USE_I18N = True
 
 USE_TZ = True
 
+gettext = lambda s: s
+LANGUAGES = (
+    ('ua', gettext('Ukrainian')),
+    ('en', gettext('English')),
+)
+MODELTRANSLATION_DEFAULT_LANGUAGE = "ua"
+MODELTRANSLATION_PREPOPULATE_LANGUAGE = "en"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/

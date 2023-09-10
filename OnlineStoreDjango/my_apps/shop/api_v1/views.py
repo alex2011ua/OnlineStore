@@ -18,6 +18,7 @@ class MyDestroyModelMixin(DestroyModelMixin):
         data = {"detail": "Deleted", "code": "deleted"}
         return Response(status=status.HTTP_204_NO_CONTENT, data=data)
 
+
 @extend_schema(tags=["Category"])
 class CategoryViewSet(viewsets.ModelViewSet, MyDestroyModelMixin):
     """
@@ -27,6 +28,7 @@ class CategoryViewSet(viewsets.ModelViewSet, MyDestroyModelMixin):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [permissions.AllowAny]
+
 
 @extend_schema(tags=["Product"])
 class ProductViewSet(viewsets.ModelViewSet, MyDestroyModelMixin):

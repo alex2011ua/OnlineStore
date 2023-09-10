@@ -5,7 +5,15 @@ from my_apps.shop.models import (Banner, Category, Order, OrderItem, Product,
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ("id", "name", "category", "slug", "description", "created_at", "updated_at")
+    list_display = (
+        "id",
+        "name",
+        "category",
+        "slug",
+        "description",
+        "created_at",
+        "updated_at",
+    )
 
 
 @admin.register(Product)
@@ -76,6 +84,7 @@ class RatingItemAdmin(admin.ModelAdmin):
         "created_at",
         "updated_at",
     )
+
 
 @admin.register(Banner)
 class RatingItemAdmin(admin.ModelAdmin):

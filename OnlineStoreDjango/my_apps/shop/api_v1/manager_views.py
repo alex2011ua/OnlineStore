@@ -10,6 +10,7 @@ from rest_framework.views import APIView
 @extend_schema(tags=["Manager"])
 class TestManager(APIView):
     """Return product according to input price"""
+
     permission_classes = [IsAuthenticated, ManagerPermission]
 
     def get(self, request):

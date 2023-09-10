@@ -97,6 +97,7 @@ def test_list_new_gifts():
 @pytest.mark.django_db
 def test_random_gift():
     import time
+
     category = Category.objects.get()
     # create 10 products with different rating and counts of sailing
     for i in range(50):

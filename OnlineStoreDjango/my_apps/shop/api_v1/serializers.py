@@ -6,7 +6,16 @@ from rest_framework import serializers
 class CategorySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Category
-        fields = ["id", "category", "url",  "name", "slug", "description", "img_small", "img"]
+        fields = [
+            "id",
+            "category",
+            "url",
+            "name",
+            "slug",
+            "description",
+            "img_small",
+            "img",
+        ]
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -22,15 +31,14 @@ class ProductSerializer(serializers.ModelSerializer):
             "price",
             "discount",
             "global_rating",
-
         ]
 
 
 class OrderSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Order
-        fields = [
-            "id", "url", "customer", "manager", "status", "order_date", "total_amount"]
+        fields = ["id", "customer", "manager", "status", "order_date", "total_amount"]
+
     status = serializers.CharField(source="get_status_display")
 
 

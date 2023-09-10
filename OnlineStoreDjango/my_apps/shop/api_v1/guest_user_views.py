@@ -5,12 +5,10 @@ from drf_spectacular.utils import (OpenApiParameter, extend_schema,
 from my_apps.shop.models import Banner, Product, Settings
 from rest_framework import status
 from rest_framework.generics import ListAPIView
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .paginators import SmallResultsSetPagination
-from .permissions import GuestUserPermission
 from .serializers import BannerSerializer, ProductSerializer
 
 
@@ -51,11 +49,9 @@ class ListPopularGifts(APIView, SmallResultsSetPagination):
     red_line = 3  # rate_limit.value
 
     def get(self, request, format=None):
-        products = Product.objects.filter(global_rating__gt=3).order_by(
-            "-sold"
-        )
+        products = Product.objects.filter(global_rating__gt=3).order_by("-sold")
         results = self.paginate_queryset(products, request, view=self)
-        serializer = ProductSerializer(results, context={'request': request}, many=True)
+        serializer = ProductSerializer(results, context={"request": request}, many=True)
         return self.get_paginated_response(serializer.data)
 
 
@@ -95,7 +91,7 @@ class ListSearchGifts(APIView, SmallResultsSetPagination):
         products2 = Product.objects.filter(name__icontains=search_string)
         products = products1 | products2
         results = self.paginate_queryset(products, request, view=self)
-        serializer = ProductSerializer(results, context={'request': request}, many=True)
+        serializer = ProductSerializer(results, context={"request": request}, many=True)
         return self.get_paginated_response(serializer.data)
 
 
@@ -122,7 +118,7 @@ class ListNewGifts(APIView, SmallResultsSetPagination):
     def get(self, request, format=None):
         products = Product.objects.all().order_by("-created_at")[:30]
         results = self.paginate_queryset(products, request, view=self)
-        serializer = ProductSerializer(results, context={'request': request}, many=True)
+        serializer = ProductSerializer(results, context={"request": request}, many=True)
         return self.get_paginated_response(serializer.data)
 
 
@@ -169,7 +165,7 @@ class RandomGift(APIView):
         product = Product.objects.filter(
             price__gte=float(from_price), price__lte=to_price
         )[random_index]
-        serializer = ProductSerializer(product, context={'request': request})
+        serializer = ProductSerializer(product, context={"request": request})
         return Response(serializer.data)
 
 
@@ -218,7 +214,9 @@ class ListRandomGifts(APIView):
         )
         if len(products) < count:
             count = len(products)
-        serializer = ProductSerializer(sample(products, count), context={'request': request}, many=True)
+        serializer = ProductSerializer(
+            sample(products, count), context={"request": request}, many=True
+        )
         return Response(serializer.data)
 
 
@@ -240,7 +238,6 @@ class ListBanners(ListAPIView):
     model = Banner
     serializer_class = BannerSerializer
     queryset = Banner.objects.all()
-
 
 
 @extend_schema(tags=["Guest_user"])
@@ -269,6 +266,6 @@ class Gpt(APIView):
             data = {"detail": "required search param", "code": "required_search"}
             return Response(status=status.HTTP_417_EXPECTATION_FAILED, data=data)
         from my_apps.shop.llama import search_answer
+
         s = search_answer(search_string)
         return Response(s)
-

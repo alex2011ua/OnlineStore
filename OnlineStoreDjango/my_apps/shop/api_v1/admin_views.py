@@ -22,6 +22,7 @@ class MyDestroyModelMixin(DestroyModelMixin):
 @extend_schema(tags=["Admin user"])
 class TestAdmin(APIView):
     """Just endpoint for test admin permissions"""
+
     permission_classes = [IsAuthenticated, AdminPermission]
 
     def get(self, request):
@@ -31,21 +32,18 @@ class TestAdmin(APIView):
 @extend_schema(tags=["Admin user"])
 @extend_schema_view(
     list=extend_schema(
-            summary="Get list banners",
-            request=BannerSerializer,
-        ),
-    update=extend_schema(
-        summary="update banner",
-        request=BannerSerializer
-    ),
-
-    create=extend_schema(
-            summary="Create new banner",
+        summary="Get list banners",
         request=BannerSerializer,
-        ),
+    ),
+    update=extend_schema(summary="update banner", request=BannerSerializer),
+    create=extend_schema(
+        summary="Create new banner",
+        request=BannerSerializer,
+    ),
 )
 class BannerViewSet(viewsets.ModelViewSet, MyDestroyModelMixin):
     """API endpoint that allows made CRUD operations with Banner."""
+
     pagination_class = None
     queryset = Banner.objects.all()
     serializer_class = BannerSerializer

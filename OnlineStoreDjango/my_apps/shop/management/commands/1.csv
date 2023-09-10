@@ -1,4 +1,4 @@
-slug,Відповідальна особа,Категорія,Підкатегорія,товари,price,name,type,description,quantity,sold,global_rating(0-5),discount,not used
+slug,Відповідальна особа,Категорія,Підкатегорія,товари,price,name,type,description,quantity,sold,global_rating(0-5),discount,name_en,type_en,description_en
 slug_001,Христя,Техніка,клавіатури,https://rozetka.com.ua/ua/razer_rz03_02741500_r3r1/p179599197/,1199,Клавіатура дротова Razer Cynosa Lite,Клавіатура,"Ігрова клавіатура Razer Cynosa Lite - це потужний девайс для геймерів-початківців, які прагнуть отримати миттєву перевагу. Клавіатура Razer Cynosa Lite оснащена клавішами ігрового рівня з можливістю запису макросів «на льоту» і ув'язненими в міцну конструкцію, що забезпечує захист від проливання рідин. Механізм клавіш мембранного типу дає приємні, м'які тактильні відчуття під час натискання, при збереженні високої точності. Використовуючи можливості Razer Chroma, проявіть творчий підхід з 16.8 мільйонами кольорів і налаштуйте підсвічування під ваш індивідуальний стиль гри.
 Тип клавіатури -Мембранні
 Під'єднання - Дротове
@@ -9,7 +9,14 @@ slug_001,Христя,Техніка,клавіатури,https://rozetka.com.ua
 Країна-виробник - Китай
 Сумісність з ОС - Mac OS, Microsoft Windows
 Інтерфейс - USB
-Колір - Чорний",7,37,3,3,
+Колір - Чорний",7,37,3,3,Razer Cynosa Lite wired keyboard,Keyboard,"The Razer Cynosa Lite Gaming Keyboard is a powerful device for entry-level gamers looking for an instant advantage. The Razer Cynosa Lite features gaming-grade keys with on-the-fly macro recording and is encased in a durable spill-proof design The membrane-type key mechanism provides a pleasant, soft tactile sensation when pressed, while maintaining high precision.Using the power of Razer Chroma, be creative with 16.8 million colors and adjust the backlight to your individual gaming style.
+Keyboard type - Membrane
+Connection - Wired
+Layout - Eng / Ru
+Key lighting - RGB
+Form - Full size
+Features - Silent
+Country of manufacture - China"
 slug_002,,,клавіатури,https://www.foxtrot.com.ua/uk/shop/klaviatury_a4tech_fstyler-fk15-white--usb.html,544,Клавіатура A4TECH Fstyler FK15,Клавіатура,"Характеристики: Інтерфейс - USB
 Особливості - вологостійкість
 Комплектація - клавіатура
@@ -24,7 +31,21 @@ slug_002,,,клавіатури,https://www.foxtrot.com.ua/uk/shop/klaviatury_a4
 Розміри - 403 x 146 x 26мм
 Вага клавіатури - 485г
 Гарантія - 12 міс.
-",5,4,4,1,
+",5,4,4,1,A4TECH Fstyler FK15 keyboard,Keyboard,"Characteristics: Interface - USB
+Features - moisture resistance
+Complete set - keyboard
+Class - standard
+The structure is membrane
+Connection - wired
+The number of multimedia keys is 12
+Layout - Eng / Ru / Ukr
+Range/cable length - 1.5
+The body material is plastic
+The color is white
+Dimensions - 403 x 146 x 26mm
+The weight of the keyboard is 485g
+Warranty - 12 months.
+"
 slug_003,,,клавіатури,https://www.foxtrot.com.ua/uk/shop/klaviatury_airon_easy-tap-z-tachpadom-4822352781088.html,1 499,Клавіатура AIRON Easy Tap з тачпадом,Клавіатура,"Характеристики
 Інтерфейс - Bluetooth
 Особливості - сенсорна панель; без цифрового блоку
@@ -40,7 +61,22 @@ slug_003,,,клавіатури,https://www.foxtrot.com.ua/uk/shop/klaviatury_ai
 Розміри - 26 x 17 x 6мм
 Вага клавіатури - 245г
 Гарантія - 12 міс.
-",7,36,1,5,
+",7,36,1,5,AIRON Easy Tap keyboard with touchpad,Keyboard,"Characteristics
+The interface is Bluetooth
+Features - touch panel; without a digital unit
+The type of power cells is a built-in battery
+Complete set - keyboard
+Class - multimedia
+The structure is membrane
+The connection is wireless
+Layout - Eng / Ru
+Range/cable length - 100 cm.
+The body material is plastic
+The color is black
+Dimensions - 26 x 17 x 6 mm
+The weight of the keyboard is 245g
+Warranty - 12 months.
+"
 slug_004,,,навушники,https://rozetka.com.ua/ua/rztk_ms300b/p318858109/,1 199,Навушники RZTK MS300,Навушники,"Надлегка конструкція вагою 208 г, робить навушники практично невідчутними на голові
 Тканинні повітропроникні амбушури, забезпечують ідеальний комфорт і звукоізоляцію.Надійне та міцне сталеве кріплення чаш створене для зручності регулювання і вибору максимально зручного положення навушників на голові.М'яка підкладка на дужці наголов'я, мінімізує тиск на голову, знижуючи напруження в разі тривалого використання.Навушники легко керуються однією рукою, позаяк усі кнопки інтегровані на лівому амбушурі. Легко перемикайтеся між музикою, грою і дзвінками без потреби виходу в системне меню.
 Тип навушників - Повнорозмірні
@@ -52,7 +88,10 @@ slug_004,,,навушники,https://rozetka.com.ua/ua/rztk_ms300b/p318858109/,
 Тип кріплення - З наголов'ям
 Функції та можливості - Регулятор гучності,Функція відповіді на дзвінок
 Підтримка кодеків - AAC, SBC
-Матеріал амбушур - Тканина",8,19,1,10,
+Матеріал амбушур - Тканина",8,19,1,10,RZTK MS300 headphones,Headphone,"Ultra-light design weighing 208 g, makes the headphones almost imperceptible on the head
+Air-permeable fabric ear cushions provide ideal comfort and sound insulation. Reliable and strong steel fastening of the cups is designed for ease of adjustment and choosing the most comfortable position of the headphones on the head. Soft padding on the headband bracket minimizes pressure on the head, reducing tension in case of long-term use .The headphones are easy to control with one hand, as all buttons are integrated on the left earcup. Easily switch between music, game and calls without the need to enter the system menu.
+
+Material of ear pads - Fabric"
 slug_005,,,навушники,https://rozetka.com.ua/ua/motorola_buds120_b/p332842153/,1 799,Навушники Motorola MOTO BUDS,Навушники,"MOTOROLA MOTO BUDS 120 такі легкі, такі мініатюрні та непомітні, що будуть просто невідчутними для тебе. А навколишнім доведеться попрацювати, щоб зрозуміти, що ти в навушниках. Студентам на замітку, до речі!
 Тип навушників - TWS (2 окремо)
 Особливості - Android-сумісність, Apple-сумісність, З вологозахистом, Світлодіодна підсвітка
@@ -63,7 +102,17 @@ slug_005,,,навушники,https://rozetka.com.ua/ua/motorola_buds120_b/p3328
 Колір - Black
 Тип кріплення - З кріпленням у вухах
 Функції та можливості - Функція відповіді на дзвінок, Функція плеєра
-Матеріал амбушур - Силікон",15,44,5,15,
+Матеріал амбушур - Силікон",15,44,5,15,Motorola MOTO BUDS headphones,Headphone,"MOTOROLA MOTO BUDS 120 are so light, so miniature and invisible that they will be simply imperceptible to you. And those around you will have to work to understand that you are wearing headphones. Note to students, by the way!
+Headphone type - TWS (2 separately)
+Features - Android compatibility, Apple compatibility, With moisture protection, LED backlight
+Connection type - Wireless
+The connection interface is Bluetooth
+Microphone - Built-in
+Availability of active noise reduction - Without active noise reduction
+Color - Black
+Fastening type - With fastening in the ears
+Functions and features - Answer call function, Player function
+The material of the ear pads is Silicone"
 slug_006,,,навушники,https://rozetka.com.ua/ua/hyperx_hx_hscsc2_bk_ww/p207566437/,1 199,Навушники HyperX Cloud Stinger Core PC,Навушники,"Сімейство гарнітур HyperX Cloud Stinger відомо завдяки високій якості звуку, легкої конструкції та надійності. Це чудова гарнітура для безлічі гравців, які починають свої пригоди. Підсильте ефект звукового занурення за допомогою об'ємного звуку 7.1, доступних через ПО NGENUITY. Доступні варіанти з провідним і бездротовим підключенням. Більшість моделей включає зручний мікрофон з функцією шумозаглушення і поворотним відключенням. Граєте на ПК, PlayStation або Xbox? У сімействі Stinger обов'язково знайдеться гарнітура, оптимізована для вашого стилю гри.
 Тип навушників - Повнорозмірні
 Особливості - Android-сумісність, Apple-сумісність, Playstation-сумісність
@@ -74,7 +123,17 @@ slug_006,,,навушники,https://rozetka.com.ua/ua/hyperx_hx_hscsc2_bk_ww/p
 Колір - Black
 Функції та можливості - Регулятор гучності
 Матеріал амбушур Тканина
-Довжина шнура - 1.7 см",0,34,2,50,
+Довжина шнура - 1.7 см",0,34,2,50,HyperX Cloud Stinger Core PC headphones,Headphone,"The HyperX Cloud Stinger family of headsets is known for its high-quality sound, lightweight design and reliability. It's a great headset for many gamers who are starting their adventures. Enhance the audio immersion with 7.1 surround sound available via Wired and wireless options available . Whether you play on PC, PlayStation or Xbox, the Stinger family is sure to find a headset optimized for your gaming style.
+Headphone type - Full size
+
+Connection type - Wired
+Connection interface - 2 x 3.5 mm (mini-Jack), 3.5 mm (mini-Jack)
+Microphone - Built-in
+Availability of active noise reduction - Without active noise reduction
+Color - Black
+Functions and features - Volume control
+Material of ear pads Fabric
+Cord length - 1.7 cm"
 slug_007,,,повербанки,https://rozetka.com.ua/ua/368171994/p368171994/,1 459,УМБ Baseus Bipow Digital Display,Повербанки,"Baseus Bipow Digital Display 20W 30000mAh — портативний зарядний пристрій із 4 роз'ємами та підтримкою швидкого заряджання.Корпус акумулятора пройшов лазерну обробку, тому має поліпшену текстуру, стійку до утворення відбитків пальців і приємну на дотик. Компактні розміри та відповідність міжнародним стандартам повітряних перевезень дають змогу взяти із собою в будь-яку поїздку.
 Ємність батареї, мА*год - 30000
 Призначення - Для телефонів, Для планшетів, Для ноутбуків
@@ -86,7 +145,16 @@ slug_007,,,повербанки,https://rozetka.com.ua/ua/368171994/p368171994/,
 Особливості - Швидке заряджання батареї
 Вихідна напруга, В, 5, 9, 12
 Вихідна сила струму, А, 1.5, 2, 2.22, 3
-Тип акумуляторів - Літій-полімерні (Li-pol)",13,9,2,55,
+Тип акумуляторів - Літій-полімерні (Li-pol)",13,9,2,55,UMB Baseus Bipow Digital Display,Powerbanks,"Baseus Bipow Digital Display 20W 30000mAh is a portable charger with 4 connectors and support for fast charging. The battery case has undergone laser processing, so it has an improved texture, resistant to fingerprints and pleasant to the touch. Compact dimensions and compliance with international air transportation standards allow you to take with you on any trip.
+Battery capacity, mAh - 30,000
+Purpose - For phones, For tablets, For laptops
+For smart watches and bracelets, cameras
+Charging type - QC fast charging 3.0
+Charges from - USB
+Output interfaces - USB Type A, USB Type C
+Input interfaces - Micro-USB, USB Type C
+
+Battery type - Lithium-polymer (Li-pol)"
 slug_008,,,повербанки,https://www.foxtrot.com.ua/uk/shop/portativnie_zariadnie_ustroistva_line-art_mirror--4000-ma-ch--dzerkalo-z-pidsv--4004m-12.html,844,Powerbank Line Art Mirror,Повербанки,"Характеристики
 Вихідні роз'єми інтерфейси - USB
 Сила струму на виході - 2 A
@@ -101,7 +169,21 @@ slug_008,,,повербанки,https://www.foxtrot.com.ua/uk/shop/portativnie_z
 Колір - рожевий
 Комплектація - micro-USB разъем типа B
 Гарантія - гарантія від виробника
-",8,9,3,0,
+",8,9,3,0,Powerbank Lyne Art Mirror,Powerbanks,"Characteristics
+Output interface connectors - USB
+Output current is 2 A
+Trademark - Line Art
+Capacity - 4000mAh
+Battery type - Li-Pol
+Input connector - micro-USB
+Quantity of USB - 1 pc.
+Dimensions - 90 x 90 x 24
+Weight - 180 g
+The body material is plastic
+The color is pink
+Complete set - micro-USB type B connector
+Warranty - manufacturer's warranty
+"
 slug_009,,,повербанки,https://www.foxtrot.com.ua/uk/shop/portativnie_zariadnie_ustroistva_vinga_10000-mah-wireless-qc3-0-pd-soft-touch-purple.html,899,Powerbank VINGA Wireless,Повербанки,"Вихідні роз'єми інтерфейси - USB; USB Type-C
 Сила струму на виході - 1 A; 1.5 A; 2 A; 3 A
 Захист - від перенапруги; від перезарядки; від повної розрядки; від короткого замикання
@@ -118,7 +200,23 @@ slug_009,,,повербанки,https://www.foxtrot.com.ua/uk/shop/portativnie_z
 Матеріал корпусу - пластик
 Колір - пурпурний
 Гарантія - 12 міс.
-",9,33,2,,
+",9,33,2,,VINGA Wireless Powerbank,Powerbanks,"Output interface connectors - USB; USB Type-C
+Output current - 1 A; 1.5 A; 2 A; 3 A
+Protection - against overvoltage; from overcharging; from full discharge; from a short circuit
+Features - anti-slip platform; fast charging; wireless charging
+Trademark - VINGA
+Capacity - 10000mAh
+Battery type - Li-Pol
+Input connector - micro-USB, USB Type-C
+Quantity of USB - 2 pcs.
+The duration of charging the portable battery is 6 hours
+The number of charge level indication segments is 5
+Dimensions - 151.5 x 72 x 15.5
+Weight - 239 g.
+The body material is plastic
+The color is purple
+Warranty - 12 months.
+"
 slug_010,,,настільні лампи,https://www.foxtrot.com.ua/uk/shop/svetilniki_mediarange_lampa_nastilna_stylish_led_with_different_light.html,1999.22,Настільна лампа MEDIARANGE Stylish LED,Настільні лампи,"Характеристики
 Тип живлення - від мережі
 Особливості - регулювання колірної температури; дисплей; USB-порт; поворотний механізм; календар; будильник; регулювання яскравості світла
@@ -130,7 +228,18 @@ slug_010,,,настільні лампи,https://www.foxtrot.com.ua/uk/shop/svet
 Світловий потік - 450Лм
 Регулювання яскравості - Так
 Гарантія - 6 міс.
-",4,20,4,10,
+",4,20,4,10,MEDIARANGE Stylish LED table lamp,Table lamps,"Characteristics
+Power type - from the network
+Features - adjustment of color temperature; display; USB port; rotary mechanism; calendar; alarm clock; adjusting the brightness of the light
+Type - LED
+Switch type - sensor
+Energy efficiency class - A
+The color is white
+Height - 44.5 cm
+Luminous flux - 450Lm
+Brightness adjustment - Yes
+Warranty - 6 months.
+"
 slug_011,,,настільні лампи,https://bt.rozetka.com.ua/ua/taigexin-tgx-7007/p375533970/,519,Настільна лампа Taigexin LED,Настільні лампи,"Led лампа TGX-7007 від бренду FunDesk – це високоякісна та ефективна лампа з LED освітленням, яка стане чудовим доповненням до будь-якого інтер'єру. Лампа виготовлена з високоякісних матеріалів, що забезпечує її довговічність та стійкість до ударів та подряпин. TGX-7007 має холодне світло. Лампа оснащена тач-кнопкою вмикання/вимикання та регулюванням яскравості, що забезпечує зручне керування світлом.
 Тип - Функціональні (Для роботи/навчання)
 Тип використовуваної лампи - Світлодіодна (LED)
@@ -141,7 +250,17 @@ slug_011,,,настільні лампи,https://bt.rozetka.com.ua/ua/taigexin-t
 Джерело живлення - Від акумулятора, Від мережі
 Особливості - З USB виходом, Режим нічника
 Стиль - Сучасний
-Термін служби (тільки LED), год - 15000 год.",5,2,4,,
+Термін служби (тільки LED), год - 15000 год.",5,2,4,,Taigexin LED table lamp,Table lamps,"Led lamp TGX-7007 from the FunDesk brand is a high-quality and efficient lamp with LED lighting, which will be a great addition to any interior. The lamp is made of high-quality materials, which ensures its durability and resistance to shocks and scratches. TGX- 7007 has a cool light.The lamp is equipped with an on/off touch button and brightness adjustment, which provides convenient control of the light.
+Type - Functional (For work/study)
+Type of lamp used - Light-emitting diode (LED)
+Voltage, V - 5 V
+The base color is White
+The color of the lampshade is White
+Power, W - 5 W
+Power source - From the battery, From the network
+Features - With USB output, Night light mode
+Style - Modern
+Service life (only LED), h - 15,000 h."
 slug_012,,,настільні лампи,https://bt.rozetka.com.ua/ua/baseus-dgrad-0g/p363576393/,598,Настільна лампа Baseus,Настільні лампи,"Портативна настільна лампа для використання при читанні, малюванні, роботі за комп'ютером та багато іншого. Невеликі розміри та вага дозволяють носити лампу із собою у сумці або рюкзаку. Вбудований акумулятор ємністю 350мАч дає живлення на 5 годин безперервної роботи при максимальній яскравості та до 24 годин при мінімальній.
 Тип - Функціональні (Для роботи/навчання)
 Тип використовуваної лампи - LED-модуль (незмінне джерело світла)
@@ -152,7 +271,17 @@ slug_012,,,настільні лампи,https://bt.rozetka.com.ua/ua/baseus-dgr
 Потужність, Вт - 3 Вт
 Джерело живлення - Від акумулятора, Від мережі
 Особливості - З USB виходом , З лампою у комплекті, Режим нічника
-Стиль - Сучасний",0,35,5,,
+Стиль - Сучасний",0,35,5,,Baseus table lamp,Table lamps,"Portable table lamp for use when reading, drawing, working at the computer and much more. The small size and weight allow you to carry the lamp with you in a bag or backpack. The built-in battery with a capacity of 350 mAh provides power for 5 hours of continuous work at maximum brightness and up to 24 hours at a minimum.
+Type - Functional (For work/study)
+Type of lamp used - LED module (constant light source)
+Purpose - For reading
+Voltage, V - 5 V
+Base color - Black
+The color of the lampshade is Gray
+Power, W - 3 W
+Power source - From the battery, From the network
+Features - With USB output, With lamp included, Night light mode
+Style - Modern"
 slug_013,,,масажери,https://www.foxtrot.com.ua/uk/shop/massazhyoriy_beurer_smg_11.html,819,Масажер BEURER SMG 11,Масажери,"Характеристики
 Види масажу - вібромасаж
 Тип масажера - ручний масажер
@@ -161,7 +290,15 @@ slug_013,,,масажери,https://www.foxtrot.com.ua/uk/shop/massazhyoriy_beur
 Розміри - 10 х 10 х 9см
 Вага - 160г
 Гарантія - 24 міс.
-",18,25,0,,
+",18,25,0,,Massager BEURER SMG 11,Massagers,"Characteristics
+Types of massage - vibration massage
+The type of massager is a manual massager
+Number of massage modes - 1
+The material is plastic
+Dimensions - 10 x 10 x 9 cm
+Weight - 160g
+Warranty - 24 months.
+"
 slug_014,,,масажери,https://bt.rozetka.com.ua/ua/recharge-7152-0001/p326037433/,649,Масажер для шиї Recharge,Масажери,"Щоб позбутися постійного напруження, спазмів і тупого болю в зоні шиї, рекомендуємо використовувати електричний масажер. Такий масажер допоможе розслабитися й зняти всі неприємні прояви. Ви позбудетеся головного болю, безсоння, відчуття скутості та інших симптомів.
 Сеанси релаксації з електричним масажером Recharge можна проводити будь-де: в офісі, вдома, у подорожі чи відрядженні.
 Кількість режимів масажу - 6
@@ -176,7 +313,17 @@ slug_014,,,масажери,https://bt.rozetka.com.ua/ua/recharge-7152-0001/p326
 Колір - Білий
 Живлення - Акумулятор
 Габарити (ВхШхГ)
-26 х 14 х 5 см",13,38,3,5,
+26 х 14 х 5 см",13,38,3,5,Recharge neck massager,Massagers,"To get rid of constant tension, spasms and dull pain in the neck area, we recommend using an electric massager. Such a massager will help you relax and remove all unpleasant symptoms. You will get rid of headaches, insomnia, stiffness and other symptoms.
+Relaxation sessions with the Recharge electric massager can be carried out anywhere: in the office, at home, on a trip or on a business trip.
+The number of massage modes is 6
+Purpose - For shoulders, For neck
+The instruction is in English
+Weight - 0.18 kg
+Type of massage - Impulse
+Color - White
+Power - Battery
+Dimensions (HxWxD)
+26 x 14 x 5 cm"
 slug_015,,,масажери,https://bt.rozetka.com.ua/ua/supretto-8222-0001/p393036339/,399,Масажний килимок Supretto,Масажери,"Якщо наприкінці дня ви відчуваєте неприємну втому в ногах, спробуйте наш масажний рефлекторний килимок Supretto. Він забезпечить релаксацію, розслаблення та полегшення больових відчуттів у ногах та тілі.Рефлексотерапія. Основним принципом дії масажного килимка для ніг є рефлексотерапія. Відомо, що на стопах розташовані спеціально точки, що впливають на все тіло. Масаж цих точок допоможе позбавитися неприємної втоми з ніг і тіла в цілому, покращити мікроциркуляцію, зняти напругу м'язів, набряклість, полегшити тяжкість у ногах.
 Призначення - Для стоп
 Вид масажера - Масажний килимок, матрац
@@ -187,19 +334,33 @@ slug_015,,,масажери,https://bt.rozetka.com.ua/ua/supretto-8222-0001/p393
 Колір - Зелений
 Габарити в упаковці (ВхШхГ) - 35.5 х 37 х 1.5 см
 Країна реєстрації бренду - Україна
-Гарантія - 14 днів офіційної гарантії від виробника",19,41,4,,
-slug_016,Владислава Чайка,Посуд,чашки,https://rozetka.com.ua/ua/282979188/p282979188/,150,Чашка біла з математичними формулами,Чашка ,"Прикольні і незвичайні чашки з написами або з милими малюнками - це позитивні емоції, які залишаються з вами надовго. Оригінальна чашка стане відмінним доповненням до будь-якої кухні, її зовнішній вигляд буде радувати не тільки вас, але і ваших гостей, а пити з цієї чашки одне задоволення!Керамічна чашка стане відмінним подарунком для ваших рідних і близьких людей. Цікавий принт підкреслить стиль і настрій.",13,28,0,,
+Гарантія - 14 днів офіційної гарантії від виробника",19,41,4,,Supretto massage mat,Massagers,"If you feel unpleasant fatigue in your legs at the end of the day, try our Supretto massage reflex mat. It will provide relaxation, relaxation and relief of pain in the legs and body. Reflexology. Massage of these points will help get rid of unpleasant fatigue from the legs and body as a whole, improve microcirculation , relieve muscle tension, swelling, relieve heaviness in the legs.
+Purpose - For feet
+mat, mattress
+Features - The relief surface of the mat is equipped with two additional massage areas that affect the arch of the foot. It will provide relaxation, relaxation and relief of pain in the legs and body
+Weight - 0.275 kg
+Color - Green
+Package dimensions (HxWxD) - 35.5 x 37 x 1.5 cm"
+slug_016,Владислава Чайка,Посуд,чашки,https://rozetka.com.ua/ua/282979188/p282979188/,150,Чашка біла з математичними формулами,Чашка ,"Прикольні і незвичайні чашки з написами або з милими малюнками - це позитивні емоції, які залишаються з вами надовго. Оригінальна чашка стане відмінним доповненням до будь-якої кухні, її зовнішній вигляд буде радувати не тільки вас, але і ваших гостей, а пити з цієї чашки одне задоволення!Керамічна чашка стане відмінним подарунком для ваших рідних і близьких людей. Цікавий принт підкреслить стиль і настрій.",13,28,0,,The cup is white with mathematical formulas,Cup,"Cool and unusual cups with inscriptions or cute pictures are positive emotions that stay with you for a long time. The original cup will be an excellent addition to any kitchen, its appearance will delight not only you, but also your guests, and drinking from this cup is a pleasure! The ceramic cup will be an excellent gift for your family and friends. An interesting print will emphasize style and mood."
 slug_017,,,чашки,https://rozetka.com.ua/ua/375714933/p375714933/,300,"Кружка біла керамічна ""Ти ж програміст""",Чашка ,"Гарячий чай або ранкова кава – що може бути кращим? Насправді кращим може бути кружка яка здатна не тільки тримати в собі ваш улюблений напій, але й захищати ваші руки від опіків.
 Виготовляючи кружки для наших улюблених покупців ми використовуємо якісну та вельми товсту кераміку, завдяки чому ваші ручки будуть у безпеці. Крім того, ми пропонуємо зручний об’єм у 320 мілілітрів – саме те для чайоманів та фанатів кавових напоїв.
-Окремої уваги варті принти, адже ми друкуємо їх з усією любов’ю та не жаліємо фарби, для вашої усмішки. Тож якщо ви хочете посміхатися кожного ранку дивлячись на кружку, як би це не виглядало, або шукаєте подарунок для друга, від якого він буде у захваті – завітайте до каталогу Чайник Рассела, адже нам є що вам запропонувати!",12,50,5,,
-slug_018,,,чашки,https://rozetka.com.ua/ua/336143281/p336143281/,450,"Чашка для програміста ""Яке ТЗ""",Чашка ,"Це аксіома: якщо немає чітких критеріїв завдання — чекай від результату чого завгодно. І коли завгодно. Якщо взагалі колись. Кружка програмісту Яке ТЗ нагадує про це. Втім, принцип працює не лише зі сферою IT. Те ж саме можна сказати про дизайнерів, копірайтерів, маркетологів, фотографів... Купити чашку з таким принтом можна багато кому, так що май на увазі якщо шукаєш універсальні подарунки.",19,4,1,,
+Окремої уваги варті принти, адже ми друкуємо їх з усією любов’ю та не жаліємо фарби, для вашої усмішки. Тож якщо ви хочете посміхатися кожного ранку дивлячись на кружку, як би це не виглядало, або шукаєте подарунок для друга, від якого він буде у захваті – завітайте до каталогу Чайник Рассела, адже нам є що вам запропонувати!",12,50,5,,"White ceramic mug ""You're a programmer""",Cup,"Hot tea or morning coffee - what could be better? In fact, a mug that can not only hold your favorite drink, but also protect your hands from burns can be better.
+When making mugs for our beloved customers, we use high-quality and very thick ceramics, thanks to which your hands will be safe. In addition, we offer a convenient volume of 320 milliliters - just the thing for tea lovers and fans of coffee drinks.
+Prints deserve special attention, because we print them with all the love and do not spare the paint, for your smile."
+slug_018,,,чашки,https://rozetka.com.ua/ua/336143281/p336143281/,450,"Чашка для програміста ""Яке ТЗ""",Чашка ,"Це аксіома: якщо немає чітких критеріїв завдання — чекай від результату чого завгодно. І коли завгодно. Якщо взагалі колись. Кружка програмісту Яке ТЗ нагадує про це. Втім, принцип працює не лише зі сферою IT. Те ж саме можна сказати про дизайнерів, копірайтерів, маркетологів, фотографів... Купити чашку з таким принтом можна багато кому, так що май на увазі якщо шукаєш універсальні подарунки.",19,4,1,,"Cup for a programmer ""What TK""",Cup,"This is an axiom: if there are no clear criteria for the task, expect anything from the result. And whenever you want. If ever. Programmer mug Yake TK reminds of this. However, the principle works not only with the IT sphere. The same can be said about designers, copywriters, marketers, photographers... Many people can buy a cup with such a print, so keep that in mind if you are looking for universal gifts."
 slug_019,,,термокружки,https://rozetka.com.ua/ua/tramp_trc_030/p1708102/,802,Термос Tramp Expedition Line,Термос,"Завдяки подвійній стінці довго зберігає температуру як гарячих, так і холодних напоїв.
 Термос укомплектований глухою пробкою з каналами для наливання в напівзакритому стані. Ця конструкція дає змогу наливати рідину, не відкручуючи пробку повністю, що зменшує втрату температури під час експлуатації.
 Зроблений із легкого та міцного зносостійкого матеріалу.
 Має додаткову пластикову чашку.
 Спеціальна обробка внутрішнього покриття дає змогу легко мити термос зсередини.
 Завдяки вузькій витягнутій формі термос легко поміщається в рюкзаку або портфелі.
-У виробництві використовується високоякісна, екологічно безпечна сировина.",4,45,3,,
+У виробництві використовується високоякісна, екологічно безпечна сировина.",4,45,3,,Thermos Tramp Expedition Line,Thermos,"Thanks to the double wall, it keeps the temperature of both hot and cold drinks for a long time.
+The thermos is equipped with a blind plug with channels for pouring in a semi-closed state. This design allows you to pour the liquid without unscrewing the cap completely, which reduces the loss of temperature during operation.
+Made of light and strong wear-resistant material.
+Has an additional plastic cup.
+The special treatment of the inner coating makes it possible to easily wash the thermos from the inside.
+Due to its narrow, elongated shape, the thermos can easily be placed in a backpack or briefcase.
+High-quality, environmentally safe raw materials are used in production."
 slug_020,,,термокружки,https://rozetka.com.ua/ua/tefal-k3140314/p374754267/,1300,Термос Tefal Ponza Pump,Термос,"Ультрасучасний термос Tefal Ponza Pump з передовою технологією Comfort Press для максимальної зручності використання та простоти. Ідеально підходить для будь-якого випадку, відрізняється стильним дизайном і збереженням тепла.
 Зручне та легке використання
 Технологія Comfort Press забезпечує виняткову простоту використання та комфорт, а помпа дозволяє повністю контролювати кількість.
@@ -210,25 +371,39 @@ slug_020,,,термокружки,https://rozetka.com.ua/ua/tefal-k3140314/p3747
 Збереження температури
 Термос Tefal Ponza Pump дозволяє насолоджуватися смачними гарячими напоями ідеальної температури до дванадцятої години або холодними напоями до двадцяти чотирьох годин.
 Об'єм 1.9 л для великих компаній
-Цей ультрасучасний термос місткістю 1.9 л ідеально підійде для великих компаній, будь то вдома, в офісі або на важливих заходах.",8,30,2,,
+Цей ультрасучасний термос місткістю 1.9 л ідеально підійде для великих компаній, будь то вдома, в офісі або на важливих заходах.",8,30,2,,Thermos Tefal Ponza Pump,Thermos,"Ultra-modern Tefal Ponza Pump thermos with advanced Comfort Press technology for maximum ease of use and simplicity. Ideal for any occasion, with a stylish design and heat preservation.
+Convenient and easy to use
+The Comfort Press technology provides exceptional ease of use and comfort, while the pump allows for full control over quantity.
+Thoughtfulness down to the smallest detail
+Easy to fill and clean with features like a removable drip tray and convenient carry handle.
+Preservation of temperature
+Thermos Tefal
+Volume 1.9 l for large companies
+This ultra-modern thermos with a capacity of 1.9 liters is ideal for large companies, whether at home, in the office or at important events."
 slug_021,,,термокружки,https://rozetka.com.ua/ua/tefal_k3081114/p21603373/,900,Термокухоль Tefal Travel Mug,Термокружка,"Компанія Tefal — провідний виробник посуду з антипригарним покриттям і світовий лідер з виробництва скороварок, кухонних електроприладів, приладів з приготування їжі та напоїв, прасок і ваг. Tefal прагне до розуміння потреб споживачів і постійного внесення інноваційних рішень. В історії компанії Tefal простежуються яскраві сторінки винахідницьких та інноваційних ідей світового масштабу.
 Термокухоль Tefal Travel Mug стане в пригоді в будь-якій ситуації, оскільки здатен підтримувати температуру напою довше за будь-яку чашку, і слугуватиме вам для будь-яких напоїв. Це ідеальне рішення для великого міста, надійний помічник у дорозі.
 Термокухоль виготовлено з високоякісної неіржавкої сталі 18/10 із силіконовим покриттям Soft Touch, вакуумна колба з неіржавкої сталі надовго збереже температуру вашого напою. Висока температура триматиметься до 4 годин, низька — до 8 годин.
 Термокухоль щільно закривається кришкою із силіконовим ущільнювачем, забезпечуючи 100% герметичність, тож його можна вільно перевертати й класти набік, ставити на сидіння автомобіля або в сумку.
 У кришці термокухля є кнопка, яка відкриває отвір для пиття. Це запобігає вихлюпуванню рідини й дає змогу використовувати кухоль навіть під час поїздок в автомобілі.
 Форма й розміри термокухля ідеально підходять для будь-якого підсклянника вашого автомобіля.
-Годиться для миття в посудомийній машині.",0,8,2,,
-slug_022,,,ланч бокси,https://rozetka.com.ua/ua/noveen_070846/p355499763/,1869,Ланч-бокс Noveen,Ланч бокс,"Ланч-бокс Noveen LB510 – ідеальний варіант, щоб взяти їжу з собою, для тих, хто цінує здоровий спосіб життя. Стильний зовнішній вигляд, зроблений з якісних матеріалів, внутрішня частина виготовлена зі сталі INOX. Ланч-бокс швидко та якісно розігріє ваші страви, завдяки вбудованому нагрівальному РТС елементу, який здатен розігріти їжу 60 °C за 20 хвилин. А щільна кришечка допоможе зберегти температуру та свіжість ваших страв. Контейнер складається з 3-х відділень, його можна мити у посудомийній машині. Це ідеальний варіант, щоб взяти їжу з собою в дорогу, бо завдяки додатковому блоку живлення на 12 В, страви можна розігрівати в машині.",6,47,4,,
-slug_023,,,ланч бокси,https://rozetka.com.ua/ua/377122419/p377122419/,250,Ланч-бокс Turtle,Ланч бокс,"Дитячий ланч-бокс у вигляді черепахи – це чудовий вибір для батьків, які хочуть забезпечити своїх дітей здоровим та смачним харчуванням під час шкільного обіду чи поїздки. Цей ланч-бокс має унікальний та привабливий дизайн у вигляді черепахи, який напевно сподобається дітям. Він має два рівні, що дозволяє розмістити різні страви в одному контейнері та не змішувати їх. Кожен рівень ланч-боксу оснащений кришкою, яка щільно закривається, щоб зберегти свіжість та смак страв. Крім того, ланч-бокс поставляється з ложкою, що робить його зручним та практичним у використанні. Цей ланч-бокс виготовлений із безпечних для дітей матеріалів, таких як пластик, та легко миється. Він також досить компактний, щоб поміститися в рюкзак або сумку для перенесення. Цей ланч-бокс у вигляді черепахи - чудовий вибір для батьків, які хочуть запропонувати своїм дітям смачне та здорове харчування під час обіду у школі чи поїздці.",2,1,3,,
-slug_024,,,ланч бокси,https://rozetka.com.ua/ua/384217770/p384217770/,230,"Ланч-бокс подвійний Эко ""Lunch box""",Ланч бокс,"Еко ланч-бокс на 750 мл з двома рівнями, ложкою та виделкою є ідеальним способом зберігання вашого обіду, одночасно піклуючись про навколишнє середовище. Цей ланч-бокс виготовлений з додаванням безпечної біорозкладної сировини, що включає перероблені волокна пшениці, солому та рис, що дозволяє йому бути екологічною альтернативою традиційним пластиковим контейнерам. Завдяки ємності на 750 мл, у вас є достатньо місця для вашого улюбленого обіду, закусок та фруктів. Дворівнева конструкція дозволяє зберігати різні види їжі окремо, щоб запобігти змішуванню запахів та зберегти їх свіжість. Цей еко ланч-бокс постачається з екологічною ложкою та виделкою, що додатково підсилюють його екологічний вплив. Вони виготовлені з біорозкладного пластику, що забезпечує їх безпечність та природності. Використання таких приборів допомагає зменшити споживання одноразових пластикових виробів та сприяє збереженню природних ресурсів. Крім екологічних переваг, цей ланч-бокс має сучасний дизайн та стійкість. Він зручно вміщується у вашу сумку, рюкзак або робочу сумку, забезпечуючи зручне перенесення та зберігання. Можете бути спокійні, знаючи, що ваш ланч не тільки збереже його свіжість, але й внесе свій внесок у збереження довкілля. Оберіть еко ланч-бокс на 750 мл з двома рівнями, ложкою та виделкою еко пластику і зробіть свій обід не тільки смачним, але й екологічно збалансованим.",15,1,2,,
-slug_025,,,пляшки для води,https://rozetka.com.ua/ua/uzspace_6955482371008/p72510921/,599,Фляга для води Uzspace Frosted,Пляшка для води,"Пляшка для води Kite — виготовлена з тритану. Тритан — надійний, міцний, безпечний пластик без запаху та смаку. Не такий крихкий, як скло, але легкий і прозорий матеріал. Пляшечки слугуватимуть довго та збережуть свій первинний вигляд. Вироби з тритану не містять бісфенолу А (він небезпечний через те, що під час нагрівання або тривалого зберігання харчових продуктів у посуді, переходить із пластику в їжу та має негативний вплив на здоров'я), можуть витримувати температуру до 90 °C. Пляшка безпечна для здоров'я. Пляшки мають оригінальний, стильний і зручний дизайн. Їх також можна мити в посудомийній машині.",14,45,2,,
-slug_026,,,пляшки для води,https://rozetka.com.ua/ua/kite_k22_400_02/p353783883/,251,Пляшечка для води Kite,Пляшка для води,"Пляшка для води Kite — виготовлена з тритану. Тритан — надійний, міцний, безпечний пластик без запаху та смаку. Не такий крихкий, як скло, але легкий і прозорий матеріал. Пляшечки слугуватимуть довго та збережуть свій первинний вигляд. Вироби з тритану не містять бісфенолу А (він небезпечний через те, що під час нагрівання або тривалого зберігання харчових продуктів у посуді, переходить із пластику в їжу та має негативний вплив на здоров'я), можуть витримувати температуру до 90 °C. Пляшка безпечна для здоров'я. Пляшки мають оригінальний, стильний і зручний дизайн. Їх також можна мити в посудомийній машині.",19,12,1,,
-slug_027,,,пляшки для води,https://rozetka.com.ua/ua/casno_kxn_1183_pink/p250629246/,290,Пляшка для води Casno,Пляшка для води,"Casno — пляшка для води, виготовлена з якісного Р7 поліефірного пластику, вона не має стороннього запаху, зручна у використанні, не шкідлива для здоров'я. Вона ідеально підходить для піших прогулянок, їзди на велосипеді, для кемпінгу, трекінгу, бігу, йоги й будь-яких інших видів спорту будинку, у тренажерному залі та в офісі. Ця пляшка — ідеальний вибір для подарунка! Чудові якості матеріалу та неймовірний вибір кольорів не залишать байдужим жодного споживача! Мірне маркування й широке горло дає змогу використовувати пляшку як шейкер для спортивного харчування!",19,4,1,,
+Годиться для миття в посудомийній машині.",0,8,2,,Thermal mug Tefal Travel Mug,Thermal mug,"The Tefal Travel Mug will come in handy in any situation, as it is able to maintain the temperature of the drink longer than any cup, and will serve you for any drinks. It is an ideal solution for a big city, a reliable assistant on the road.
+The thermos mug is made of high-quality stainless steel, the vacuum flask made of stainless steel will keep the temperature of your drink for a long time.
+The lid of the thermal mug has a button that opens the opening for drinking. This prevents liquid from spilling and allows you to use the mug even during car trips.
+The shape and size of the thermal mug are ideal for any windshield of your car.
+Suitable for washing in the dishwasher."""
+slug_022,,,ланч бокси,https://rozetka.com.ua/ua/noveen_070846/p355499763/,1869,Ланч-бокс Noveen,Ланч бокс,"Ланч-бокс Noveen LB510 – ідеальний варіант, щоб взяти їжу з собою, для тих, хто цінує здоровий спосіб життя. Стильний зовнішній вигляд, зроблений з якісних матеріалів, внутрішня частина виготовлена зі сталі INOX. Ланч-бокс швидко та якісно розігріє ваші страви, завдяки вбудованому нагрівальному РТС елементу, який здатен розігріти їжу 60 °C за 20 хвилин. А щільна кришечка допоможе зберегти температуру та свіжість ваших страв. Контейнер складається з 3-х відділень, його можна мити у посудомийній машині. Це ідеальний варіант, щоб взяти їжу з собою в дорогу, бо завдяки додатковому блоку живлення на 12 В, страви можна розігрівати в машині.",6,47,4,,Noveen lunch box,Lunch box,"The Noveen LB510 lunch box is an ideal option to take food with you, for those who value a healthy lifestyle. Stylish appearance, made of quality materials, the interior is made of INOX steel. The lunch box will heat up your meals quickly and efficiently, thanks to the built-in RTS heating element, which is capable of heating food to 60 °C in 20 minutes. And the tight lid will help keep the temperature and freshness of your dishes. The container consists of 3 compartments, it can be washed in a dishwasher. This is an ideal option to take food with you on the road, because thanks to the additional 12 V power supply unit, you can heat up the food in the car."
+slug_023,,,ланч бокси,https://rozetka.com.ua/ua/377122419/p377122419/,250,Ланч-бокс Turtle,Ланч бокс,"Дитячий ланч-бокс у вигляді черепахи – це чудовий вибір для батьків, які хочуть забезпечити своїх дітей здоровим та смачним харчуванням під час шкільного обіду чи поїздки. Цей ланч-бокс має унікальний та привабливий дизайн у вигляді черепахи, який напевно сподобається дітям. Він має два рівні, що дозволяє розмістити різні страви в одному контейнері та не змішувати їх. Кожен рівень ланч-боксу оснащений кришкою, яка щільно закривається, щоб зберегти свіжість та смак страв. Крім того, ланч-бокс поставляється з ложкою, що робить його зручним та практичним у використанні. Цей ланч-бокс виготовлений із безпечних для дітей матеріалів, таких як пластик, та легко миється. Він також досить компактний, щоб поміститися в рюкзак або сумку для перенесення. Цей ланч-бокс у вигляді черепахи - чудовий вибір для батьків, які хочуть запропонувати своїм дітям смачне та здорове харчування під час обіду у школі чи поїздці.",2,1,3,,Turtle lunch box,Lunch box,"The children's lunch box in the form of a turtle is a great choice for parents who want to provide their children with healthy and tasty food during school lunches or trips. This lunch box has a unique and attractive turtle design that is sure to appeal to kids. It has two levels. In addition, the lunch box comes with a spoon, which makes it convenient and practical to use. This lunch box is made of child-safe materials such as plastic and is easy to clean. It's also compact enough to fit in a backpack or carry-on bag. a choice for parents who want to offer their children a tasty and healthy meal during lunch at school or on a trip."
+slug_024,,,ланч бокси,https://rozetka.com.ua/ua/384217770/p384217770/,230,"Ланч-бокс подвійний Эко ""Lunch box""",Ланч бокс,"Еко ланч-бокс на 750 мл з двома рівнями, ложкою та виделкою є ідеальним способом зберігання вашого обіду, одночасно піклуючись про навколишнє середовище. Цей ланч-бокс виготовлений з додаванням безпечної біорозкладної сировини, що включає перероблені волокна пшениці, солому та рис, що дозволяє йому бути екологічною альтернативою традиційним пластиковим контейнерам. Завдяки ємності на 750 мл, у вас є достатньо місця для вашого улюбленого обіду, закусок та фруктів. Дворівнева конструкція дозволяє зберігати різні види їжі окремо, щоб запобігти змішуванню запахів та зберегти їх свіжість. Цей еко ланч-бокс постачається з екологічною ложкою та виделкою, що додатково підсилюють його екологічний вплив. Вони виготовлені з біорозкладного пластику, що забезпечує їх безпечність та природності. Використання таких приборів допомагає зменшити споживання одноразових пластикових виробів та сприяє збереженню природних ресурсів. Крім екологічних переваг, цей ланч-бокс має сучасний дизайн та стійкість. Він зручно вміщується у вашу сумку, рюкзак або робочу сумку, забезпечуючи зручне перенесення та зберігання. Можете бути спокійні, знаючи, що ваш ланч не тільки збереже його свіжість, але й внесе свій внесок у збереження довкілля. Оберіть еко ланч-бокс на 750 мл з двома рівнями, ложкою та виделкою еко пластику і зробіть свій обід не тільки смачним, але й екологічно збалансованим.",15,1,2,,"Lunch box double Eco ""Lunch box""",Lunch box,"The 750 ml eco lunch box with two levels, a spoon and a fork is the perfect way to store your lunch while being kind to the environment. to be an ecological alternative to traditional plastic containers. with a capacity of 750 ml. The two-level design comes with an eco-friendly spoon and fork, further enhancing its environmental impact. has a modern design and durability. You can rest easy knowing that your lunch will not only keep its freshness, but also contribute to the preservation of the environment. Choose a 750 ml eco lunch box with two levels, a spoon and a fork made of eco plastic and make your lunch not only tasty, but also ecologically balanced."
+slug_025,,,пляшки для води,https://rozetka.com.ua/ua/uzspace_6955482371008/p72510921/,599,Фляга для води Uzspace Frosted,Пляшка для води,"Пляшка для води Kite — виготовлена з тритану. Тритан — надійний, міцний, безпечний пластик без запаху та смаку. Не такий крихкий, як скло, але легкий і прозорий матеріал. Пляшечки слугуватимуть довго та збережуть свій первинний вигляд. Вироби з тритану не містять бісфенолу А (він небезпечний через те, що під час нагрівання або тривалого зберігання харчових продуктів у посуді, переходить із пластику в їжу та має негативний вплив на здоров'я), можуть витримувати температуру до 90 °C. Пляшка безпечна для здоров'я. Пляшки мають оригінальний, стильний і зручний дизайн. Їх також можна мити в посудомийній машині.",14,45,2,,Water bottle Uzspace Frosted,Water bottle,"The Kite water bottle is made of tritan. Tritan is a reliable, strong, safe, odorless and tasteless plastic. Not as fragile as glass, but a light and transparent material. The bottles will last a long time and retain their original appearance. Tritan products do not contain bisphenol A (it is dangerous due to the fact that during heating or long-term storage of food products in dishes, it transfers from plastic to food and has a negative effect on health), can withstand temperatures up to 90 °C. The bottle is safe for health. The bottles have an original, stylish and convenient design. They can also be washed in the dishwasher."
+slug_026,,,пляшки для води,https://rozetka.com.ua/ua/kite_k22_400_02/p353783883/,251,Пляшечка для води Kite,Пляшка для води,"Пляшка для води Kite — виготовлена з тритану. Тритан — надійний, міцний, безпечний пластик без запаху та смаку. Не такий крихкий, як скло, але легкий і прозорий матеріал. Пляшечки слугуватимуть довго та збережуть свій первинний вигляд. Вироби з тритану не містять бісфенолу А (він небезпечний через те, що під час нагрівання або тривалого зберігання харчових продуктів у посуді, переходить із пластику в їжу та має негативний вплив на здоров'я), можуть витримувати температуру до 90 °C. Пляшка безпечна для здоров'я. Пляшки мають оригінальний, стильний і зручний дизайн. Їх також можна мити в посудомийній машині.",19,12,1,,Kite water bottle,Water bottle,"The Kite water bottle is made of tritan. Tritan is a reliable, strong, safe, odorless and tasteless plastic. Not as fragile as glass, but a light and transparent material. The bottles will last a long time and retain their original appearance. Tritan products do not contain bisphenol A (it is dangerous due to the fact that during heating or long-term storage of food products in dishes, it transfers from plastic to food and has a negative effect on health), can withstand temperatures up to 90 °C. The bottle is safe for health. The bottles have an original, stylish and convenient design. They can also be washed in the dishwasher."
+slug_027,,,пляшки для води,https://rozetka.com.ua/ua/casno_kxn_1183_pink/p250629246/,290,Пляшка для води Casno,Пляшка для води,"Casno — пляшка для води, виготовлена з якісного Р7 поліефірного пластику, вона не має стороннього запаху, зручна у використанні, не шкідлива для здоров'я. Вона ідеально підходить для піших прогулянок, їзди на велосипеді, для кемпінгу, трекінгу, бігу, йоги й будь-яких інших видів спорту будинку, у тренажерному залі та в офісі. Ця пляшка — ідеальний вибір для подарунка! Чудові якості матеріалу та неймовірний вибір кольорів не залишать байдужим жодного споживача! Мірне маркування й широке горло дає змогу використовувати пляшку як шейкер для спортивного харчування!",19,4,1,,Casno water bottle,Water bottle,"Casno is a water bottle made of high-quality P7 polyester plastic, it has no extraneous smell, is convenient to use, and is not harmful to health. It is perfect for hiking, cycling, camping, trekking, running, yoga and any other sports at home, gym and office. This bottle is a perfect gift choice! The excellent quality of the material and the incredible choice of colors will not leave any consumer indifferent! Moderate labeling and a wide mouth allow you to use the bottle as a shaker for sports nutrition!"
 slug_028,Ілона,Їжа,цукерки,https://kashalot.gift/ua/boby-berti-botts-garri-potter/,260,Боби Берті Бот / Bertie Bott's Beans,Цукерки,"Цукерки «Боби Берті Бот» (Bertie Bott's Every Flavour Beans) у коробочці боби з різними смаками (одна упаковка, 34 г).
-Всього 20 смаків: банан, чорний перець, чорниця, комашки, цукрова вата, вишня, кориця, бруд, черв'як, вушна сірка, трава, зелене яблуко, зефір, тухле яйце, ковбаса, лимон, мило, тутті-Фрутті, блювота і кавун .",16,7,0,,
-slug_029,,,цукерки,https://kashalot.gift/ua/konfetki-v-stile-adventure-time/,80,Час пригод,Цукерки,"Цукерки від принцеси Бубльгум (горішки в глазурі), для поповнення супергеройських сил.",1,26,4,,
+Всього 20 смаків: банан, чорний перець, чорниця, комашки, цукрова вата, вишня, кориця, бруд, черв'як, вушна сірка, трава, зелене яблуко, зефір, тухле яйце, ковбаса, лимон, мило, тутті-Фрутті, блювота і кавун .",16,7,0,,Bertie Bott's Beans,Sweets,"""Bertie Bott's Every Flavor Beans"" candies in a box of beans with different flavors (one package, 34 g).
+20 flavors in total: Banana, Black Pepper, Blueberry, Bugs, Cotton Candy, Cherry, Cinnamon, Dirt, Worm, Earwax, Grass, Green Apple, Marshmallow, Rotten Egg, Sausage, Lemon, Soap, Tutti Frutti, Puke and watermelon."""
+slug_029,,,цукерки,https://kashalot.gift/ua/konfetki-v-stile-adventure-time/,80,Час пригод,Цукерки,"Цукерки від принцеси Бубльгум (горішки в глазурі), для поповнення супергеройських сил.",1,26,4,,Adventure time,Sweets,"Candies from Princess Bubblegum (peanuts in glaze), to replenish superhero powers."
 slug_030,,,цукерки,https://kashalot.gift/ua/tsukerky-spell-iz-solonoiu-karamelliu-solodki-suveniry-ta-atrybutyka-podarunok-na-den-narodzhennia-ta-novyi-rik/,140,Цукерки Spell із солоною карамеллю,Цукерки,"Колекція авторських цукерок з солоною карамеллю.
-Цукерки ручної роботи, виконані з бельгійського шоколаду. Вага: 160 г.",19,20,2,,
+Цукерки ручної роботи, виконані з бельгійського шоколаду. Вага: 160 г.",19,20,2,,Spell candies with salted caramel,Sweets,"A collection of original candies with salted caramel.
+Handmade candies made from Belgian chocolate. Weight: 160 g."
 slug_031,,,печиво з передбаченням,https://kashalot.gift/ua/patrotichne-pechivo-peredbachennja/,340,Патріотичні печива-передбачення,Печиво з передбаченням,"Не треба мати дар пророцтва або надприродні здібності, щоб зазирнути у майбутнє. У цьому майбутньому Україна буде вільною, щасливою та з перемогою. У цьому майбутньому будуть кохання, щастя та достаток під мирним небом. І заглянути туди можна за допомогою нашого патріотичного печива із пророкуваннями.
 
 Це символічний і водночас незвичайний презент, який розірве замкнене коло банальних та набридлих подарунків. При цьому він недорогий, але не схожий на все, що ви бачили до цього. Цей патріотичний подарунок зроблений у коробці зі шпону, він включає 10 печив з веселими і мотивуючими пророкуваннями. Кожне печиво зроблено у жовтому чи блакитному кольорах.
@@ -238,10 +413,17 @@ slug_031,,,печиво з передбаченням,https://kashalot.gift/ua/p
 ⦁ Матеріал коробки – шпон.
 ⦁ Розмір коробки – 15 х 15 см.
 ⦁ Усередині 10 печив з веселими, мотивуючими та підбадьорюючими передбаченнями для патріотів.
-⦁ Зверху коробка обмотується атласною жовтою та блакитною стрічкою.",12,31,2,,
+⦁ Зверху коробка обмотується атласною жовтою та блакитною стрічкою.",12,31,2,,Patriotic Prediction Cookies,Prediction cookies,"Ukraine will be free, happy and victorious. In this future there will be love, happiness and prosperity under a peaceful sky.
+This is a symbolic and at the same time unusual present that will break the closed circle of banal and boring gifts. At the same time, it is inexpensive, but unlike anything you have seen before. This patriotic gift comes in a veneer box and includes 10 cookies with fun and motivational predictions
+True Ukrainians will like such a gift with patriotic symbols
+
+⦁ The material of the box is veneer.
+⦁ The size of the box is 15 x 15 cm.
+⦁ Inside are 10 cookies with fun, motivational, and encouraging predictions for the Patriots."
 slug_032,,,печиво з передбаченням,https://kashalot.gift/ua/pechene-s-predskazaniyami/,320,Печиво з передбаченнями ,Печиво з передбаченням,"Подарунки можуть дивувати своїх отримувачів, можуть надихати, можуть вражати. Але чи багато ви знаєте презентів, здатних передбачати майбутнє? Наш солодкий подарунок для дівчини «печиво з передбаченнями» входить до їх рідкісного числа. Дар пророцтва у поєднанні з вишуканим, ніжним і солодким смаком – звучить досить оригінально та незвичайно, а значить, таке точно здивує вашу подругу, колегу чи другу половинку. Наше печиво з прогнозами у подарунок – ласощі, які урізноманітнюють звичний підхід до дарування солодощів. Шоколадки та цукерки – це, звичайно, добре, але куди краще, коли навіть простий та недорогий презент має ідею, посил, оригінальне призначення.
 
-Такий подарунок для дівчини виглядає незвичайно та святково. Це красива коробка з прозорою кришкою, всередині якої знаходиться 10 великих печив у глазурі та обсипці. Кожне містить пророцтво, яке мотивує на подвиги і робить одержувачку щасливішою.",14,22,4,,
+Такий подарунок для дівчини виглядає незвичайно та святково. Це красива коробка з прозорою кришкою, всередині якої знаходиться 10 великих печив у глазурі та обсипці. Кожне містить пророцтво, яке мотивує на подвиги і робить одержувачку щасливішою.",14,22,4,,Prediction cookies,Prediction cookies,"The gift of prophecy combined with an exquisite, delicate and sweet taste - sounds quite original and unusual, which means that this will definitely surprise your girlfriend, colleague or soulmate.
+Such a gift for a girl looks unusual and festive. This is a beautiful box with a clear lid, inside which are 10 large cookies with frosting and sprinkles. Each contains a prophecy that motivates feats and makes the recipient happier."""
 slug_033,,,печиво з передбаченням,https://kashalot.gift/ua/magicheskie-prorochestva-professora-treloni-garri-potter/,340,Печиво з передбаченнями Гаррі Поттер ,Печиво з передбаченням,"Це у книгах і фільмах учні Гоґвортсу швидко зрозуміли, що на уроках професора Трелоні з віщування можна померти від нудьги, так і не зазирнувши за межі реальності. Ми ж зробили пророцтва, які не просто працюють – вони піднімають настрій, роблять будь-яке свято незабутнім і трошки розповідають про майбутнє. Можливо, ми вмовили Трелоні постаратися для печива з пророкуваннями у подарунок, але нехай це залишиться нашим секретом. Вони ідеально доповнять будь-який великий презент, зробивши його більш тематичним та оригінальним. Але підійдуть вони і в якості окремого подарунка фанату Гаррі Поттера – невеликого, але такого атмосферного та смачного.
 
 Ви можете купити печиво з пророкуваннями у магічній коробці, перев'язаній стрічкою. Усередині знаходиться цілих 10 штучок смаколиків. З ними не тільки чарівник, а й будь-який маґл може передбачати майбутнє! Цей подарунок поттероману зроблений із смачного тіста з гарним декором глазур'ю. Термін придатності такої коробочки – 2 місяці.
@@ -251,21 +433,37 @@ slug_033,,,печиво з передбаченням,https://kashalot.gift/ua/m
 Дата виготовлення: вказана на стікері.
 Усередині кожного печива - тоненький аркуш з пророцтвом. Не тільки чарівник, а й маґл зможе зазирнути у майбутнє!
 
-Можна купити як самостійний подарунок, або додати його в бокс. Просто додайте товар в кошик разом з боксом і вкажіть, що бажаєте упаковати разом в коментарі до замовлення.",1,29,2,,
+Можна купити як самостійний подарунок, або додати його в бокс. Просто додайте товар в кошик разом з боксом і вкажіть, що бажаєте упаковати разом в коментарі до замовлення.",1,29,2,,Harry Potter Prediction Cookies,Prediction cookies,"But they will also be suitable as a separate gift for a Harry Potter fan - small, but so atmospheric and tasty.
+there are as many as 10 pieces of goodies. This gift for a Potter lover is made from a delicious dough with a beautiful frosting decoration. The shelf life of such a box is 2 months.
+
+Number of cookies in a package: 10 pcs.
+Shelf life: 2 months.
+Date of manufacture: indicated on the sticker.
+Inside each cookie is a thin sheet with a prophecy. Not only a wizard, but also a muggle will be able to look into the future!
+
+You can buy it as an independent gift, or add it to the box. Just add the product to the cart together with the box and indicate what you want to pack together in the comments to the order."""
 slug_034,,,чай,https://kashalot.gift/ua/dotrakijskij-chaj-hra-prestoliv-suveniry-ta-atrybutyka-podarunky-za-serialom-game-of-thrones/,180,Дотракійський чай,Чай,"Дотракійський чай - заряджає хоробрістю і впевненістю. Як бонус: робить тіло невразливим у бою.
-Чорний цейлонський чай з шипшиною, яблуком, пелюстками квітів і ароматом тропічних фруктів. Вага: 80 г.",6,0,5,,
+Чорний цейлонський чай з шипшиною, яблуком, пелюстками квітів і ароматом тропічних фруктів. Вага: 80 г.",6,0,5,,Dothraki tea,Tea,"""Dothraki tea - charges with courage and confidence. As a bonus: makes the body invulnerable in battle.
+Black Ceylon tea with rosehip, apple, flower petals and aroma of tropical fruits. Weight: 80 g."
 slug_035,,,чай,https://kashalot.gift/ua/chai-dlia-podorozhei-u-chasi-ta-prostori-doktor-khto-suveniry-ta-solodoshchi-podarunky-v%20styli-seryalu-doctor-who/,160,Чай для подорожей у часі та просторі ,Чай,"Відмінно відновлює енергію після подорожей у просторі та часі. І як говорив Доктор Хто: «Чаю, найміцнішого, пакетик не виймати!»
-Всередині: чорний листовий чай з ароматом лимону та чебрецю, 95 г.",3,25,5,,
-slug_036,,,чай,https://kashalot.gift/ua/chornyi-lystovyi-chai-beauty-suveniry-ta-solodoshchi-universalnyi-podarunok-dlia-zhinky/,160,"Чорний листовий чай ""Beauty""",Чай,Чорний пряний цейлонський чай з чебрецем і цедрою лимона. Вага: 95 г.,1,16,0,,
+Всередині: чорний листовий чай з ароматом лимону та чебрецю, 95 г.",3,25,5,,Tea for traveling through time and space,Tea,"Perfectly restores energy after traveling through space and time. And as Doctor Who used to say: 'Tea, the strongest, don't take out the tea bag!'
+Inside: black leaf tea with the aroma of lemon and thyme, 95 g."
+slug_036,,,чай,https://kashalot.gift/ua/chornyi-lystovyi-chai-beauty-suveniry-ta-solodoshchi-universalnyi-podarunok-dlia-zhinky/,160,"Чорний листовий чай ""Beauty""",Чай,Чорний пряний цейлонський чай з чебрецем і цедрою лимона. Вага: 95 г.,1,16,0,,"Black leaf tea ""Beauty""",Tea,Black spicy Ceylon tea with thyme and lemon peel. Weight: 95 g.
 slug_037,,,кава,https://kashalot.gift/ua/aromatna-kava-suveniri-druzi-podarunok-fanatu-serialu-friends/,200,Запашна кава з кав'ярні Central Perk,Кава,"Пориньте у затишну атмосферу посиденьок з Друзями в кав'ярні «Central Perk» з ароматною кавою у стильному дизайні.
 На вибір мелена, зернова кава. Об'єм: 150 г.
-",0,18,0,,
+",0,18,0,,Fragrant coffee from the Central Perk coffee shop,Coffee,"Immerse yourself in the cozy atmosphere of gatherings with friends at the Central Perk coffee shop with aromatic coffee in a stylish design.
+A choice of ground or grain coffee. Volume: 150 g.
+"
 slug_038,,,кава,https://kashalot.gift/ua/kava-enerhin-forte-suveniry-ta-solodoshchi-universalnyi-podarunok-dlia-zhinky-chy-cholovika/,200,"Мелена кава ""Енергін форте""",Кава,"Упаковка кави «Енергін форте».
 • Властивості: наповнює енергією, моментально бадьорить, викликає бажання зробити все за 1 день.
-• Всередині: мелена кава преміум якості.",13,42,1,,
+• Всередині: мелена кава преміум якості.",13,42,1,,"Ground coffee ""Energin Forte""",Coffee,"""Package of ""Energin Forte"" coffee.
+• Properties: fills with energy, instantly invigorates, makes you want to do everything in 1 day.
+• Inside: ground coffee of premium quality."""
 slug_039,,,кава,https://kashalot.gift/ua/kofe-programmers-never-sleep-podarok-programistu/,200,"Кава ""Programmers never sleep"" ",Кава,"Кава «Programmers never sleep».
 Всередині: мелена кава, 100% арабіка.
-Вага: 150 г.",9,28,2,,
+Вага: 150 г.",9,28,2,,"Coffee ""Programmers never sleep""",Coffee,"""Programmers never sleep"" coffee.
+Inside: ground coffee, 100% Arabica.
+Weight: 150 g."
 slug_040,,,Суміші для коктейлів,https://kashalot.gift/ua/shokoladnaja-ljagushka-garri-potter/,300,Шоколадне жабеня,Шоколад,"Шоколадне непосидюче жабеня ручної роботи. У книзі такі жаби є звичними для всіх шоколадних виробів, бо не дуже зручно було б куштувати шоколад, що вистрибує з рота.
 
 Примітною деталлю шоколадних жаб є картка з портретом та біографічними даними знаменитого чарівника. Діти магів колекціонують ці вкладиші, як маггли збирають вкладиші від жуйок, кришечки та іграшки з кіндеру.
@@ -278,71 +476,100 @@ slug_040,,,Суміші для коктейлів,https://kashalot.gift/ua/shoko
 
 Склад: 54% чорний шоколад.
 Вага: +-50 г.
-Термін придатності: 3 місяці.",5,48,0,,
+Термін придатності: 3 місяці.",5,48,0,,Chocolate frog,Chocolate,"""Chocolate restless handmade frog. In the book, such frogs are common for all chocolate products, because it would not be very convenient to taste chocolate that jumps out of the mouth.
+
+A notable detail of the chocolate frogs is a card with a portrait and biographical data of the famous magician. Wizarding children collect these liners the way Muggles collect gum liners, lids and Kindergarten toys.
+And also, as in any magical sweet shop, cards in chocolate frogs will come across randomly.
+
+On the cards of our magical frogs, you can meet such magicians:
+⦁ Albus Dumbledore
+⦁ Harry Potter
+⦁ Newt Scamander
+
+Composition: 54% dark chocolate.
+Weight: +-50 g.
+Shelf life: 3 months."""
 slug_041,,,Суміші для коктейлів,https://kashalot.gift/ua/chernij-shokolad-s-soljonoj-karamelju-podarok-dlja-dizajnera-shokolad-dlja-kreativnih-sladkoezhek/,190,Чорний шоколад із солоною карамеллю,Шоколад,"• Вага – 100 г.
 • Чорний шоколад із солоною карамеллю.
-• Дизайнерське креативне оформлення.",2,3,4,,
-slug_042,,,Суміші для коктейлів,https://kashalot.gift/ua/belhiiskyi-molochnyi-shokolad-bez-tsukru-z-fundukom-spell-suveniry-ta-atrybutyka-solodkyi-podarunok/,150,Молочний шоколад без цукру з фундуком,Шоколад,"А чи можна без цукру? Справжньому бельгійському шоколаду можна все! Навіть без цукру, з ніжною горіховою начинкою ця плитка просто зникне миттєво. Вага: 80г. Розмір плитки: 10x10 см.",16,38,1,,
+• Дизайнерське креативне оформлення.",2,3,4,,Dark chocolate with salted caramel,Chocolate,"""• Weight – 100 g.
+• Dark chocolate with salted caramel.
+• Designer creative design."""
+slug_042,,,Суміші для коктейлів,https://kashalot.gift/ua/belhiiskyi-molochnyi-shokolad-bez-tsukru-z-fundukom-spell-suveniry-ta-atrybutyka-solodkyi-podarunok/,150,Молочний шоколад без цукру з фундуком,Шоколад,"А чи можна без цукру? Справжньому бельгійському шоколаду можна все! Навіть без цукру, з ніжною горіховою начинкою ця плитка просто зникне миттєво. Вага: 80г. Розмір плитки: 10x10 см.",16,38,1,,Sugar-free milk chocolate with hazelnuts,Chocolate,"And is it possible without sugar? Real Belgian chocolate can do anything! Even without sugar, with a delicate nut filling, this bar will simply disappear in an instant. Weight: 80g. Tile size: 10x10 cm."
 slug_043,Олексій,Знання,книги,https://rozetka.com.ua/ua/69297506/p69297506/,519,Жива 4D Енциклопедія Космос,Книга,"Космічна енциклопедія в доповненій реальності - це дивовижна книга, яка дозволить Вам відправитися в справжню космічну подорож до далеких зірок та відкрити секрети галактики Чумацького Шляху та всієї нашої Сонячної системи. Наша подорож починається прямо зараз. Ви готові вирушити у подорож?
 
 Дізнатися про таємниці космосу може кожен за допомогою енциклопедії Космос у доповненій реальності від ТМ Devar. За допомогою безкоштовної програми DEVAR можна детально розглянути 62 основні космічні тіла без телескопа.
 
 Наближайте, обертайте та розглядайте космічні об'єкти: планети, супутники та астероїди; Планету можна розкрити, дізнатися про її склад; Активуйте режим супутника та дізнайтеся про нього багато цікавого. Кожен супутник планети можна розглянути докладно та дізнатися факти про нього від робота-помічника; Поринайте прямо вглиб Стовпів творіння і чорної дірки; Дізнайтеся, де розташована планета щодо Сонця; Викличте вашого персонального робота-помічника, щоб дізнатися цікаві факти про космічні тіла.
 
-Тримай свій пристрій над сторінкою і дивися, як вона оживає. Ти зможеш розглянути зображення з усіх боків, вивчити та запам'ятати основні терміни.",15,10,5,,
+Тримай свій пристрій над сторінкою і дивися, як вона оживає. Ти зможеш розглянути зображення з усіх боків, вивчити та запам'ятати основні терміни.",15,10,5,,Live 4D Encyclopedia Cosmos,Book,"The space encyclopedia in augmented reality is an amazing book that will allow you to go on a real space journey
+Everyone can learn about the secrets of the cosmos with the help of the Cosmos encyclopedia. Call your personal robot assistant to learn interesting facts about cosmic bodies.
+
+Hold your device over the page and watch it come to life. You will be able to examine the image from all sides, learn and remember the main terms."
 slug_044,,,книги,https://rozetka.com.ua/ua/354792483/p354792483/,239,Англійська мова за 4 тижні,Книга,"Автор:        Малгожата Глоговська
 ISBN:        978-966-10-6143-8
 Рік видання:        2022
 Мова:         Українсько-англійська
 Палітурка:        М'яка
-Кількість сторінок:        465",12,40,0,,
-slug_045,,,книги,https://rozetka.com.ua/ua/365174805/p365174805/,1224,"Енциклопедія в шкірі ""Віскі"" Марки і типи.",Книга,"Ілюстрована енциклопедія Віскі. Марки і типи Відмінна подарункова книга в шкіряній палітурці з футляром для любителів і цінителів віскі ""Віскі. Ілюстрована енциклопедія"". Шанувальники цього міцного ароматного алкогольного напою зможуть сповна насолодитися її читанням і не тільки - у книзі наведені рецепти приготування коктейлів на основі віскі. Із цього видання ви зможете дізнатися: - все про культуру та історію віскі - які способи виробництва віскі - як правильно пити віскі і золоті правила дегустації - про що свідчить інформація на етикетці - країни-виробники, марки віскі, основні типи віскі і особливості виробництва (Шотландія, Ірландія, США, Канада, Японія та інші) - рецепти приготування та правила прикраси коктейлів з віскі Матеріал: мідь, золото, шкіра Додатково: Під будь-яку книгу ми можемо виготовити футляр з натурального дерева. Ціну та строк виготовлення уточнюйте у менеджерів. Формат видання, мм: 190х270 Готова книга може відрізнятися від представленої на фото.",13,0,4,,
-slug_046,,,курси,https://profstudy.com.ua/uk/,599,Курс конструювання та шиття,Курс,Під час навчання Ви опануєте найголовніші теми у конструюванні та пошитті одягу!,11,1,0,,
-slug_047,,,курси,https://itvdn.com/ua/subscriptions/giftcertificate/6-months,1500,Подарунковий сертифікат itvdn,Курс,"Навчатися за відео курсами – це дуже зручно! Вивчай сучасні технології легко та із задоволенням! Оціни переваги навчання з відео курсів прямо зараз. Вибирай курс чи спеціальність, яка тебе цікавить та отримай безкоштовний пробний доступ. Дивись відео уроки, виконуй практичні завдання та формуй навички програмування на інтерактивному тренажері. Ми допоможемо тобі стати крутим фахівцем!",12,48,5,,
-slug_048,,,курси,https://oxford-school.com.ua/uk/price.html,1900,Курси англійської,Курс,"Всім студентам школи Oxford School надається персональний номер, який використовується для входу в особистий обліковий запис на нашому сайті і для отримання різних бонусів та знижок.",2,29,2,,
-slug_049,,Одяг,шкарпетки,,,,,,4,33,2,,
-slug_050,,,шкарпетки,,,,,,12,37,5,,
-slug_051,,,шкарпетки,,,,,,5,47,4,,
-slug_052,,,футболки,,,,,,17,11,0,,
-slug_053,,,футболки,,,,,,3,46,1,,
-slug_054,,,футболки,,,,,,18,20,4,,
-slug_055,,,худі,,,,,,11,2,4,,
-slug_056,,,худі,,,,,,4,41,4,,
-slug_057,,,худі,,,,,,2,17,3,,
-slug_058,,,пледи з рукавами,,,,,,6,6,4,,
-slug_059,,,пледи з рукавами,,,,,,12,8,0,,
-slug_060,,,пледи з рукавами,,,,,,3,44,5,,
-slug_061,,,тапці,,,,,,15,45,5,,
-slug_062,,,тапці,,,,,,2,20,2,,
-slug_063,,,тапці,,,,,,16,39,0,,
-slug_064,Владислав Самокрик,Аксесуари,рюкзаки,https://samsonite.ua/ru/move-40-zhnochy-ryukzak-kj601024?iln=Category&ili=cat1146,3680,Рюкзак MOVE 4.0 DARK BLUE,Рюкзак,"Усі моделі створені для максимального комфорту. Крім того, рюкзаки оснащені світловідбивними деталями і карабіном для кріплення велосипедного ліхтаря. Міський стиль і екологічно чисті матеріали доповнюють цю колекцію.",18,1,5,,
-slug_065,,,рюкзаки,https://www.moyo.ua/ryukzak_wenger_crango_16_krasno-chyornyy/547653.html,1500,"Рюкзак Wenger, Crango 16""",Рюкзак,"Переносьте своє спорядження стильно з рюкзаками серії Wenger Crango 16"". Завдяки спеціальному відділенню supersoft для розміщення 16-дюймового ноутбука, а також органайзеру для речей першої необхідності: шнури живлення, зарядні пристрої, письмове приладдя, візитні картки та багато іншого саме там, де вони вам потрібні. Wenger Crango 16 це ідеальний рюкзак, який можна взяти з собою практично куди завгодно. Завдяки внутрішньому поділу, ваші документи і папки залишаться недоторканими, а спеціальний патч забезпечить захист вам і вашому велосипеду, коли ви перебуваєте в дорозі.",13,14,2,,
-slug_066,,,рюкзаки,https://www.moyo.ua/ryukzak_hp_renew_travel_15_6_laptop_backpack_2z8a3aa_/513857.html,2999,"Рюкзак HP Renew Travel 15.6"" Laptop Backpack",Рюкзак,"Погляньте на рюкзак для подорожей HP Renew Travel, у який зміститься ноутбук із діагоналлю 15,6 дюйма. Він зроблений з екологічних матеріалів. Акуратно розкладайте речі по безлічі кишень і фіксуйте рюкзак завдяки зручним ремінцям.",10,18,4,,
-slug_067,,,чохли для ноутбуків,https://rozetka.com.ua/grand_x_slx_14g/p266124546/,359,"Чехол для ноутбука Grand-X SLX-14G 14""",Чохол,"Ця модель унікальна тим, що може використовуватися як як чохол, при цьому його ручка ховається, а сама вона поміщається у велику сумку або рюкзак, так і як незалежна портативна мінімалістична сумка. Ще одна відмінна риса - дуже м'яка, приємна на дотик внутрішня підкладка, яка захищає ноутбук від подряпин або інших дрібних пошкоджень. Чохол має зручну додаткову зовнішню кишеню на блискавці, яку можна використовувати для перенесення блока живлення, мишки, блокнота тощо.",3,6,4,,
-slug_068,,,чохли для ноутбуків,https://rozetka.com.ua/grand-x-sf-15/p364314639/,225,Чехол для ноутбука Grand-X SF-15 15.6'',Чохол,"Чохол для ноутбука Grand-X SF-15 підійде для ноутбуків з діагоналлю 15.6"" і менше. Дана модель унікальна тим, що незважаючи на доступну ціну відмінно підходить для захисту ноутбука, м'яка, приємна на дотик фетрова тканина, захищає ноутбук від подряпин або інших дрібних пошкоджень. Переносити ноутбук можна як у чохлі, так і упакувавши чохол із пристроєм у сумку або рюкзак. Якщо ви любите, щоб ноутбук після деякого часу використання мав вигляд як новий, без потертостей і дрібних подряпин, такий чохол може бути цікавим вибором.",17,35,3,,
-slug_069,,,чохли для ноутбуків,https://www.moyo.ua/chekhol_tucano_offroad_cam_13_14_kamuflyazh/538796.html,1 399,"Чехол Tucano Offroad CAM 13""/14""",Чохол,"Еластичний неопреновий чохол для ноутбуків 13"" і 14"" з протиударним зовнішнім бампером, що ефективно захищає пристрій від ударів і падінь. Оснащений системою Anti-Slip System, двома кутовими вушками, призначеними для фіксації пристрою, Second Skin Offroad має зручний отвір з подвійною тягою і м'яку, стійку до подряпин внутрішню частину.",12,10,5,,
+Кількість сторінок:        465",12,40,0,,English in 4 weeks,Book,"English in 4 weeks ""Author: Malgozhata Glogovska
+ISBN: 978-966-10-6143-8
+Year of publication: 2022
+Language: Ukrainian-English
+Binding: Soft
+Number of pages: 465"""
+slug_045,,,книги,https://rozetka.com.ua/ua/365174805/p365174805/,1224,"Енциклопедія в шкірі ""Віскі"" Марки і типи.",Книга,"Ілюстрована енциклопедія Віскі. Марки і типи Відмінна подарункова книга в шкіряній палітурці з футляром для любителів і цінителів віскі ""Віскі. Ілюстрована енциклопедія"". Шанувальники цього міцного ароматного алкогольного напою зможуть сповна насолодитися її читанням і не тільки - у книзі наведені рецепти приготування коктейлів на основі віскі. Із цього видання ви зможете дізнатися: - все про культуру та історію віскі - які способи виробництва віскі - як правильно пити віскі і золоті правила дегустації - про що свідчить інформація на етикетці - країни-виробники, марки віскі, основні типи віскі і особливості виробництва (Шотландія, Ірландія, США, Канада, Японія та інші) - рецепти приготування та правила прикраси коктейлів з віскі Матеріал: мідь, золото, шкіра Додатково: Під будь-яку книгу ми можемо виготовити футляр з натурального дерева. Ціну та строк виготовлення уточнюйте у менеджерів. Формат видання, мм: 190х270 Готова книга може відрізнятися від представленої на фото.",13,0,4,,"Encyclopedia in leather ""Whiskey"" Brands and types.",Book,"Illustrated Encyclopedia of Whiskey. An excellent leather bound gift book with case for whiskey lovers and connoisseurs ""Whisky. The Illustrated Encyclopedia"". the book contains recipes for whiskey-based cocktails. From this publication you will be able to learn: - everything about the culture and history of whiskey - what are the methods of whiskey production - how to drink whiskey correctly and the golden rules for preparing and decorating whiskey cocktails Material: copper, gold, leather Format of the publication, mm: 190x270 The finished book can differ from the one shown in the photo."
+slug_046,,,курси,https://profstudy.com.ua/uk/,599,Курс конструювання та шиття,Курс,Під час навчання Ви опануєте найголовніші теми у конструюванні та пошитті одягу!,11,1,0,,Design and sewing course,Course,"During your studies, you will master the most important topics in designing and sewing clothes!"
+slug_047,,,курси,https://itvdn.com/ua/subscriptions/giftcertificate/6-months,1500,Подарунковий сертифікат itvdn,Курс,"Навчатися за відео курсами – це дуже зручно! Вивчай сучасні технології легко та із задоволенням! Оціни переваги навчання з відео курсів прямо зараз. Вибирай курс чи спеціальність, яка тебе цікавить та отримай безкоштовний пробний доступ. Дивись відео уроки, виконуй практичні завдання та формуй навички програмування на інтерактивному тренажері. Ми допоможемо тобі стати крутим фахівцем!",12,48,5,,Gift certificate itvdn,Course,"Studying with video courses is very convenient! Learn modern technologies easily and with pleasure! Evaluate the benefits of learning from video courses right now. Choose a course or specialty that interests you and get free trial access. Watch video lessons, complete practical tasks and develop programming skills on an interactive simulator. We will help you become a cool specialist!"
+slug_048,,,курси,https://oxford-school.com.ua/uk/price.html,1900,Курси англійської,Курс,"Всім студентам школи Oxford School надається персональний номер, який використовується для входу в особистий обліковий запис на нашому сайті і для отримання різних бонусів та знижок.",2,29,2,,English courses,Course,"All Oxford School students are given a personal number, which is used to log into a personal account on our website and to receive various bonuses and discounts."
+slug_049,,Одяг,шкарпетки,,,,,,4,33,2,,,,
+slug_050,,,шкарпетки,,,,,,12,37,5,,,,
+slug_051,,,шкарпетки,,,,,,5,47,4,,,,
+slug_052,,,футболки,,,,,,17,11,0,,,,
+slug_053,,,футболки,,,,,,3,46,1,,,,
+slug_054,,,футболки,,,,,,18,20,4,,,,
+slug_055,,,худі,,,,,,11,2,4,,,,
+slug_056,,,худі,,,,,,4,41,4,,,,
+slug_057,,,худі,,,,,,2,17,3,,,,
+slug_058,,,пледи з рукавами,,,,,,6,6,4,,,,
+slug_059,,,пледи з рукавами,,,,,,12,8,0,,,,
+slug_060,,,пледи з рукавами,,,,,,3,44,5,,,,
+slug_061,,,тапці,,,,,,15,45,5,,,,
+slug_062,,,тапці,,,,,,2,20,2,,,,
+slug_063,,,тапці,,,,,,16,39,0,,,,
+slug_064,Владислав Самокрик,Аксесуари,рюкзаки,https://samsonite.ua/ru/move-40-zhnochy-ryukzak-kj601024?iln=Category&ili=cat1146,3680,Рюкзак MOVE 4.0 DARK BLUE,Рюкзак,"Усі моделі створені для максимального комфорту. Крім того, рюкзаки оснащені світловідбивними деталями і карабіном для кріплення велосипедного ліхтаря. Міський стиль і екологічно чисті матеріали доповнюють цю колекцію.",18,1,5,,Backpack MOVE 4.0 DARK BLUE,Backpack,"All models are designed for maximum comfort. In addition, the backpacks are equipped with reflective parts and a carabiner for attaching a bicycle light. Urban style and environmentally friendly materials complement this collection."
+slug_065,,,рюкзаки,https://www.moyo.ua/ryukzak_wenger_crango_16_krasno-chyornyy/547653.html,1500,"Рюкзак Wenger, Crango 16""",Рюкзак,"Переносьте своє спорядження стильно з рюкзаками серії Wenger Crango 16"". Завдяки спеціальному відділенню supersoft для розміщення 16-дюймового ноутбука, а також органайзеру для речей першої необхідності: шнури живлення, зарядні пристрої, письмове приладдя, візитні картки та багато іншого саме там, де вони вам потрібні. Wenger Crango 16 це ідеальний рюкзак, який можна взяти з собою практично куди завгодно. Завдяки внутрішньому поділу, ваші документи і папки залишаться недоторканими, а спеціальний патч забезпечить захист вам і вашому велосипеду, коли ви перебуваєте в дорозі.",13,14,2,,"Backpack Wenger, Crango 16""",Backpack,"Carry your gear in style with the Wenger Crango 16"" backpack series, with a dedicated supersoft compartment for a 16"" laptop and an organizer to keep your essentials: power cords, chargers, stationery, business cards and more right where they are you need The Wenger Crango 16 is the perfect backpack to take almost anywhere, with an internal compartment to keep your documents and folders intact and a special patch to protect you and your bike when you're on the go."
+slug_066,,,рюкзаки,https://www.moyo.ua/ryukzak_hp_renew_travel_15_6_laptop_backpack_2z8a3aa_/513857.html,2999,"Рюкзак HP Renew Travel 15.6"" Laptop Backpack",Рюкзак,"Погляньте на рюкзак для подорожей HP Renew Travel, у який зміститься ноутбук із діагоналлю 15,6 дюйма. Він зроблений з екологічних матеріалів. Акуратно розкладайте речі по безлічі кишень і фіксуйте рюкзак завдяки зручним ремінцям.",10,18,4,,"Backpack HP Renew Travel 15.6"" Laptop Backpack",Backpack,"Check out the HP Renew Travel Backpack, which fits a 15.6-inch laptop. It is made of ecological materials. Carefully arrange things in many pockets and fix the backpack thanks to convenient straps."
+slug_067,,,чохли для ноутбуків,https://rozetka.com.ua/grand_x_slx_14g/p266124546/,359,"Чехол для ноутбука Grand-X SLX-14G 14""",Чохол,"Ця модель унікальна тим, що може використовуватися як як чохол, при цьому його ручка ховається, а сама вона поміщається у велику сумку або рюкзак, так і як незалежна портативна мінімалістична сумка. Ще одна відмінна риса - дуже м'яка, приємна на дотик внутрішня підкладка, яка захищає ноутбук від подряпин або інших дрібних пошкоджень. Чохол має зручну додаткову зовнішню кишеню на блискавці, яку можна використовувати для перенесення блока живлення, мишки, блокнота тощо.",3,6,4,,"Laptop case Grand-X SLX-14G 14""",Cover,"This model is unique in that it can be used both as a cover, while its handle is hidden, and it itself fits into a large bag or backpack, and as an independent portable minimalist bag. Another outstanding feature is a very soft, pleasant-to-the-touch inner lining that protects the laptop from scratches or other minor damage. The case has a convenient additional external zippered pocket that can be used to carry a power supply, mouse, notebook, etc."
+slug_068,,,чохли для ноутбуків,https://rozetka.com.ua/grand-x-sf-15/p364314639/,225,Чехол для ноутбука Grand-X SF-15 15.6'',Чохол,"Чохол для ноутбука Grand-X SF-15 підійде для ноутбуків з діагоналлю 15.6"" і менше. Дана модель унікальна тим, що незважаючи на доступну ціну відмінно підходить для захисту ноутбука, м'яка, приємна на дотик фетрова тканина, захищає ноутбук від подряпин або інших дрібних пошкоджень. Переносити ноутбук можна як у чохлі, так і упакувавши чохол із пристроєм у сумку або рюкзак. Якщо ви любите, щоб ноутбук після деякого часу використання мав вигляд як новий, без потертостей і дрібних подряпин, такий чохол може бути цікавим вибором.",17,35,3,,Laptop case Grand-X SF-15 15.6'',Cover,"The Grand-X SF-15 laptop case is suitable for laptops with a diagonal of 15.6"" and less. This model is unique in that, despite the affordable price, it is excellent for protecting the laptop, the soft, pleasant-to-the-touch felt fabric protects the laptop from scratches or and other small damages. You can carry the laptop either in the case or by packing the case with the device in a bag or backpack. If you like to keep the laptop looking like new after some time of use, without scuffs and small scratches, such a case can be an interesting choice."
+slug_069,,,чохли для ноутбуків,https://www.moyo.ua/chekhol_tucano_offroad_cam_13_14_kamuflyazh/538796.html,1 399,"Чехол Tucano Offroad CAM 13""/14""",Чохол,"Еластичний неопреновий чохол для ноутбуків 13"" і 14"" з протиударним зовнішнім бампером, що ефективно захищає пристрій від ударів і падінь. Оснащений системою Anti-Slip System, двома кутовими вушками, призначеними для фіксації пристрою, Second Skin Offroad має зручний отвір з подвійною тягою і м'яку, стійку до подряпин внутрішню частину.",12,10,5,,"Case Tucano Offroad CAM 13""/14""",Cover,"Elastic neoprene cover for 13"" and 14"" laptops with an anti-shock external bumper that effectively protects the device from shocks and drops. Equipped with the Anti-Slip System, two corner lugs designed to secure the device, the Second Skin Offroad has a convenient double-pull opening and a soft, scratch-resistant interior."
 slug_070,,,шопери,https://www.olx.ua/d/uk/obyavlenie/ko-sumki-patrotichn-shoperi-eko-sumka-slava-ukran-eko-torba-IDPccJt.html,280,"Еко-сумка ""Слава Україні""",Шопер,"Екоторба з патріотичним принтом.
 Стильна та екологічна альтернатива поліетиеновим пакетам.
-Щільна та натуральна тканина",10,42,2,,
+Щільна та натуральна тканина",10,42,2,,"Eco-bag ""Glory to Ukraine""",Shopper,"""Eco bag with a patriotic print.
+A stylish and ecological alternative to polyethylene bags.
+Dense and natural fabric"""
 slug_071,,,шопери,https://rozetka.com.ua/355648773/p355648773/,315,"Еко-сумка чорна ""Home""",Шопер,"Эко сумка (шоппер) - альтернативная замена полиэтиленовым пакетам и красивое решение;
 Сумка сделана из плотной ткани и прослужит вам очень долго;
 С нашей эко сумкой вы всегда будете оригинальными и неповторимыми;
 По желанию можно изменить текст, рисунок или цвет нанесения;
-А также можем сделать с любым вашим принтом.",14,13,5,,
+А также можем сделать с любым вашим принтом.",14,13,5,,"Eco-bag black ""Home""",Shopper,"""Eco bag (shopper) - an alternative replacement for polyethylene bags and a beautiful solution;
+The bag is made of thick fabric and will last you a very long time;
+With our eco bag you will always be original and unique;
+If you wish, you can change the text, picture or color of the application;
+And we can also do it with any of your prints."""
 slug_072,,,шопери,https://www.fatline.com.ua/ua/sumka-ya-mnogo-rabotayu.html,278,"Шопер ""Я багато працюю""",Шопер,"Шопер «Я багато працюю» (3249907) з колекції «Прикольні написи» – популярна позиція каталогу FatLine, яка відрізняється високою якістю як самого виробу, так і нанесеного принта. Екосумка зі 100% натуральної бавовни (саржа). Щільність тканини 220 г/м2, ручка 70 см. Матеріал основи - 100% бавовна (саржа). Тип друку - DTF-друк.
-Принт стійкий до дії ультрафіолету, води, перепадів температури. За умов належного догляду довгий час зберігає колір, чіткість ліній і цілісність.",0,46,0,,
-slug_073,,,брелоки,https://rozetka.com.ua/376309500/p376309500/,235,"Металевий брелок ""Я програміст""",Брелок,"Брелок на ключі з гравіюванням - це не тільки стильний аксесуар, а й гарний варіант подарунка для представників різних професій. На брелоку можна написати все, що завгодно, додати малюнок, смішний текст або цікаву цитату. Виріб надійно фіксується на ключах за допомогою спеціального кріпильного кільця. Брелок поставляється в красивій подарунковій коробці з логотипом і подарунковому пакетику.",11,15,4,,
-slug_074,,,брелоки,https://rozetka.com.ua/brelok-na-kluci-zaryad-karta-ukrainy-metall-534/g43492222/,149,"Патріотичний брелок ""Карта України""",Брелок,"Представляємо вам подарунковий брелок для справжнього патріота! Стильний і яскравий брелок для ключів тішить око і створює чудовий настрій. Брелоки потрібні скрізь: у сумку, на ключі від будинку, на ключі від автомобіля, дехто навіть використовує брелок як тримач для картки. Це універсальний і корисний подарунок для кожного.",14,6,0,,
-slug_075,,,брелоки,https://rozetka.com.ua/maxi-mx63048/p329349679/,50,"Брелок гумовий ""Бадьорий лінивець""",Брелок,"Щоб надати будь-якому створюваному образу оригінальну родзинку, часом буває достатньо скористатися невеликою прикрасою. Компанією Maxi представлений великий вибір брелоків, пофарбованих у яскраві кольори, які привертають увагу різноманітністю форм і різновидів. Вибір за вами.",16,21,0,,
-slug_076,,Канцелярія,Блокноти,,,,,,20,15,1,,
-slug_077,,,Блокноти,,,,,,6,18,5,,
-slug_078,,,Блокноти,,,,,,17,22,5,,
-slug_079,,,Планери,,,,,,19,9,1,,
-slug_080,,,Планери,,,,,,5,28,5,,
-slug_081,,,Планери,,,,,,3,41,3,,
-slug_082,,,Магнітні дошки,,,,,,11,19,3,,
-slug_083,,,Магнітні дошки,,,,,,19,4,2,,
-slug_084,,,Магнітні дошки,,,,,,14,48,0,,
-slug_085,,,Ручки,,,,,,13,33,4,,
-slug_086,,,Ручки,,,,,,18,24,3,,
-slug_087,,,Ручки,,,,,,2,42,4,,
+Принт стійкий до дії ультрафіолету, води, перепадів температури. За умов належного догляду довгий час зберігає колір, чіткість ліній і цілісність.",0,46,0,,"Shopper ""I work a lot""",Shopper,"""I work a lot"" tote bag (3249907) from the collection ""Cool inscriptions"" is a popular item in the FatLine catalog, which is distinguished by the high quality of both the product itself and the applied print. Eco bag made of 100% natural cotton (twill). Fabric density 220 g/ m2, handle 70 cm. Base material - 100% cotton (twill). Print type - DTF print.
+The print is resistant to ultraviolet, water, and temperature changes. Under the conditions of proper care, it retains color, clarity of lines and integrity for a long time."""
+slug_073,,,брелоки,https://rozetka.com.ua/376309500/p376309500/,235,"Металевий брелок ""Я програміст""",Брелок,"Брелок на ключі з гравіюванням - це не тільки стильний аксесуар, а й гарний варіант подарунка для представників різних професій. На брелоку можна написати все, що завгодно, додати малюнок, смішний текст або цікаву цитату. Виріб надійно фіксується на ключах за допомогою спеціального кріпильного кільця. Брелок поставляється в красивій подарунковій коробці з логотипом і подарунковому пакетику.",11,15,4,,"Metal keychain ""I am a programmer""",Keychain,"A key ring with engraving is not only a stylish accessory, but also a good gift option for representatives of various professions. You can write anything you want on the keychain, add a picture, a funny text or an interesting quote. The product is securely fixed on the keys with the help of a special fastening ring. The keychain comes in a beautiful gift box with logo and a gift bag."
+slug_074,,,брелоки,https://rozetka.com.ua/brelok-na-kluci-zaryad-karta-ukrainy-metall-534/g43492222/,149,"Патріотичний брелок ""Карта України""",Брелок,"Представляємо вам подарунковий брелок для справжнього патріота! Стильний і яскравий брелок для ключів тішить око і створює чудовий настрій. Брелоки потрібні скрізь: у сумку, на ключі від будинку, на ключі від автомобіля, дехто навіть використовує брелок як тримач для картки. Це універсальний і корисний подарунок для кожного.",14,6,0,,"Patriotic keychain ""Map of Ukraine""",Keychain,"We present to you a gift keychain for a true patriot! A stylish and bright key chain pleases the eye and creates a wonderful mood. Keychains are needed everywhere: in your bag, on your house keys, on your car keys, some even use the keychain as a card holder. This is a universal and useful gift for everyone."
+slug_075,,,брелоки,https://rozetka.com.ua/maxi-mx63048/p329349679/,50,"Брелок гумовий ""Бадьорий лінивець""",Брелок,"Щоб надати будь-якому створюваному образу оригінальну родзинку, часом буває достатньо скористатися невеликою прикрасою. Компанією Maxi представлений великий вибір брелоків, пофарбованих у яскраві кольори, які привертають увагу різноманітністю форм і різновидів. Вибір за вами.",16,21,0,,"Rubber key ring ""Cheerful sloth""",Keychain,"To give any created image an original zest, sometimes it is enough to use a small decoration. The Maxi company presents a large selection of keychains painted in bright colors, which attract attention with a variety of shapes and varieties. The choice is yours."
+slug_076,,Канцелярія,Блокноти,,,,,,20,15,1,,,,
+slug_077,,,Блокноти,,,,,,6,18,5,,,,
+slug_078,,,Блокноти,,,,,,17,22,5,,,,
+slug_079,,,Планери,,,,,,19,9,1,,,,
+slug_080,,,Планери,,,,,,5,28,5,,,,
+slug_081,,,Планери,,,,,,3,41,3,,,,
+slug_082,,,Магнітні дошки,,,,,,11,19,3,,,,
+slug_083,,,Магнітні дошки,,,,,,19,4,2,,,,
+slug_084,,,Магнітні дошки,,,,,,14,48,0,,,,
+slug_085,,,Ручки,,,,,,13,33,4,,,,
+slug_086,,,Ручки,,,,,,18,24,3,,,,
+slug_087,,,Ручки,,,,,,2,42,4,,,,

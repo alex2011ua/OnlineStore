@@ -15,13 +15,21 @@ class Settings(models.Model):
 class Category(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     category = models.ForeignKey(
-        "self", default=None, blank=True, null=True, on_delete=models.CASCADE, related_name="sub_category"
+        "self",
+        default=None,
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE,
+        related_name="sub_category",
     )
     name = models.CharField(_("category name"), max_length=100)
     slug = models.SlugField(_("category slug"), unique=True, blank=True, null=True)
     description = models.TextField(_("category description"), blank=True, null=True)
     img_small = models.ImageField(
-        _("category icon image small"), upload_to="foto/categories/", blank=True, null=True
+        _("category icon image small"),
+        upload_to="foto/categories/",
+        blank=True,
+        null=True,
     )
     img = models.ImageField(
         _("category image"), upload_to="foto/categories/", blank=True, null=True
@@ -95,6 +103,12 @@ class Product(models.Model):
         null=True,
     )
 
+    @staticmethod
+    def get_by_id(key):
+        p = Product.objects.filter(id=key)
+        if len(p) == 1:
+            return p[0]
+
     def __str__(self):
         return self.name
 
@@ -126,7 +140,9 @@ class Order(models.Model):
     customer = models.ForeignKey(
         User, related_name="customer", on_delete=models.CASCADE
     )
-    manager = models.ForeignKey(User, related_name="manager", on_delete=models.CASCADE)
+    manager = models.ForeignKey(
+        User, related_name="manager", on_delete=models.CASCADE, blank=True, null=True
+    )
     products = models.ManyToManyField(Product, through="OrderItem")
     order_date = models.DateTimeField(_("create order"), auto_now_add=True)
     updated_at = models.DateTimeField(_("update order"), auto_now=True)
@@ -138,6 +154,16 @@ class Order(models.Model):
         null=True,
         default=0,
     )
+
+    def get_order_info(self, id):
+        order = self.objects.get(id=id)
+
+    @staticmethod
+    def get_current_order_id(user):
+        order, _ = Order.objects.get_or_create(
+            customer=user, manager=user, status=Order.new_order
+        )
+        return order
 
     def __str__(self):
         return f"Order #{self.pk} by {self.customer}"
@@ -236,6 +262,7 @@ class Rating(models.Model):
 
 class Banner(models.Model):
     import uuid
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     slug = models.SlugField(_("product slug"), unique=True)
     title = models.CharField(_("title"), max_length=200)

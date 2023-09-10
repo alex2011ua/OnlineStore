@@ -16,4 +16,5 @@ urlpatterns = [
     path("token/verify/", TokenVerifyView.as_view(), name="token_verify"),
     path("user-create/", CreateUserView.as_view(), name="create_user"),
     path("change-password/", ChangePasswordView.as_view(), name="change_password"),
+    path("guest_user/", include("my_apps.accounts.api_v1.guest_user_routes")),
 ]

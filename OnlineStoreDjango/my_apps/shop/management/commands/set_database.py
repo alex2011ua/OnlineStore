@@ -8,7 +8,7 @@ from my_apps.shop.models import Banner, Category, Product
 class Command(BaseCommand):
     def handle(self, *args, **options):
         """Create content in DB"""
-        # self.create_categories()
+        self.create_categories()
         self.create_banners()
         self.create_products()
 
@@ -25,15 +25,16 @@ class Command(BaseCommand):
         }
         main_category_list = []
         for slug, name in main_category.items():
-            cat, created = Category.objects.get_or_create(
+            cat, created = Category.objects.update_or_create(
                 slug=slug,
-                defaults={"name": name, "img_small": f"foto/categories/{slug}.jpg"},
+                defaults={
+                    "name": name,
+                    "name_en": slug,
+                    "img_small": f"foto/categories/{slug}.jpg",
+                },
             )
-            self.stdout.write(slug)
-            if not created:
-                self.stdout.write(
-                    self.style.WARNING(f"Category {slug} is already created")
-                )
+            if created:
+                self.stdout.write(self.style.WARNING(f"Category {slug} created"))
             main_category_list.append(cat)
 
         self.stdout.write(self.style.SUCCESS(f"Start creating {main_category_list[0]}"))
@@ -45,19 +46,17 @@ class Command(BaseCommand):
             "massagers": "Масажери",
         }
         for slug, name in technique.items():
-            cat, created = Category.objects.get_or_create(
+            cat, created = Category.objects.update_or_create(
                 slug=slug,
                 defaults={
                     "name": name,
+                    "name_en": slug,
                     "category": main_category_list[0],
                     "img": f"foto/categories/{slug}.jpg",
                 },
             )
-            self.stdout.write(slug)
-            if not created:
-                self.stdout.write(
-                    self.style.WARNING(f"Category {slug} is already created")
-                )
+            if created:
+                self.stdout.write(self.style.WARNING(f"Category {slug} created"))
 
         self.stdout.write(self.style.SUCCESS(f"Start creating {main_category_list[1]}"))
         dishes = {
@@ -67,19 +66,17 @@ class Command(BaseCommand):
             "water_bottles": "Пляшки для води",
         }
         for slug, name in dishes.items():
-            cat, created = Category.objects.get_or_create(
+            cat, created = Category.objects.update_or_create(
                 slug=slug,
                 defaults={
                     "name": name,
+                    "name_en": slug,
                     "category": main_category_list[1],
                     "img": f"foto/categories/{slug}.jpg",
                 },
             )
-            self.stdout.write(slug)
-            if not created:
-                self.stdout.write(
-                    self.style.WARNING(f"Category {slug} is already created")
-                )
+            if created:
+                self.stdout.write(self.style.WARNING(f"Category {slug} created"))
 
         self.stdout.write(self.style.SUCCESS(f"Start creating {main_category_list[2]}"))
         food = {
@@ -90,36 +87,32 @@ class Command(BaseCommand):
             "cocktail_mixes": "Суміші для коктейлів",
         }
         for slug, name in food.items():
-            cat, created = Category.objects.get_or_create(
+            cat, created = Category.objects.update_or_create(
                 slug=slug,
                 defaults={
                     "name": name,
+                    "name_en": slug,
                     "category": main_category_list[2],
                     "img": f"foto/categories/{slug}.jpg",
                 },
             )
-            self.stdout.write(slug)
-            if not created:
-                self.stdout.write(
-                    self.style.WARNING(f"Category {slug} is already created")
-                )
+            if created:
+                self.stdout.write(self.style.WARNING(f"Category {slug} created"))
 
         self.stdout.write(self.style.SUCCESS(f"Start creating {main_category_list[3]}"))
         knowledge = {"book": "Книги", "courses": "Курси"}
         for slug, name in knowledge.items():
-            cat, created = Category.objects.get_or_create(
+            cat, created = Category.objects.update_or_create(
                 slug=slug,
                 defaults={
                     "name": name,
+                    "name_en": slug,
                     "category": main_category_list[3],
                     "img": f"foto/categories/{slug}.jpg",
                 },
             )
-            self.stdout.write(slug)
-            if not created:
-                self.stdout.write(
-                    self.style.WARNING(f"Category {slug} is already created")
-                )
+            if created:
+                self.stdout.write(self.style.WARNING(f"Category {slug} created"))
 
         self.stdout.write(self.style.SUCCESS(f"Start creating {main_category_list[4]}"))
         clothes = {
@@ -130,19 +123,17 @@ class Command(BaseCommand):
             "slippers": "Тапці",
         }
         for slug, name in clothes.items():
-            cat, created = Category.objects.get_or_create(
+            cat, created = Category.objects.update_or_create(
                 slug=slug,
                 defaults={
                     "name": name,
+                    "name_en": slug,
                     "category": main_category_list[4],
                     "img": f"foto/categories/{slug}.jpg",
                 },
             )
-            self.stdout.write(slug)
-            if not created:
-                self.stdout.write(
-                    self.style.WARNING(f"Category {slug} is already created")
-                )
+            if created:
+                self.stdout.write(self.style.WARNING(f"Category {slug}  created"))
 
         self.stdout.write(self.style.SUCCESS(f"Start creating {main_category_list[5]}"))
         accessories = {
@@ -152,19 +143,17 @@ class Command(BaseCommand):
             "charm": "Брелоки",
         }
         for slug, name in accessories.items():
-            cat, created = Category.objects.get_or_create(
+            cat, created = Category.objects.update_or_create(
                 slug=slug,
                 defaults={
                     "name": name,
+                    "name_en": slug,
                     "category": main_category_list[5],
                     "img": f"foto/categories/{slug}.jpg",
                 },
             )
-            self.stdout.write(slug)
-            if not created:
-                self.stdout.write(
-                    self.style.WARNING(f"Category {slug} is already created")
-                )
+            if created:
+                self.stdout.write(self.style.WARNING(f"Category {slug} created"))
 
         self.stdout.write(self.style.SUCCESS(f"Start creating {main_category_list[6]}"))
         chancellery = {
@@ -174,43 +163,56 @@ class Command(BaseCommand):
             "pen": "Ручки",
         }
         for slug, name in chancellery.items():
-            cat, created = Category.objects.get_or_create(
+            cat, created = Category.objects.update_or_create(
                 slug=slug,
                 defaults={
                     "name": name,
+                    "name_en": slug,
                     "category": main_category_list[6],
                     "img": f"foto/categories/{slug}.jpg",
                 },
             )
-            self.stdout.write(slug)
-            if not created:
-                self.stdout.write(
-                    self.style.WARNING(f"Category {slug} is already created")
-                )
+            if created:
+                self.stdout.write(self.style.WARNING(f"Category {slug}  created"))
 
     def create_banners(self):
         self.stdout.write(self.style.SUCCESS("Start creating banners"))
-        Banner.objects.update_or_create(slug="banner150", defaults={
-            "title": "Sales",
-            "description": "get ready to save up to 150",
-            "img": "foto/banners/banner150.jpg",
-            "mobileImg": "foto/banners/banner150_mobile.jpg",
-            "link": "/catalog"
-        })
-        Banner.objects.update_or_create(slug="banner250", defaults={
-            "title": "Sales",
-            "description": "get ready to save up to 250",
-            "img": "foto/banners/banner250.jpg",
-            "mobileImg": "foto/banners/banner250_mobile.jpg",
-            "link": "/catalog"
-        })
-        Banner.objects.update_or_create(slug="banner360", defaults={
-            "title": "Sales",
-            "description": "get ready to save up to 360",
-            "img": "foto/banners/banner360.jpg",
-            "mobileImg": "foto/banners/banner360_mobile.jpg",
-            "link": "/catalog"
-        })
+        Banner.objects.update_or_create(
+            slug="banner150",
+            defaults={
+                "title_en": "Sales",
+                "title": "Знижка",
+                "description": "Будьте готові заощадити до 150",
+                "description_en": "Get ready to save up to 150",
+                "img": "foto/banners/banner150.jpg",
+                "mobileImg": "foto/banners/banner150_mobile.jpg",
+                "link": "/catalog",
+            },
+        )
+        Banner.objects.update_or_create(
+            slug="banner250",
+            defaults={
+                "title": "Знижка",
+                "title_en": "Sales",
+                "description": "Будьте готові заощадити до 250",
+                "description_en": "Get ready to save up to 250",
+                "img": "foto/banners/banner250.jpg",
+                "mobileImg": "foto/banners/banner250_mobile.jpg",
+                "link": "/catalog",
+            },
+        )
+        Banner.objects.update_or_create(
+            slug="banner360",
+            defaults={
+                "title": "Знижка",
+                "title_en": "Sales",
+                "description": "Будьте готові заощадити до 360",
+                "description_en": "Get ready to save up to 360",
+                "img": "foto/banners/banner360.jpg",
+                "mobileImg": "foto/banners/banner360_mobile.jpg",
+                "link": "/catalog",
+            },
+        )
 
     def create_products(self):
         cat = {
@@ -256,13 +258,16 @@ class Command(BaseCommand):
                 category_str = row[3].strip().capitalize()
                 category_eng = cat.get(category_str)
                 name = row[6]
+                name_en = row[13]
                 if len(name) == 0:
                     continue
                 slug = row[0]
                 image = "foto/products/" + slug + ".webp"
 
                 type_product = row[7]
+                type_product_en = row[14]
                 description = row[8]
+                description_en = row[15]
                 try:
                     category = Category.get_category(category_eng)
                     price = float(row[5].replace(" ", ""))
@@ -270,15 +275,19 @@ class Command(BaseCommand):
                     sold = int(row[10]) if row[10].isdigit() else 0
                     global_rating = int(row[11]) if row[11].isdigit() else None
                     discount = int(row[12]) if row[12].isdigit() else 0
+
                     product, created = Product.objects.update_or_create(
                         slug=slug,
                         defaults={
                             "category": category,
                             "price": price,
                             "name": name,
+                            "name_en": name_en,
                             "description": description,
+                            "description_en": description_en,
                             "img": image,
                             "type": type_product,
+                            "type_en": type_product_en,
                             "quantity": quantity,
                             "sold": sold,
                             "global_rating": global_rating,
@@ -290,7 +299,11 @@ class Command(BaseCommand):
                     self.stdout.write(
                         self.style.WARNING(f"Error read from csv file: {ex}")
                     )
-                    self.stdout.write(self.style.WARNING(f"slug: {slug}, name: {name}, category: {category_str}"))
+                    self.stdout.write(
+                        self.style.WARNING(
+                            f"slug: {slug}, name: {name}, category: {category_str}"
+                        )
+                    )
 
             self.stdout.write(
                 self.style.SUCCESS("count products:" + str(cout_products))

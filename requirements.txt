@@ -16,6 +16,7 @@ django-cors-headers
 llama_index
 nltk
 llama-cpp-python
+django-modeltranslation
 
 black
 isort

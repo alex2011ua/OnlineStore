@@ -11,5 +11,4 @@ router.register(r"banner", admin_views.BannerViewSet)
 urlpatterns = [
     path("test/", admin_views.TestAdmin.as_view()),
     path("", include(router.urls)),
-
 ]

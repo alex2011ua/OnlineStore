@@ -7,10 +7,14 @@ urlpatterns = [
     path("popular/", guest_user_views.ListPopularGifts.as_view(), name="list_popular"),
     path("search/", guest_user_views.ListSearchGifts.as_view(), name="search"),
     path("gpt/", guest_user_views.Gpt.as_view(), name="gpt"),
-    path("new-products/", guest_user_views.ListNewGifts.as_view(), name="list_new_products"),
+    path(
+        "new-products/",
+        guest_user_views.ListNewGifts.as_view(),
+        name="list_new_products",
+    ),
     path("random-gift/", guest_user_views.RandomGift.as_view(), name="random_gift"),
-    path("random-gifts/", guest_user_views.ListRandomGifts.as_view(), name="random_gifts"),
+    path(
+        "random-gifts/", guest_user_views.ListRandomGifts.as_view(), name="random_gifts"
+    ),
     path("banner_list/", guest_user_views.ListBanners.as_view(), name="banner_list"),
-
-
 ]

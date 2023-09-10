@@ -3,6 +3,8 @@ from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from my_apps.shop.models import Order
+
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     """Add some info about user in token response"""
@@ -27,6 +29,8 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         data["created_at"] = self.user.created_at
         data["updated_at"] = self.user.updated_at
+        order = Order.get_current_order_id(self.user)
+        data["order"] = order.id
         return data
 
 
@@ -82,7 +86,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
     #     return user
 
     def save(self):
-
         user = User(
             email=self.validated_data["email"],
             role=self.validated_data["get_role_display"],
@@ -106,3 +109,19 @@ class PasswordChangeSerializer(serializers.Serializer):
         if not self.context["request"].user.check_password(value):
             raise serializers.ValidationError({"current_password": "Does not match"})
         return value
+
+
+class RegisterAuthUser(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["email", "password"]
+        extra_kwargs = {"password": {"write_only": True}}
+
+    def save(self):
+        user = User(
+            email=self.validated_data["email"],
+        )
+        password = self.validated_data["password"]
+        user.set_password(password)
+        user.save()
+        return user
