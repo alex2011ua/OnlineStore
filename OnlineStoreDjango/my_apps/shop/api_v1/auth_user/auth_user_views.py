@@ -46,7 +46,7 @@ class TestAuthUser(APIView):
         },
     ),
 )
-class AddProductOrder(APIView):
+class Basket(APIView):
     permission_classes = [IsAuthenticated, AuthUserPermission]
 
     def post(self, request):
@@ -72,6 +72,17 @@ class AddProductOrder(APIView):
                 {"prodID": prod.product.id, "quantity": prod.quantity}
             )
         return Response({"order_id": order.id, "products": product_list_in_order})
+    def get(self, request):
+        user: User = request.user
+        order = Order.get_current_order_id(user)
+        oi = OrderItem.objects.filter(order=order)
+        product_list_in_order: list = []
+        for prod in oi:
+            product_list_in_order.append(
+                {"prodID": prod.product.id, "quantity": prod.quantity}
+            )
+        return Response({"order_id": order.id, "products": product_list_in_order})
+
 
 
 """
