@@ -1,5 +1,4 @@
-from my_apps.shop.models import (Banner, Category, Order, Product, Rating,
-                                 Review)
+from my_apps.shop.models import Banner, Category, Order, Product, Rating, Review
 from rest_framework import serializers
 
 

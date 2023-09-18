@@ -1,6 +1,7 @@
 import uuid
 
 from django.db import models
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from my_apps.accounts.models import User
 
@@ -47,6 +48,13 @@ class Category(models.Model):
         if cat:
             return cat[0]
 
+    @staticmethod
+    def get_by_id(id):
+        """
+        todo: add
+        """
+        return Category.objects.get(id=id)
+
     def __str__(self):
         return self.name
 
@@ -78,6 +86,11 @@ class Product(models.Model):
     created_at = models.DateTimeField(_("created"), auto_now_add=True)
     updated_at = models.DateTimeField(_("update"), auto_now=True)
     sold = models.PositiveIntegerField(_("number sold"), default=0)
+
+    wishlist = models.ManyToManyField(
+        User, related_name="wishlist"
+    )  # add products to user wishlist
+
     global_rating = models.IntegerField(
         _("global rating"),
         choices=[(i, i) for i in range(0, 6)],
@@ -102,6 +115,15 @@ class Product(models.Model):
         blank=True,
         null=True,
     )
+
+    @staticmethod
+    def get_products_in_category(category: uuid.UUID):
+        """return all products in category or subcategories."""
+
+        products = Product.objects.filter(
+            Q(category__category=category) | Q(category=category)
+        )
+        return products
 
     @staticmethod
     def get_by_id(key):
@@ -160,9 +182,7 @@ class Order(models.Model):
 
     @staticmethod
     def get_current_order_id(user):
-        order, _ = Order.objects.get_or_create(
-            customer=user, manager=user, status=Order.new_order
-        )
+        order, _ = Order.objects.get_or_create(customer=user, status=Order.new_order)
         return order
 
     def __str__(self):

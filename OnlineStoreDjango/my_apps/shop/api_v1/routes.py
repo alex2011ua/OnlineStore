@@ -16,7 +16,7 @@ router.register(r"product", views.ProductViewSet)
 urlpatterns = [
     path("", include(router.urls)),
     path("guest_user/", include("my_apps.shop.api_v1.guest_user_routes")),
-    path("auth_user/", include("my_apps.shop.api_v1.auth_user_routes")),
-    path("manager/", include("my_apps.shop.api_v1.manager_routes")),
-    path("admin/", include("my_apps.shop.api_v1.admin_routes")),
+    path("auth_user/", include("my_apps.shop.api_v1.auth_user.auth_user_routes")),
+    path("manager/", include("my_apps.shop.api_v1.manager.manager_routes")),
+    path("admin/", include("my_apps.shop.api_v1.admin.admin_routes")),
 ]

@@ -2,6 +2,7 @@ from django.http import FileResponse, HttpResponseRedirect
 from django.shortcuts import render
 
 from .form import gpt_Form
+
 # from .llama import search_answer
 from .models import Product
 

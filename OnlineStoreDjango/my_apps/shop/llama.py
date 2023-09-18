@@ -1,9 +1,15 @@
 import logging
 import sys
 
-from llama_index import (Document, DocumentSummaryIndex, GPTKeywordTableIndex,
-                         StorageContext, TreeIndex, VectorStoreIndex,
-                         load_index_from_storage)
+from llama_index import (
+    Document,
+    DocumentSummaryIndex,
+    GPTKeywordTableIndex,
+    StorageContext,
+    TreeIndex,
+    VectorStoreIndex,
+    load_index_from_storage,
+)
 from llama_index.node_parser import SimpleNodeParser
 from my_apps.shop.models import Product
 

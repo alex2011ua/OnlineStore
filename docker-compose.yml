@@ -2,6 +2,11 @@ version: '3.8'
 
 services:
   web:
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 255m
     container_name: online_store
     build: .
     volumes:
@@ -15,7 +20,7 @@ services:
       POSTGRES_USER: "AlexUA"
       POSTGRES_PASSWORD: "online_store"
       DEBUG: 1
-
+      OPENAI_API_KEY: "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"
     depends_on:
       - postgres
   postgres:
@@ -48,3 +53,6 @@ services:
           memory: 1G
 volumes:
   postgres_data:
+networks:
+  network1:
+    name: my-pre-existing-network

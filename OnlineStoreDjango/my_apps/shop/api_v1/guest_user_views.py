@@ -1,8 +1,8 @@
 from random import randint, sample
+from uuid import UUID
 
-from drf_spectacular.utils import (OpenApiParameter, extend_schema,
-                                   extend_schema_view)
-from my_apps.shop.models import Banner, Product, Settings
+from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
+from my_apps.shop.models import Banner, Category, Product, Settings
 from rest_framework import status
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
@@ -10,6 +10,13 @@ from rest_framework.views import APIView
 
 from .paginators import SmallResultsSetPagination
 from .serializers import BannerSerializer, ProductSerializer
+
+
+def version_uuid(uuid):
+    try:
+        return UUID(uuid).version
+    except ValueError:
+        return None
 
 
 @extend_schema(tags=["Guest_user"])
@@ -128,6 +135,10 @@ class ListNewGifts(APIView, SmallResultsSetPagination):
         summary="get random product",
         responses={
             status.HTTP_200_OK: ProductSerializer,
+            status.HTTP_404_NOT_FOUND: {
+                "coed": status.HTTP_404_NOT_FOUND,
+                "details": "category is empty",
+            },
         },
         parameters=[
             OpenApiParameter(
@@ -144,27 +155,39 @@ class ListNewGifts(APIView, SmallResultsSetPagination):
                 required=False,
                 type=int,
             ),
+            OpenApiParameter(
+                name="category",
+                location=OpenApiParameter.QUERY,
+                description="search in category",
+                required=False,
+                type=str,
+            ),
         ],
     ),
 )
 class RandomGift(APIView):
-    """Return product according to input price"""
+    """Return product according to input price and category"""
 
     def get(self, request):
         from_price = request.query_params.get("from", 0)
         to_price = request.query_params.get("to", 1000000)
+        category_id = request.query_params.get("category")
+        if version_uuid(category_id) != 4:
+            return Response(
+                status=status.HTTP_404_NOT_FOUND, data=["Wrong ID category"]
+            )
 
-        # get quantity of products according to price filter and choose random index
-        random_index = randint(
-            0,
-            Product.objects.filter(
-                price__gte=float(from_price), price__lte=to_price
-            ).count()
-            - 1,
-        )
-        product = Product.objects.filter(
+        products = Product.get_products_in_category(category_id)  # add product in this category and subcategories
+        products_filtered_by_price = products.filter(
             price__gte=float(from_price), price__lte=to_price
-        )[random_index]
+        )
+        if products_filtered_by_price.count() == 0:
+            return Response(
+                status=status.HTTP_404_NOT_FOUND, data=["no products in this category"]
+            )
+
+        random_index = randint(0, products_filtered_by_price.count() - 1)
+        product = products_filtered_by_price[random_index]
         serializer = ProductSerializer(product, context={"request": request})
         return Response(serializer.data)
 

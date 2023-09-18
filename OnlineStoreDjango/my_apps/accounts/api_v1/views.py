@@ -1,7 +1,6 @@
 from drf_spectacular.utils import extend_schema
 from my_apps.accounts.models import User
-from my_apps.shop.api_v1.permissions import (AdminPermission,
-                                             GuestUserPermission)
+from my_apps.shop.api_v1.permissions import AdminPermission, GuestUserPermission
 from rest_framework import generics, mixins, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -9,15 +8,19 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from .serializers import (MyTokenObtainPairSerializer,
-                          PasswordChangeSerializer, RegistrationSerializer,
-                          UserUrlSerializer)
+from .serializers import (
+    MyTokenObtainPairSerializer,
+    PasswordChangeSerializer,
+    RegistrationSerializer,
+    UserUrlSerializer,
+)
 
 
 class MyTokenObtainPairView(TokenObtainPairView):
     """Custom clas for add user info in tocken response"""
 
     serializer_class = MyTokenObtainPairSerializer
+
 
 @extend_schema(tags=["User"])
 class UserViewSet(

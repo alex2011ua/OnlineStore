@@ -21,4 +21,4 @@ RUN python manage.py collectstatic --no-input
 RUN apt-get install htop -y
 EXPOSE 8000
 ENTRYPOINT ["/code/swap.sh"]
-CMD ["gunicorn", "OnlineStoreDjango.wsgi:application","--bind", "0.0.0.0:8000"]
+

@@ -1,3 +1,4 @@
 # OnlineStore
 ## backend part for online store Team Challenge
-### https://django-rest-framework-simplejwt.readthedocs.io/en/latest/getting_started.html
+### https://dbdiagram.io/d/64ca041702bd1c4a5e192886
+### https://slavasamokrik.atlassian.net/jira/software/projects/OS/boards/2/

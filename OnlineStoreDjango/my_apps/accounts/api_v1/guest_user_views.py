@@ -8,7 +8,6 @@ from rest_framework.response import Response
 from .serializers import RegisterAuthUser
 
 
-@extend_schema()
 @extend_schema(
     tags=["Guest_user"],
     request=RegisterAuthUser,
