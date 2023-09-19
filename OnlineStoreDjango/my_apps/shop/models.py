@@ -119,11 +119,13 @@ class Product(models.Model):
     @staticmethod
     def get_products_in_category(category: uuid.UUID):
         """return all products in category or subcategories."""
-
-        products = Product.objects.filter(
-            Q(category__category=category) | Q(category=category)
-        )
-        return products
+        if category:
+            products = Product.objects.filter(
+                Q(category__category=category) | Q(category=category)
+            )
+            return products
+        else:
+            return Product.objects.all()
 
     @staticmethod
     def get_by_id(key):

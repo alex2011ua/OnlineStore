@@ -100,7 +100,7 @@ def test_random_gift():
 
     category = Category.objects.get()
     # create 10 products with different rating and counts of sailing
-    for i in range(50):
+    for i in range(100):
         Product.objects.create(
             name=i,
             slug=i,
@@ -110,7 +110,11 @@ def test_random_gift():
         )
     url = reverse("random_gift")
     response1 = client.get(url, {"from": 20, "to": 50})
-    time.sleep(0.01)
     response2 = client.get(url, {"from": 20, "to": 50})
     assert response1.data == response1.data
+    count = 0
+    while response1.data == response2.data and count > 150:
+        response2 = client.get(url, {"from": 20, "to": 50})
+        count += 1
+        time.sleep(0.115)
     assert response1.data != response2.data

@@ -171,8 +171,8 @@ class RandomGift(APIView):
     def get(self, request):
         from_price = request.query_params.get("from", 0)
         to_price = request.query_params.get("to", 1000000)
-        category_id = request.query_params.get("category")
-        if version_uuid(category_id) != 4:
+        category_id = request.query_params.get("category", None)
+        if category_id and version_uuid(category_id) != 4:
             return Response(
                 status=status.HTTP_404_NOT_FOUND, data=["Wrong ID category"]
             )
