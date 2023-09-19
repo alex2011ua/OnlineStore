@@ -3,6 +3,8 @@ import uuid
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
+from rest_framework.exceptions import NotFound
+
 from my_apps.accounts.models import User
 
 
@@ -129,9 +131,11 @@ class Product(models.Model):
 
     @staticmethod
     def get_by_id(key):
-        p = Product.objects.filter(id=key)
-        if len(p) == 1:
-            return p[0]
+        try:
+            product = Product.objects.get(id=key)
+        except Product.DoesNotExist:
+            raise NotFound(detail="product not found")
+        return product
 
     def __str__(self):
         return self.name
@@ -162,7 +166,7 @@ class Order(models.Model):
     status = models.SmallIntegerField(choices=STATUS_CHOICES, default=1)
 
     customer = models.ForeignKey(
-        User, related_name="customer", on_delete=models.CASCADE
+        User, related_name="customer", on_delete=models.CASCADE, blank=True, null=True
     )
     manager = models.ForeignKey(
         User, related_name="manager", on_delete=models.CASCADE, blank=True, null=True
@@ -178,9 +182,34 @@ class Order(models.Model):
         null=True,
         default=0,
     )
+    @classmethod
+    def get_by_id(cls, pk: str):
+        try:
+            order = cls.objects.get(id=pk)
+        except Order.DoesNotExist:
+            raise NotFound(detail="order not found")
+        return order
 
-    def get_order_info(self, id):
-        order = self.objects.get(id=id)
+    def add_product_to_order(self, product: Product, amount):
+        products_in_order = self.products.all()
+        if product in products_in_order:
+            oi = OrderItem.objects.get(product=product, order=self)
+            oi.quantity = amount
+            oi.save()
+        else:
+            self.products.add(product, through_defaults={"quantity": amount})
+    def get_products_order(self):
+        oi = OrderItem.objects.filter(order=self)
+        product_list_in_order: list = []
+        for prod in oi:
+            product_list_in_order.append(
+                {"prodID": prod.product.id, "quantity": prod.quantity}
+            )
+        return product_list_in_order
+    def delete_product_order(self, product: Product):
+        products_in_order = self.products.all()
+        if product in products_in_order:
+            self.products.remove(product)
 
     @staticmethod
     def get_current_order_id(user):

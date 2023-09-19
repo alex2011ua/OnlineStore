@@ -1,9 +1,8 @@
 import pytest
 from django.shortcuts import redirect
-from rest_framework.test import APIRequestFactory, force_authenticate
-
 from my_apps.accounts.models import User
 from my_apps.shop.models import Category, Product
+from rest_framework.test import APIRequestFactory, force_authenticate
 
 from .auth_user_views import Basket
 
@@ -30,18 +29,18 @@ def test_basket_endpoints():
     user = User.objects.get(email="auth_user@gmail.com")
     view = Basket.as_view()
 
-    request = factory.get(redirect("basket"))
+    request = factory.get(redirect("auth_user_basket"))
     force_authenticate(request, user=user)
     response = view(request)
     assert response.data["products"] == []
 
     p = Product.objects.all()[0]
-    request = factory.post(redirect("basket"), {"product": p.id, "amount": 2})
+    request = factory.post(redirect("auth_user_basket"), {"product_id": p.id, "amount": 2})
     force_authenticate(request, user=user)
     response = view(request)
-    assert response.status_code == 201
+    assert response.status_code == 200
 
-    request = factory.get(redirect("basket"))
+    request = factory.get(redirect("auth_user_basket"))
     force_authenticate(request, user=user)
     response = view(request)
     assert response.data["products"] != []

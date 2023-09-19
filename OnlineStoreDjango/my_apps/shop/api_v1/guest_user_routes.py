@@ -17,4 +17,5 @@ urlpatterns = [
         "random-gifts/", guest_user_views.ListRandomGifts.as_view(), name="random_gifts"
     ),
     path("banner_list/", guest_user_views.ListBanners.as_view(), name="banner_list"),
+    path("basket/", guest_user_views.Basket.as_view(), name="guest_user_basket"),
 ]

@@ -15,7 +15,7 @@ from my_apps.shop.api_v1.auth_user.serializers_auth_user import (
 from my_apps.shop.api_v1.permissions import AuthUserPermission
 from my_apps.shop.models import Order, OrderItem, Product
 from rest_framework import serializers, status
-from rest_framework.exceptions import NotFound
+from rest_framework.exceptions import NotFound, ParseError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -23,7 +23,7 @@ from rest_framework.views import APIView
 
 @extend_schema(tags=["Auth_user"])
 class TestAuthUser(APIView):
-    """Return product according to input price"""
+    """test permissions"""
 
     permission_classes = [IsAuthenticated, AuthUserPermission]
 
@@ -46,7 +46,7 @@ class TestAuthUser(APIView):
         summary="delete product from basket",
         parameters=[
             OpenApiParameter(
-                name="id",
+                name="product_id",
                 location=OpenApiParameter.QUERY,
                 description="product id",
                 required=True,
@@ -59,53 +59,29 @@ class Basket(APIView):
     permission_classes = [IsAuthenticated, AuthUserPermission]
 
     def post(self, request):
-        product_id: str = request.data.get("product")
+        product_id: str = request.data.get("product_id")
         product = Product.get_by_id(product_id)
-        if not product:
-            raise NotFound(detail="Error 404, product not found", code=404)
-        amount: int = int(request.data.get("amount"))
-
+        try:
+            amount: int = int(request.data.get("amount"))
+        except ValueError:
+            raise ParseError(detail="must be integer")
         user: User = request.user
         order = Order.get_current_order_id(user)
-        products_in_order = order.products.all()
-        if product in products_in_order:
-            oi = OrderItem.objects.get(product=product)
-            oi.quantity = amount
-            oi.save()
-            return Response(status=status.HTTP_200_OK)
-        else:
-            order.products.add(product, through_defaults={"quantity": amount})
-            return Response(status=status.HTTP_201_CREATED)
+        order.add_product_to_order(product, amount)
+        return Response(status=status.HTTP_200_OK)
 
     def get(self, request):
         user: User = request.user
         order = Order.get_current_order_id(user)
-        oi = OrderItem.objects.filter(order=order)
-        product_list_in_order: list = []
-        for prod in oi:
-            product_list_in_order.append(
-                {"prodID": prod.product.id, "quantity": prod.quantity}
-            )
-        return Response({"order_id": order.id, "products": product_list_in_order})
+        return Response({"order_id": order.id, "products": order.get_products_order()})
 
     def delete(self, request):
         user: User = request.user
-        product_id: str = request.query_params.get("id")
+        product_id: str = request.query_params.get("product_id")
         product = Product.get_by_id(product_id)
-        if not product:
-            raise NotFound(detail="Error 404, product not found", code=404)
         order = Order.get_current_order_id(user)
-        products_in_order = order.products.all()
-        if product in products_in_order:
-            order.products.remove(product)
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
-
-class GetOrderInfo(APIView):
-    def get(self, request):
-        return Response({})
+        order.delete_product_order(product)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 @extend_schema(

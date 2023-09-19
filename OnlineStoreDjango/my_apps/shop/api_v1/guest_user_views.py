@@ -1,9 +1,16 @@
 from random import randint, sample
 from uuid import UUID
 
-from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
-from my_apps.shop.models import Banner, Category, Product, Settings
-from rest_framework import status
+from drf_spectacular.utils import (
+    OpenApiParameter,
+    extend_schema,
+    extend_schema_view,
+    inline_serializer,
+)
+from rest_framework.exceptions import NotFound, ParseError
+
+from my_apps.shop.models import Banner, Category, Product, Settings, Order, OrderItem
+from rest_framework import serializers, status
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -292,3 +299,80 @@ class Gpt(APIView):
 
         s = search_answer(search_string)
         return Response(s)
+
+
+@extend_schema(
+    tags=["Guest_user"],
+    request=inline_serializer(
+        name="ProductSerializer",
+        fields={
+            "product_id": serializers.UUIDField(),
+            "amount": serializers.IntegerField(),
+            "order_id": serializers.UUIDField(),
+        },
+    ),
+)
+@extend_schema_view(
+    get=extend_schema(
+        summary="get product from basket",
+        parameters=[
+            OpenApiParameter(
+                name="order_id",
+                location=OpenApiParameter.QUERY,
+                description="order id",
+                required=True,
+                type=UUID,
+            ),
+        ],
+    ),
+    delete=extend_schema(
+        summary="delete product from basket",
+        parameters=[
+            OpenApiParameter(
+                name="product_id",
+                location=OpenApiParameter.QUERY,
+                description="product id",
+                required=True,
+                type=UUID,
+            ),
+            OpenApiParameter(
+                name="order_id",
+                location=OpenApiParameter.QUERY,
+                description="order id",
+                required=True,
+                type=UUID,
+            ),
+        ],
+    ),
+)
+class Basket(APIView):
+    """API endpoints for unregistered user"""
+    def post(self, request):
+        product_id: str = request.data.get("product_id")
+        product = Product.get_by_id(product_id)
+        try:
+            amount: int = int(request.data.get("amount"))
+        except ValueError:
+            raise ParseError(detail="value must be integer")
+
+        order_id = request.data.get("order_id", None)
+        if order_id:
+            order = Order.get_by_id(order_id)
+        else:
+            order = Order.objects.create()
+        order.add_product_to_order(product, amount)
+        return Response({"order_id": order.id}, status=status.HTTP_200_OK)
+
+    def get(self, request):
+        order_id: str = request.query_params.get("order_id")
+        order = Order.get_by_id(order_id)
+        return Response({"order_id": order.id, "products": order.get_products_order()})
+
+    def delete(self, request):
+        order_id: str = request.query_params.get("order_id")
+        order = Order.get_by_id(order_id)
+        product_id: str = request.query_params.get("product_id")
+        product = Product.get_by_id(product_id)
+        order.delete_product_order(product)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
