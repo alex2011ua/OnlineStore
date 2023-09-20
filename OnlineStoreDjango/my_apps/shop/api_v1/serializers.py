@@ -57,3 +57,9 @@ class BannerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Banner
         fields = ["id", "title", "description", "img", "mobileImg", "link"]
+
+
+class BasketSerializer(serializers.Serializer):
+    order_id = serializers.UUIDField(required=False)
+    product_id = serializers.UUIDField()
+    amount = serializers.IntegerField()

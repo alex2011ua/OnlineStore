@@ -16,7 +16,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .paginators import SmallResultsSetPagination
-from .serializers import BannerSerializer, ProductSerializer
+from .serializers import BannerSerializer, ProductSerializer, BasketSerializer
 
 
 def version_uuid(uuid):
@@ -303,14 +303,7 @@ class Gpt(APIView):
 
 @extend_schema(
     tags=["Guest_user"],
-    request=inline_serializer(
-        name="ProductSerializer",
-        fields={
-            "product_id": serializers.UUIDField(),
-            "amount": serializers.IntegerField(),
-            "order_id": serializers.UUIDField(),
-        },
-    ),
+    request=BasketSerializer
 )
 @extend_schema_view(
     get=extend_schema(
@@ -348,14 +341,14 @@ class Gpt(APIView):
 class Basket(APIView):
     """API endpoints for unregistered user"""
     def post(self, request):
-        product_id: str = request.data.get("product_id")
-        product = Product.get_by_id(product_id)
-        try:
-            amount: int = int(request.data.get("amount"))
-        except ValueError:
-            raise ParseError(detail="value must be integer")
+        serializer = BasketSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
-        order_id = request.data.get("order_id", None)
+        product_id: str = serializer.validated_data.get("product_id")
+        amount: int = serializer.validated_data.get("amount")
+        order_id = serializer.validated_data.get("order_id", None)
+        product = Product.get_by_id(product_id)
+
         if order_id:
             order = Order.get_by_id(order_id)
         else:

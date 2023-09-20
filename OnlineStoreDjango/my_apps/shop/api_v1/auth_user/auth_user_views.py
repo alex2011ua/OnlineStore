@@ -13,6 +13,7 @@ from my_apps.shop.api_v1.auth_user.serializers_auth_user import (
     ProductSerializer,
 )
 from my_apps.shop.api_v1.permissions import AuthUserPermission
+from my_apps.shop.api_v1.serializers import BasketSerializer
 from my_apps.shop.models import Order, OrderItem, Product
 from rest_framework import serializers, status
 from rest_framework.exceptions import NotFound, ParseError
@@ -36,7 +37,7 @@ class TestAuthUser(APIView):
     request=inline_serializer(
         name="InlineFormSerializer",
         fields={
-            "product": serializers.UUIDField(),
+            "product_id": serializers.UUIDField(),
             "amount": serializers.IntegerField(),
         },
     ),
@@ -59,12 +60,12 @@ class Basket(APIView):
     permission_classes = [IsAuthenticated, AuthUserPermission]
 
     def post(self, request):
-        product_id: str = request.data.get("product_id")
+        serializer = BasketSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        product_id: str = serializer.validated_data.get("product_id")
+        amount: int = serializer.validated_data.get("amount")
+
         product = Product.get_by_id(product_id)
-        try:
-            amount: int = int(request.data.get("amount"))
-        except ValueError:
-            raise ParseError(detail="must be integer")
         user: User = request.user
         order = Order.get_current_order_id(user)
         order.add_product_to_order(product, amount)
@@ -132,17 +133,17 @@ class Wishlist(APIView):
     def post(self, request):
         user = get_user(request)
         serializer = ProductIdSerializer(data=request.data)
-        if serializer.is_valid():
-            product = Product.get_by_id(serializer.validated_data["id"])
-            user.wishlist.add(product)
-            return Response(status=status.HTTP_201_CREATED)
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer.is_valid(raise_exception=True)
+        product = Product.get_by_id(serializer.validated_data["id"])
+        user.wishlist.add(product)
+        return Response(status=status.HTTP_201_CREATED)
+
 
     def delete(self, request):
         user = get_user(request)
         serializer = ProductIdSerializer(data=request.query_params)
-        if serializer.is_valid():
-            product = Product.get_by_id(serializer.validated_data["id"])
-            user.wishlist.remove(product)
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer.is_valid(raise_exception=True)
+        product = Product.get_by_id(serializer.validated_data["id"])
+        user.wishlist.remove(product)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
