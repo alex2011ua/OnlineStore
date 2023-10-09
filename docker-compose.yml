@@ -2,11 +2,6 @@ version: '3.8'
 
 services:
   web:
-    deploy:
-      resources:
-        limits:
-          cpus: '0.50'
-          memory: 255m
     container_name: online_store
     build: .
     volumes:
@@ -20,9 +15,10 @@ services:
       POSTGRES_USER: "AlexUA"
       POSTGRES_PASSWORD: "online_store"
       DEBUG: 1
-      OPENAI_API_KEY:"fff"
     depends_on:
       - postgres
+    networks:
+      - network1
   postgres:
     container_name: online_store_db
     image: postgres:13.8
@@ -32,7 +28,11 @@ services:
       POSTGRES_DB: online_store_db
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - network1
   pgadmin:
+    networks:
+      - network1
     container_name: online_store_pgadmin
     depends_on:
       - postgres

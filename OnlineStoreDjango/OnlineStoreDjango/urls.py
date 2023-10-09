@@ -17,7 +17,6 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path, re_path
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
-from rest_framework import permissions
 
 urlpatterns = [
     path('', SpectacularSwaggerView.as_view(url_name='schema'), name='docs'),
@@ -26,5 +25,6 @@ urlpatterns = [
     path("api/v1/accounts/", include("my_apps.accounts.api_v1.routes")),
     path("api/v1/shop/", include("my_apps.shop.api_v1.routes")),
     path("foto/", include("my_apps.shop.urls")),
+    path("auth/", include("my_apps.accounts.urls"))
 
 ]

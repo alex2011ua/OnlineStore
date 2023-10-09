@@ -3,7 +3,7 @@ from rest_framework import routers
 from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView
 
 from .views import (ChangePasswordView, CreateUserView, MyTokenObtainPairView,
-                    UserViewSet)
+                    UserViewSet, GoogleAuth, GoogleMail)
 
 router = routers.DefaultRouter()
 router.register(r"users", UserViewSet)
@@ -17,4 +17,6 @@ urlpatterns = [
     path("user-create/", CreateUserView.as_view(), name="create_user"),
     path("change-password/", ChangePasswordView.as_view(), name="change_password"),
     path("guest_user/", include("my_apps.accounts.api_v1.guest_user_routes")),
+    path("google_auth/", GoogleAuth.as_view()),
+    path("google_mail/", GoogleMail.as_view()),
 ]

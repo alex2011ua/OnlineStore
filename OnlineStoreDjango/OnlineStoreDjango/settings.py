@@ -13,11 +13,14 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 from datetime import timedelta
 from pathlib import Path
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv()
+load_dotenv("../.env")
 
-
+print(os.getenv("GOOGLE_CLIENT_ID"))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -100,7 +103,7 @@ DATABASES = {
         'NAME':     os.getenv("POSTGRES_DB", "online_store_db"),
         'USER':     os.getenv("POSTGRES_USER", "AlexUA"),
         'PASSWORD': os.getenv("POSTGRES_PASSWORD", "online_store"),
-        'HOST':     os.getenv("DB_HOST", "172.21.0.3",),
+        'HOST':     os.getenv("DB_HOST", "172.20.0.2",),
         'PORT':     str(os.getenv("PORT_DB", 5432)),
     }
 }
@@ -114,6 +117,14 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
             'rest_framework.permissions.AllowAny', )
 }
+
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv("GOOGLE_CLIENT_ID")
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+    'https://www.googleapis.com/auth/userinfo.email',
+    'https://www.googleapis.com/auth/userinfo.profile',
+]
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -157,9 +168,9 @@ MODELTRANSLATION_PREPOPULATE_LANGUAGE = "en"
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
-STATIC_ROOT = "shop/static/"
+STATIC_ROOT = "shop/media/"
 
-MEDIA_ROOT = "shop/media/"
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 

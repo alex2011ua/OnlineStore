@@ -2,19 +2,27 @@ from my_apps.shop.models import Banner, Category, Order, Product, Rating, Review
 from rest_framework import serializers
 
 
-class CategorySerializer(serializers.HyperlinkedModelSerializer):
+class CategorySerializer(serializers.ModelSerializer):
+    sub = serializers.SerializerMethodField()
+    icon = serializers.ImageField(source="img_small")
+    url = serializers.CharField(source="slug")
+
     class Meta:
         model = Category
         fields = [
             "id",
-            "category",
             "url",
             "name",
-            "slug",
-            "description",
-            "img_small",
+            "icon",
             "img",
+            "sub",
         ]
+
+    def get_sub(self, obj) -> list[dict]:
+        serializer = CategorySerializer(
+            obj.get_sub_categories(), context=self.context, many=True
+        )
+        return serializer.data
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -60,6 +68,9 @@ class BannerSerializer(serializers.ModelSerializer):
 
 
 class BasketSerializer(serializers.Serializer):
-    order_id = serializers.UUIDField(required=False)
     product_id = serializers.UUIDField()
     amount = serializers.IntegerField()
+
+
+class OrderIdSerializer(serializers.Serializer):
+    order_id = serializers.UUIDField()

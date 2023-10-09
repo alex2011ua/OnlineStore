@@ -77,13 +77,14 @@ class RegistrationSerializer(serializers.ModelSerializer):
         fields = ["email", "password", "role"]
         extra_kwargs = {"password": {"write_only": True}}
 
-    # def create(self, validated_data):
-    #     user = User.objects.create(
-    #         email=validated_data["email"],
-    #     )
-    #     user.set_password(validated_data["password"])
-    #     user.save()
-    #     return user
+    def create(self,validated_data):
+       password=validated_data.pop('password',None)
+       instance=self.Meta.model(**validated_data)
+       if password is not None:
+           instance.set_password(password)
+       instance.save()
+       return instance
+
 
     def save(self):
         user = User(
@@ -125,3 +126,4 @@ class RegisterAuthUser(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
         return user
+

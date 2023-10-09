@@ -26,7 +26,9 @@ class Category(models.Model):
         related_name="sub_category",
     )
     name = models.CharField(_("category name"), max_length=100)
-    slug = models.SlugField(_("category slug"), unique=True, blank=True, null=True)
+    slug = models.SlugField(
+        _("category slug"), unique=True, blank=True, null=True, db_index=True
+    )  # create index
     description = models.TextField(_("category description"), blank=True, null=True)
     img_small = models.ImageField(
         _("category icon image small"),
@@ -41,8 +43,8 @@ class Category(models.Model):
     updated_at = models.DateTimeField(_("update"), auto_now=True)
 
     @staticmethod
-    def get_all_categories():
-        return Category.objects.all()
+    def get_main_categories():
+        return Category.objects.filter(category=None)
 
     @staticmethod
     def get_category(slug):
@@ -56,6 +58,10 @@ class Category(models.Model):
         todo: add
         """
         return Category.objects.get(id=id)
+
+    def get_sub_categories(self):
+        subcategories = Category.objects.filter(category=self)
+        return subcategories
 
     def __str__(self):
         return self.name
@@ -148,6 +154,10 @@ class Product(models.Model):
 
     class Meta:
         ordering = ["category"]
+        indexes = [models.Index(fields=["created_at", "price"])]
+        constraints = [
+            models.CheckConstraint(check=models.Q(price__gt=0), name="valid_price")
+        ]
 
 
 class Order(models.Model):
@@ -182,6 +192,7 @@ class Order(models.Model):
         null=True,
         default=0,
     )
+
     @classmethod
     def get_by_id(cls, pk: str):
         try:
@@ -198,6 +209,7 @@ class Order(models.Model):
             oi.save()
         else:
             self.products.add(product, through_defaults={"quantity": amount})
+
     def get_products_order(self):
         oi = OrderItem.objects.filter(order=self)
         product_list_in_order: list = []
@@ -206,6 +218,7 @@ class Order(models.Model):
                 {"prodID": prod.product.id, "quantity": prod.quantity}
             )
         return product_list_in_order
+
     def delete_product_order(self, product: Product):
         products_in_order = self.products.all()
         if product in products_in_order:

@@ -7,16 +7,22 @@ from drf_spectacular.utils import (
     extend_schema_view,
     inline_serializer,
 )
-from rest_framework.exceptions import NotFound, ParseError
 
 from my_apps.shop.models import Banner, Category, Product, Settings, Order, OrderItem
 from rest_framework import serializers, status
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework import viewsets
 
 from .paginators import SmallResultsSetPagination
-from .serializers import BannerSerializer, ProductSerializer, BasketSerializer
+from .serializers import (
+    BannerSerializer,
+    ProductSerializer,
+    CategorySerializer,
+    BasketSerializer,
+    OrderIdSerializer,
+)
 
 
 def version_uuid(uuid):
@@ -184,7 +190,9 @@ class RandomGift(APIView):
                 status=status.HTTP_404_NOT_FOUND, data=["Wrong ID category"]
             )
 
-        products = Product.get_products_in_category(category_id)  # add product in this category and subcategories
+        products = Product.get_products_in_category(
+            category_id
+        )  # add product in this category and subcategories
         products_filtered_by_price = products.filter(
             price__gte=float(from_price), price__lte=to_price
         )
@@ -295,77 +303,27 @@ class Gpt(APIView):
         if search_string is None:
             data = {"detail": "required search param", "code": "required_search"}
             return Response(status=status.HTTP_417_EXPECTATION_FAILED, data=data)
-        from my_apps.shop.llama import search_answer
+        from my_apps.shop.llama import LlamaSearch
 
-        s = search_answer(search_string)
+        search = LlamaSearch()
+        s = search.search_answer(search_string)
         return Response(s)
 
-
-@extend_schema(
-    tags=["Guest_user"],
-    request=BasketSerializer
-)
+@extend_schema(tags=["Guest_user"])
 @extend_schema_view(
-    get=extend_schema(
-        summary="get product from basket",
-        parameters=[
-            OpenApiParameter(
-                name="order_id",
-                location=OpenApiParameter.QUERY,
-                description="order id",
-                required=True,
-                type=UUID,
-            ),
-        ],
-    ),
-    delete=extend_schema(
-        summary="delete product from basket",
-        parameters=[
-            OpenApiParameter(
-                name="product_id",
-                location=OpenApiParameter.QUERY,
-                description="product id",
-                required=True,
-                type=UUID,
-            ),
-            OpenApiParameter(
-                name="order_id",
-                location=OpenApiParameter.QUERY,
-                description="order id",
-                required=True,
-                type=UUID,
-            ),
-        ],
+    list=extend_schema(
+        summary="all categories with sub categories",
+        responses={
+            status.HTTP_200_OK: CategorySerializer,
+        },
     ),
 )
-class Basket(APIView):
-    """API endpoints for unregistered user"""
-    def post(self, request):
-        serializer = BasketSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+class GetAllCategories(viewsets.ViewSet):
+    """
+    Endpoint to get all categories with sub categories
+    """
 
-        product_id: str = serializer.validated_data.get("product_id")
-        amount: int = serializer.validated_data.get("amount")
-        order_id = serializer.validated_data.get("order_id", None)
-        product = Product.get_by_id(product_id)
-
-        if order_id:
-            order = Order.get_by_id(order_id)
-        else:
-            order = Order.objects.create()
-        order.add_product_to_order(product, amount)
-        return Response({"order_id": order.id}, status=status.HTTP_200_OK)
-
-    def get(self, request):
-        order_id: str = request.query_params.get("order_id")
-        order = Order.get_by_id(order_id)
-        return Response({"order_id": order.id, "products": order.get_products_order()})
-
-    def delete(self, request):
-        order_id: str = request.query_params.get("order_id")
-        order = Order.get_by_id(order_id)
-        product_id: str = request.query_params.get("product_id")
-        product = Product.get_by_id(product_id)
-        order.delete_product_order(product)
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
+    def list(self, request):
+        queryset = Category.get_main_categories()
+        serializer = CategorySerializer(queryset, context={"request": request}, many=True)
+        return Response(serializer.data)

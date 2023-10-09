@@ -6,6 +6,7 @@ from drf_spectacular.utils import (
     extend_schema,
     extend_schema_view,
     inline_serializer,
+    OpenApiResponse,
 )
 from my_apps.accounts.models import User
 from my_apps.shop.api_v1.auth_user.serializers_auth_user import (
@@ -98,9 +99,15 @@ class Basket(APIView):
     ),
     post=extend_schema(
         summary="add product in wishlist",
-        request=ProductIdSerializer,
         responses={
             status.HTTP_200_OK: ProductIdSerializer,
+            status.HTTP_401_UNAUTHORIZED: OpenApiResponse(
+                response=False,
+                description="Authentication credentials were not provided.",
+            ),
+            status.HTTP_404_NOT_FOUND: OpenApiResponse(
+                response=False, description="Product not found."
+            ),
         },
     ),
     delete=extend_schema(
@@ -138,7 +145,6 @@ class Wishlist(APIView):
         user.wishlist.add(product)
         return Response(status=status.HTTP_201_CREATED)
 
-
     def delete(self, request):
         user = get_user(request)
         serializer = ProductIdSerializer(data=request.query_params)
@@ -146,4 +152,3 @@ class Wishlist(APIView):
         product = Product.get_by_id(serializer.validated_data["id"])
         user.wishlist.remove(product)
         return Response(status=status.HTTP_204_NO_CONTENT)
-

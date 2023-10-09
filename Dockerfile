@@ -11,6 +11,7 @@ RUN apt-get update
 RUN apt-get install build-essential -y
 
 COPY requirements.txt requirements.txt
+COPY .env .env
 RUN set -ex && \
     pip install --upgrade pip && \
     pip install -r requirements.txt && \
