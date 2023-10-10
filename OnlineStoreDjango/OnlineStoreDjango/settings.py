@@ -169,7 +169,7 @@ MODELTRANSLATION_PREPOPULATE_LANGUAGE = "en"
 
 STATIC_URL = 'static/'
 STATIC_ROOT = "shop/media/"
-
+STATIC = "shop/media/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

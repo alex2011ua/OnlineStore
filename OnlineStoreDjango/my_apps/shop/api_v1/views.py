@@ -23,7 +23,9 @@ class MyDestroyModelMixin(DestroyModelMixin):
         return Response(status=status.HTTP_204_NO_CONTENT, data=data)
 
 
-@extend_schema(tags=["Category"])
+@extend_schema(
+        exclude=True
+    )
 class CategoryViewSet(viewsets.ModelViewSet, MyDestroyModelMixin):
     """
     API endpoint that allows made CRUD operations with Category.
@@ -34,7 +36,9 @@ class CategoryViewSet(viewsets.ModelViewSet, MyDestroyModelMixin):
     permission_classes = [permissions.AllowAny]
 
 
-@extend_schema(tags=["Product"])
+@extend_schema(
+        exclude=True
+    )
 class ProductViewSet(viewsets.ModelViewSet, MyDestroyModelMixin):
     """
     API endpoint that allows made CRUD operations with Product.
@@ -44,7 +48,9 @@ class ProductViewSet(viewsets.ModelViewSet, MyDestroyModelMixin):
     serializer_class = ProductSerializer
     permission_classes = [permissions.AllowAny]
 
-
+@extend_schema(
+        exclude=True
+    )
 class OrderViewSet(viewsets.ModelViewSet, MyDestroyModelMixin):
     """
     .
@@ -54,7 +60,9 @@ class OrderViewSet(viewsets.ModelViewSet, MyDestroyModelMixin):
     serializer_class = OrderSerializer
     permission_classes = [permissions.AllowAny]
 
-
+@extend_schema(
+        exclude=True
+    )
 class ReviewViewSet(viewsets.ModelViewSet, MyDestroyModelMixin):
     """
     API endpoint that allows made CRUD operations with users reviews.
@@ -64,7 +72,9 @@ class ReviewViewSet(viewsets.ModelViewSet, MyDestroyModelMixin):
     serializer_class = ReviewSerializer
     permission_classes = [permissions.AllowAny]
 
-
+@extend_schema(
+        exclude=True
+    )
 class RatingViewSet(viewsets.ModelViewSet, MyDestroyModelMixin):
     """
     API endpoint that allows made CRUD operations with Rating.

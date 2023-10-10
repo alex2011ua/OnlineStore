@@ -1,4 +1,4 @@
-from django.http import FileResponse, HttpResponseRedirect
+from django.http import FileResponse, Http404
 from django.shortcuts import render
 
 from .form import gpt_Form
@@ -8,21 +8,30 @@ from .models import Product
 
 
 def get_foto_product(request, image_path):
-    img = open(f"shop/media/foto/products/{image_path}", "rb")
-    response = FileResponse(img)
-    return response
+    try:
+        img = open(f"shop/media/foto/products/{image_path}", "rb")
+        response = FileResponse(img)
+        return response
+    except FileNotFoundError:
+        raise Http404(f"file {image_path} not found!")
 
 
 def get_foto_banner(request, image_path):
-    img = open(f"shop/media/foto/banners/{image_path}", "rb")
-    response = FileResponse(img)
-    return response
+    try:
+        img = open(f"shop/media/foto/banners/{image_path}", "rb")
+        response = FileResponse(img)
+        return response
+    except FileNotFoundError:
+        raise Http404(f"file {image_path} not found!")
 
 
 def get_foto_category(request, image_path):
-    img = open(f"shop/media/foto/categories/{image_path}", "rb")
-    response = FileResponse(img)
-    return response
+    try:
+        img = open(f"shop/media/foto/categories/{image_path}", "rb")
+        response = FileResponse(img)
+        return response
+    except FileNotFoundError:
+        raise Http404(f"file {image_path} not found!")
 
 
 def gpt_search(request):
