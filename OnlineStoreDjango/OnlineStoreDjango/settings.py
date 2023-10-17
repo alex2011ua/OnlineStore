@@ -20,7 +20,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv()
 load_dotenv("../.env")
 
-print(os.getenv("GOOGLE_CLIENT_ID"))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -28,14 +27,16 @@ print(os.getenv("GOOGLE_CLIENT_ID"))
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY") or 'django-insecure-u#koj3@4+s+#nns0j6lk!+jxi6n8r))l1nejiyhkw*9mbf*u9x'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-debug: str | bool = os.getenv("DEBUG", True)
+
 DEBUG = int(os.getenv('DEBUG', 1))
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", 'localhost').split()
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
+    "https://main--lighthearted-cocada-0d2e37.netlify.app",
 ]
-CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOW_ALL_ORIGINS = True
+
 CSRF_TRUSTED_ORIGINS = [os.getenv("CSRF_TRUSTED_ORIGINS")] if os.getenv("CSRF_TRUSTED_ORIGINS") else []
 # Application definition
 

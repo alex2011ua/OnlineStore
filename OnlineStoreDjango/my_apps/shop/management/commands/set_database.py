@@ -73,7 +73,7 @@ class Command(BaseCommand):
             {"slug": "pens", "name": "Ручки", "name_en": "Pens"},
         ],
         "games": [
-            {"slug": "3Dpuzzles", "name": "3d пазли", "name_en": "3D puzzles"},
+            {"slug": "TDpuzzles", "name": "3d пазли", "name_en": "3D puzzles"},
             {
                 "slug": "boardGames",
                 "name": "Настільні ігри",

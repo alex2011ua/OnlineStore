@@ -17,6 +17,19 @@ urlpatterns = [
         "random-gifts/", guest_user_views.ListRandomGifts.as_view(), name="random_gifts"
     ),
     path("banner_list/", guest_user_views.ListBanners.as_view(), name="banner_list"),
-    path("get_all_categories/", guest_user_views.GetAllCategories.as_view({'get': 'list'}), name="get_all_categories"),
+    path(
+        "get_all_categories/",
+        guest_user_views.GetAllCategories.as_view({"get": "list"}),
+        name="get_all_categories",
+    ),
+    path(
+        "category/<category_id>/products",
+        guest_user_views.GetProductsByCategory.as_view({"get": "list"}),
+        name="get_products_by_category",
+    ),
+    path(
+        "product/<product_id>",
+        guest_user_views.GetProduct.as_view({"get": "retrieve"}),
+        name="get_product",
+    ),
 ]
-

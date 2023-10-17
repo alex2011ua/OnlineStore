@@ -1,12 +1,10 @@
 import pytest
 from django.urls import reverse
 from faker import Faker
+from my_apps.shop.management.commands.set_database import Command
 from my_apps.shop.models import Category, Product, Settings
 from rest_framework import status
 from rest_framework.test import APIClient
-
-from my_apps.shop.management.commands.set_database import Command
-
 
 fake = Faker()
 client = APIClient()

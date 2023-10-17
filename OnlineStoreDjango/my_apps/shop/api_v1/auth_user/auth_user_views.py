@@ -1,21 +1,16 @@
 from uuid import UUID
 
 from django.contrib.auth import get_user
-from drf_spectacular.utils import (
-    OpenApiParameter,
-    extend_schema,
-    extend_schema_view,
-    inline_serializer,
-    OpenApiResponse,
-)
+from drf_spectacular.utils import (OpenApiParameter, OpenApiResponse,
+                                   extend_schema, extend_schema_view,
+                                   inline_serializer)
 from my_apps.accounts.models import User
 from my_apps.shop.api_v1.auth_user.serializers_auth_user import (
-    ProductIdSerializer,
-    ProductSerializer,
-)
+    ProductIdSerializer, ProductSerializer)
 from my_apps.shop.api_v1.permissions import AuthUserPermission
-from my_apps.shop.api_v1.serializers import BasketSerializer
-from my_apps.shop.models import Order, OrderItem, Product
+from my_apps.shop.api_v1.serializers import (BasketItemSerializer,
+                                             BasketSerializer)
+from my_apps.shop.models import BasketItem, Order, OrderItem, Product
 from rest_framework import serializers, status
 from rest_framework.exceptions import NotFound, ParseError
 from rest_framework.permissions import IsAuthenticated
@@ -68,21 +63,22 @@ class Basket(APIView):
 
         product = Product.get_by_id(product_id)
         user: User = request.user
-        order = Order.get_current_order_id(user)
-        order.add_product_to_order(product, amount)
+        BasketItem.objects.create(
+            registered_user=user, product=product, quantity=amount
+        )
         return Response(status=status.HTTP_200_OK)
 
     def get(self, request):
         user: User = request.user
-        order = Order.get_current_order_id(user)
-        return Response({"order_id": order.id, "products": order.get_products_order()})
+        basket = user.basket.all()
+        serializer = BasketItemSerializer(basket, many=True)
+        return Response(serializer.data)
 
     def delete(self, request):
         user: User = request.user
         product_id: str = request.query_params.get("product_id")
         product = Product.get_by_id(product_id)
-        order = Order.get_current_order_id(user)
-        order.delete_product_order(product)
+        user.basket.get(registered_user=user, product=product).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -145,10 +141,11 @@ class Wishlist(APIView):
         user.wishlist.add(product)
         return Response(status=status.HTTP_201_CREATED)
 
-    def delete(self, request):
+    def delete(self, request) -> Response:
         user = get_user(request)
         serializer = ProductIdSerializer(data=request.query_params)
         serializer.is_valid(raise_exception=True)
         product = Product.get_by_id(serializer.validated_data["id"])
         user.wishlist.remove(product)
         return Response(status=status.HTTP_204_NO_CONTENT)
+

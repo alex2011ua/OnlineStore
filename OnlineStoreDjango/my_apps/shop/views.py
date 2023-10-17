@@ -2,7 +2,6 @@ from django.http import FileResponse, Http404
 from django.shortcuts import render
 
 from .form import gpt_Form
-
 from .llama import LlamaSearch
 from .models import Product
 

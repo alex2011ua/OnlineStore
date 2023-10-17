@@ -1,4 +1,5 @@
-from my_apps.shop.models import Banner, Category, Order, Product, Rating, Review
+from my_apps.shop.models import (Banner, BasketItem, Category, Order, Product,
+                                 Rating, Review)
 from rest_framework import serializers
 
 
@@ -33,6 +34,11 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "name",
+            "slug",
+            "type",
+            "description",
+            "quantity",
+            "sold",
             "img",
             "category",
             "price",
@@ -70,6 +76,12 @@ class BannerSerializer(serializers.ModelSerializer):
 class BasketSerializer(serializers.Serializer):
     product_id = serializers.UUIDField()
     amount = serializers.IntegerField()
+
+
+class BasketItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BasketItem
+        fields = ["registered_user", "product", "quantity"]
 
 
 class OrderIdSerializer(serializers.Serializer):

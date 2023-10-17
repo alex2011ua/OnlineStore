@@ -1,28 +1,18 @@
 from random import randint, sample
 from uuid import UUID
 
-from drf_spectacular.utils import (
-    OpenApiParameter,
-    extend_schema,
-    extend_schema_view,
-    inline_serializer,
-)
-
-from my_apps.shop.models import Banner, Category, Product, Settings, Order, OrderItem
-from rest_framework import serializers, status
+from drf_spectacular.utils import (OpenApiParameter, OpenApiResponse,
+                                   extend_schema, extend_schema_view)
+from my_apps.shop.models import (Banner, Category, Order, OrderItem, Product,
+                                 Settings)
+from rest_framework import status, viewsets
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import viewsets
 
-from .paginators import SmallResultsSetPagination
-from .serializers import (
-    BannerSerializer,
-    ProductSerializer,
-    CategorySerializer,
-    BasketSerializer,
-    OrderIdSerializer,
-)
+from .paginators import SmallResultsSetPagination, StandardResultsSetPagination
+from .serializers import (BannerSerializer, CategorySerializer,
+                          ProductSerializer)
 
 
 def version_uuid(uuid):
@@ -309,6 +299,7 @@ class Gpt(APIView):
         s = search.search_answer(search_string)
         return Response(s)
 
+
 @extend_schema(tags=["Guest_user"])
 @extend_schema_view(
     list=extend_schema(
@@ -325,5 +316,121 @@ class GetAllCategories(viewsets.ViewSet):
 
     def list(self, request):
         queryset = Category.get_main_categories()
-        serializer = CategorySerializer(queryset, context={"request": request}, many=True)
+        serializer = CategorySerializer(
+            queryset, context={"request": request}, many=True
+        )
+        return Response(serializer.data)
+
+
+@extend_schema(tags=["Guest_user"])
+@extend_schema_view(
+    list=extend_schema(
+        summary="products in category filtered and ordered",
+        responses={
+            status.HTTP_200_OK: ProductSerializer,
+            422: OpenApiResponse(description="wrong query param: "),
+            404: OpenApiResponse(description="category not found "),
+        },
+        parameters=[
+            OpenApiParameter(
+                name="page",
+                location=OpenApiParameter.QUERY,
+                description="page",
+                required=False,
+                type=int,
+            ),
+            OpenApiParameter(
+                name="sort",
+                location=OpenApiParameter.QUERY,
+                description="cheap | expensive | new | popular | rate",
+                required=False,
+                type=str,
+            ),
+            OpenApiParameter(
+                name="price_from",
+                location=OpenApiParameter.QUERY,
+                description="price_from",
+                required=False,
+                type=int,
+            ),
+            OpenApiParameter(
+                name="price_to",
+                location=OpenApiParameter.QUERY,
+                description="price_to",
+                required=False,
+                type=int,
+            ),
+            OpenApiParameter(
+                name="main",
+                location=OpenApiParameter.QUERY,
+                description="main(available |& pending  |& available)",
+                required=False,
+                type=str,
+            ),
+        ],
+    ),
+)
+class GetProductsByCategory(viewsets.ViewSet, StandardResultsSetPagination):
+    def list(self, request, category_id):
+        match request.query_params.get("sort"):
+            case "cheap":
+                order_by = "price"
+            case "expensive":
+                order_by = "-price"
+            case "new":
+                order_by = "-created_at"
+            case "popular":
+                order_by = "-sold"
+            case "rate":
+                order_by = "-global_rating"
+            case _:
+                order_by = "name"
+        category = Category.get_by_id(category_id)
+        params_filtering = {"category": category}
+        # sort by price
+        if request.query_params.get("price_from"):
+            params_filtering["price__gte"] = request.query_params.get("price_from")
+        if request.query_params.get("price_to"):
+            params_filtering["price__lte"] = request.query_params.get("price_to")
+        # sort by rating
+        if request.query_params.get("rate"):
+            params_filtering["global_rating__gte"] = request.query_params.get("rate")
+        #  add list of main filters
+        for product_filter in request.query_params.getlist("main"):
+            match product_filter:
+                case "available":
+                    # add only available products whith quantity > 0
+                    params_filtering["quantity__gt"] = 0
+                case "pending":
+                    # add only products whith quantity = 0
+                    params_filtering["quantity"] = 0
+                case "sale":
+                    # only product with discount
+                    params_filtering["discount__gt"] = 0
+                case _:
+                    return Response(
+                        status=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                        data=[f"wrong query param: {product_filter}"],
+                    )
+
+        queryset = Product.objects.filter(**params_filtering).order_by(order_by)
+
+        results = self.paginate_queryset(queryset, request, view=self)
+        serializer = ProductSerializer(results, context={"request": request}, many=True)
+        return self.get_paginated_response(serializer.data)
+
+
+@extend_schema(tags=["Guest_user"])
+@extend_schema_view(
+    retrieve=extend_schema(
+        summary="return product info",
+        responses={
+            status.HTTP_200_OK: ProductSerializer,
+        },
+    ),
+)
+class GetProduct(viewsets.ViewSet):
+    def retrieve(self, request, product_id):
+        product = Product.get_by_id(product_id)
+        serializer = ProductSerializer(product, context={"request": request})
         return Response(serializer.data)
