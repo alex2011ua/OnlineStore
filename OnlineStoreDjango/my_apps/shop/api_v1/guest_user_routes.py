@@ -28,8 +28,13 @@ urlpatterns = [
         name="get_products_by_category",
     ),
     path(
-        "product/<product_id>",
-        guest_user_views.GetProduct.as_view({"get": "retrieve"}),
+        "category/url/<url_category>/",
+        guest_user_views.get_category_by_slug,
+        name="get_category_by_slug",
+    ),
+    path(
+        "product/<pk>",
+        guest_user_views.GetProduct.as_view(),
         name="get_product",
     ),
 ]

@@ -1,18 +1,20 @@
 from random import randint, sample
 from uuid import UUID
 
-from drf_spectacular.utils import (OpenApiParameter, OpenApiResponse,
-                                   extend_schema, extend_schema_view)
-from my_apps.shop.models import (Banner, Category, Order, OrderItem, Product,
-                                 Settings)
-from rest_framework import status, viewsets
-from rest_framework.generics import ListAPIView
+from drf_spectacular.utils import (
+    OpenApiParameter,
+    OpenApiResponse,
+    extend_schema,
+    extend_schema_view,
+)
+from my_apps.shop.models import Banner, Category, Order, OrderItem, Product, Settings
+from rest_framework import generics, status, viewsets
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .paginators import SmallResultsSetPagination, StandardResultsSetPagination
-from .serializers import (BannerSerializer, CategorySerializer,
-                          ProductSerializer)
+from .serializers import BannerSerializer, CategorySerializer, ProductSerializer
 
 
 def version_uuid(uuid):
@@ -257,7 +259,7 @@ class ListRandomGifts(APIView):
         },
     ),
 )
-class ListBanners(ListAPIView):
+class ListBanners(generics.ListAPIView):
     """
     Return list of banners.
     """
@@ -421,16 +423,21 @@ class GetProductsByCategory(viewsets.ViewSet, StandardResultsSetPagination):
 
 
 @extend_schema(tags=["Guest_user"])
-@extend_schema_view(
-    retrieve=extend_schema(
-        summary="return product info",
-        responses={
-            status.HTTP_200_OK: ProductSerializer,
-        },
-    ),
+class GetProduct(generics.RetrieveAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
+
+@extend_schema(
+    tags=["Guest_user"],
+    responses={
+        200: OpenApiResponse(description="return ID category "),
+        404: OpenApiResponse(description="category not found "),
+    },
+    summary="get category by slug",
 )
-class GetProduct(viewsets.ViewSet):
-    def retrieve(self, request, product_id):
-        product = Product.get_by_id(product_id)
-        serializer = ProductSerializer(product, context={"request": request})
-        return Response(serializer.data)
+@api_view()
+def get_category_by_slug(request, url_category):
+    if request.method == "GET":
+        cat = Category.get_category(url_category)
+        return Response(cat.id)

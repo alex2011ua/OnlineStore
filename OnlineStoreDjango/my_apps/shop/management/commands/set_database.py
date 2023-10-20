@@ -85,12 +85,12 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         """Create content in DB"""
-        Category.objects.all().delete()
-        self.create_categories()
-        Banner.objects.all().delete()
-        self.create_banners()
-        Product.objects.all().delete()
-        self.create_products()
+        # Category.objects.all().delete()
+        # self.create_categories()
+        # Banner.objects.all().delete()
+        # self.create_banners()
+        # Product.objects.all().delete()
+        # self.create_products()
 
     def create_categories(self):
         self.stdout.write(self.style.SUCCESS("Start creating main category"))

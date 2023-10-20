@@ -75,9 +75,11 @@ class Category(models.Model):
 
     @staticmethod
     def get_category(slug):
-        cat = Category.objects.filter(slug=slug)
-        if cat:
-            return cat[0]
+        try:
+            cat = Category.objects.get(slug=slug)
+        except Category.DoesNotExist:
+            raise NotFound(detail="category not found")
+        return cat
 
     @staticmethod
     def get_by_id(_id):
