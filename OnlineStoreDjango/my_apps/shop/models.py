@@ -36,10 +36,10 @@ def is_valid_uuid(uuid_to_test, version=4):
     """
 
     try:
-        uuid_obj = uuid.UUID(uuid_to_test, version=version)
+        uuid_obj = uuid.UUID(str(uuid_to_test), version=version)
     except ValueError:
         return False
-    return str(uuid_obj) == uuid_to_test
+    return True
 
 
 class Category(models.Model):
@@ -159,23 +159,22 @@ class Product(models.Model):
     @staticmethod
     def get_products_in_category(category: uuid.UUID):
         """return all products in category or subcategories."""
-        if category:
-            products = Product.objects.filter(
-                Q(category__category=category) | Q(category=category)
-            )
-            return products
-        else:
-            return Product.objects.all()
+        category = Category.get_by_id(category)
+        products = Product.objects.filter(
+            Q(category__category=category) | Q(category=category)
+        )
+        return products
 
     @staticmethod
     def get_by_id(key):
-        if not is_valid_uuid(key):
+        if is_valid_uuid(key):
+            try:
+                product = Product.objects.get(id=key)
+            except Product.DoesNotExist:
+                raise NotFound(detail="product not found")
+            return product
+        else:
             raise NotFound(detail="product id not UUID")
-        try:
-            product = Product.objects.get(id=key)
-        except Product.DoesNotExist:
-            raise NotFound(detail="product not found")
-        return product
 
     def __str__(self):
         return self.name

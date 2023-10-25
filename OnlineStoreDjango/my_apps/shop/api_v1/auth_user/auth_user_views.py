@@ -1,17 +1,28 @@
 from uuid import UUID
 
 from django.contrib.auth import get_user
-from drf_spectacular.utils import (OpenApiParameter, OpenApiResponse,
-                                   extend_schema, extend_schema_view,
-                                   inline_serializer)
+from drf_spectacular.utils import (
+    OpenApiParameter,
+    OpenApiResponse,
+    extend_schema,
+    extend_schema_view,
+    inline_serializer,
+)
+from rest_framework.generics import CreateAPIView
+
 from my_apps.accounts.models import User
 from my_apps.shop.api_v1.auth_user.serializers_auth_user import (
-    ProductIdSerializer, ProductSerializer)
+    ProductIdSerializer,
+    ProductSerializer,
+)
 from my_apps.shop.api_v1.permissions import AuthUserPermission
-from my_apps.shop.api_v1.serializers import (BasketItemSerializer,
-                                             BasketSerializer)
-from my_apps.shop.models import BasketItem, Order, OrderItem, Product
-from rest_framework import serializers, status
+from my_apps.shop.api_v1.serializers import (
+    BasketItemSerializer,
+    BasketSerializer,
+    ReviewSerializer,
+)
+from my_apps.shop.models import BasketItem, Order, OrderItem, Product, Review
+from rest_framework import serializers, status, viewsets
 from rest_framework.exceptions import NotFound, ParseError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -149,3 +160,34 @@ class Wishlist(APIView):
         user.wishlist.remove(product)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
+@extend_schema(
+    tags=["test"],
+)
+class AuthComments(APIView):
+    permission_classes = [IsAuthenticated, AuthUserPermission]
+    serializer_class = ReviewSerializer
+
+    def post(self, request, pk):
+        product = Product.get_by_id(pk)
+        data = request.data.copy()
+        data["customer"] = self.request.user.id
+        data["product"] = product.id
+
+        serializer = ReviewSerializer(data=data)
+        if serializer.is_valid(raise_exception=True):
+            comment = serializer.save()
+            return Response(comment.id)
+
+
+
+    #
+    # def create(self, request, *args, **kwargs):
+    #     request.data["customer"] = self.request.user
+    #     serializer = self.get_serializer(data=request.data)
+    #     serializer.is_valid(raise_exception=True)
+    #     self.perform_create(serializer)
+    #     headers = self.get_success_headers(serializer.data)
+    #     return Response(
+    #         serializer.data, status=status.HTTP_201_CREATED, headers=headers
+    #     )

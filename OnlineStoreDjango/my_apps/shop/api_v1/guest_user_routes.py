@@ -36,4 +36,14 @@ urlpatterns = [
         guest_user_views.GetProduct.as_view(),
         name="get_product",
     ),
+    path(
+        "product/<prod_pk>/comments",
+        guest_user_views.Comments.as_view({'get': 'list'}),
+        name="get_product_comments",
+    ),
+    path(
+        "product/<prod_pk>/comments/<pk>",
+        guest_user_views.Comments.as_view({'get': 'retrieve'}),
+        name="get_product_comment",
+    ),
 ]

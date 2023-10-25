@@ -1,6 +1,7 @@
 from random import randint, sample
 from uuid import UUID
 
+from django.db.models import QuerySet
 from django.utils.translation import get_language
 from drf_spectacular.utils import (
     OpenApiParameter,
@@ -8,6 +9,8 @@ from drf_spectacular.utils import (
     extend_schema,
     extend_schema_view,
 )
+from rest_framework.exceptions import NotFound
+
 from my_apps.shop.models import Banner, Category, Order, OrderItem, Product, Settings
 from rest_framework import generics, status, viewsets
 from rest_framework.decorators import api_view
@@ -15,7 +18,12 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .paginators import SmallResultsSetPagination, StandardResultsSetPagination
-from .serializers import BannerSerializer, CategorySerializer, ProductSerializer
+from .serializers import (
+    BannerSerializer,
+    CategorySerializer,
+    ProductSerializer,
+    ReviewSerializer,
+)
 
 
 def version_uuid(uuid):
@@ -118,11 +126,6 @@ class ListPopularGifts(APIView, StandardResultsSetPagination):
     """
     List most popular products with rate > 3.
     """
-
-    rate_limit, _ = Settings.objects.get_or_create(
-        name="rate_limit",
-        defaults={"description": "show gifts with rate more then value", "value": 6},
-    )
     red_line = 3  # rate_limit.value
 
     def get(self, request, format=None):
@@ -239,6 +242,7 @@ class ListNewGifts(APIView, SmallResultsSetPagination):
         summary="get random products",
         responses={
             status.HTTP_200_OK: ProductSerializer,
+            404: OpenApiResponse(description="id not UUID or not found"),
         },
         parameters=[
             OpenApiParameter(
@@ -285,18 +289,17 @@ class ListRandomGifts(APIView):
         to_price = request.query_params.get("to", 2000)
         count = int(request.query_params.get("quantity", 5))
         category_id = request.query_params.get("categoryId", None)
-        if category_id and version_uuid(category_id) != 4:
-            return Response(
-                status=status.HTTP_404_NOT_FOUND, data=["Wrong ID category"]
-            )
-        products = Product.get_products_in_category(
-            category_id
-        )
+
+        if category_id:
+            products_queryset: QuerySet = Product.get_products_in_category(category_id)
+        else:
+            products_queryset: QuerySet = Product.objects.all()
         products = list(
-            products.filter(price__gte=float(from_price), price__lte=to_price)
+            products_queryset.filter(price__gte=float(from_price), price__lte=to_price)
         )
-        if len(products) < count:
+        if len(products) < count:  # if count products less as existing, correct count
             count = len(products)
+        # get random products from products list
         serializer = ProductSerializer(
             sample(products, count), context={"request": request}, many=True
         )
@@ -458,3 +461,13 @@ def get_category_by_slug(request, url_category):
     if request.method == "GET":
         cat = Category.get_category(url_category)
         return Response(cat.id)
+
+
+class Comments(viewsets.ReadOnlyModelViewSet):
+    serializer_class = ReviewSerializer
+
+    def get_queryset(self):
+
+        product_id = self.kwargs["prod_pk"]
+        product = Product.get_by_id(product_id)
+        return product.reviews.all()

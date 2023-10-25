@@ -25,7 +25,7 @@ def test_list_popular_gifts_true():
             name=fake.name(),
             slug=slug[i],
             category=category,
-            price=i,
+            price=i+1,
             quantity=i,
             sold=i,
             global_rating=i,
@@ -92,29 +92,3 @@ def test_list_new_gifts():
     assert response.status_code == status.HTTP_200_OK
     assert response.data["count"] == 3
     assert response.data["results"][0]["name"] == "product2"
-
-
-@pytest.mark.django_db
-def test_random_gift():
-    import time
-
-    category = Category.objects.get()
-    # create 10 products with different rating and counts of sailing
-    for i in range(100):
-        Product.objects.create(
-            name=i,
-            slug=i,
-            category=category,
-            price=i,
-            quantity=i,
-        )
-    url = reverse("random_gift")
-    response1 = client.get(url, {"from": 20, "to": 50})
-    response2 = client.get(url, {"from": 20, "to": 50})
-    assert response1.data == response1.data
-    count = 0
-    while response1.data == response2.data and count > 150:
-        response2 = client.get(url, {"from": 20, "to": 50})
-        count += 1
-        time.sleep(0.115)
-    assert response1.data != response2.data

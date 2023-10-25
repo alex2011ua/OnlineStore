@@ -1,5 +1,12 @@
-from my_apps.shop.models import (Banner, BasketItem, Category, Order, Product,
-                                 Rating, Review)
+from my_apps.shop.models import (
+    Banner,
+    BasketItem,
+    Category,
+    Order,
+    Product,
+    Rating,
+    Review,
+)
 from rest_framework import serializers
 
 
@@ -55,11 +62,17 @@ class OrderSerializer(serializers.HyperlinkedModelSerializer):
     status = serializers.CharField(source="get_status_display")
 
 
-class ReviewSerializer(serializers.HyperlinkedModelSerializer):
+class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
-        fields = ["id", "url", "product", "customer", "title", "body", "created_at"]
+        fields = ["id", "product", "customer", "title", "body", "created_at"]
 
+    # def create(self, validated_data):
+    #     user = self.context["request"].user
+    #     valid = validated_data.copy()
+    #     valid["customer"] = user.id
+    #
+    #     return Review(validated_data)
 
 class RatingSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -81,7 +94,7 @@ class BasketSerializer(serializers.Serializer):
 class BasketItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = BasketItem
-        fields = ["registered_user", "product", "quantity"]
+        fields = ["product", "quantity"]
 
 
 class OrderIdSerializer(serializers.Serializer):

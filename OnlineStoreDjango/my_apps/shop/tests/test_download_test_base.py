@@ -15,7 +15,8 @@ client = APIClient()
 def initialized_task_db(tmpdir):
     """Connect to db before testing, disconnect after."""
     c = Command()
-    c.handle()
+    c.create_categories()
+    c.create_products()
 
 
 @pytest.mark.django_db
