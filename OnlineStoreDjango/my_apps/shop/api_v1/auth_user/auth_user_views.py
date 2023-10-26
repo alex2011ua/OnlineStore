@@ -162,7 +162,7 @@ class Wishlist(APIView):
 
 
 @extend_schema(
-    tags=["test"],
+    tags=["Auth_user"],
 )
 class AuthComments(APIView):
     permission_classes = [IsAuthenticated, AuthUserPermission]

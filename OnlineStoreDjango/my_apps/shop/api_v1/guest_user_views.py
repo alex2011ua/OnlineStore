@@ -189,7 +189,7 @@ class ListPopularGifts(APIView, StandardResultsSetPagination):
         ],
     ),
 )
-class ListSearchGifts(APIView, SmallResultsSetPagination):
+class ListSearchGifts(APIView, StandardResultsSetPagination):
     """Search products by name and slug."""
 
     def get(self, request, format=None):
@@ -462,7 +462,13 @@ def get_category_by_slug(request, url_category):
         cat = Category.get_category(url_category)
         return Response(cat.id)
 
-
+@extend_schema(
+    tags=["Guest_user"],
+    responses={
+        404: OpenApiResponse(description="product not found "),
+    },
+    summary="get all reviews in product",
+)
 class Comments(viewsets.ReadOnlyModelViewSet):
     serializer_class = ReviewSerializer
 

@@ -1,3 +1,6 @@
+import sys
+import logging
+
 import pytest
 from django.shortcuts import redirect
 from my_apps.accounts.models import User
@@ -9,24 +12,18 @@ from my_apps.shop.api_v1.guest_user_views import Comments
 from my_apps.shop.api_v1.auth_user.auth_user_views import AuthComments
 
 
-@pytest.fixture(autouse=True)
-def initalized_task_db(tmpdir):
+@pytest.fixture()
+def initalized_task_db():
     category1 = Category.objects.create(name="cat1", slug="slugcat1")
-    category2 = Category.objects.create(name="cat2", slug="slugcat2")
     product1 = Product.objects.create(
         name="prod1", slug="prod1", category=category1, price=1
     )
-    product2 = Product.objects.create(
-        name="prod2", slug="prod2", category=category2, price=3
-    )
-    product3 = Product.objects.create(
-        name="prod3", slug="prod3", category=category1, price=3
-    )
     user_auth = User.objects.create(email="auth_user@gmail.com", role="U")
+    return {"user": user_auth, "product": product1, "category": category1}
 
 
 @pytest.mark.django_db
-def test_basket_endpoints():
+def test_basket_endpoints(initalized_task_db):
     factory = APIRequestFactory()
     user = User.objects.get(email="auth_user@gmail.com")
     view = Basket.as_view()
@@ -51,27 +48,50 @@ def test_basket_endpoints():
     assert len(response.data) == 1
 
 
-@pytest.mark.django_db
-def test_product_review():
-    """test getting and creating review in product"""
-    factory = APIRequestFactory()
-    product = Product.objects.filter()[0]
-    user = User.objects.get(email="auth_user@gmail.com")
-    request_get_reviews = factory.get(
-        redirect("get_product_comments", prod_pk=product.id)
-    )
-    view_get_comment = Comments.as_view({"get": "list"})
-    request_add_review = factory.post(
-        redirect("auth_comments", pk=product.id), {"title": "string", "body": "string"}
-    )
-    # count comments should be 0
-    response = view_get_comment(request_get_reviews, prod_pk=product.id)
-    assert response.data["count"] == 0
-    # add new comment
-    force_authenticate(request_add_review, user=user)
-    view = AuthComments.as_view()
-    response = view(request_add_review, pk=product.id)
-    assert response.status_code == 200
-    # count comments should be 1
-    response = view_get_comment(request_get_reviews, prod_pk=product.id)
-    assert response.data["count"] == 1
+class TestReviewProduct:
+    @pytest.fixture()
+    def initalized_task_db_review(self):
+        category1 = Category.objects.create(name="cat1", slug="slugcat1")
+        product1 = Product.objects.create(
+            name="prod1", slug="prod1", category=category1, price=1
+        )
+        user_auth = User.objects.create(email="auth_user@gmail.com", role="U")
+        return {"product": product1, "user": user_auth, "category": category1}
+
+    @pytest.mark.django_db
+    def test_product_review_get(self, initalized_task_db_review):
+        factory = APIRequestFactory()
+        product = initalized_task_db_review["product"]
+        user = initalized_task_db_review["user"]
+        request_get_reviews = factory.get(
+            redirect("get_product_comments", prod_pk=product.id)
+        )
+        view_get_comment = Comments.as_view({"get": "list"})
+        response = view_get_comment(request_get_reviews, prod_pk=product.id)
+
+        assert response.data["count"] == 0
+        # creating review
+        product.reviews.create(customer=user, title="test_title")
+        response = view_get_comment(request_get_reviews, prod_pk=product.id)
+        assert response.data["count"] == 1
+
+    @pytest.mark.django_db
+    def test_product_review_add(self, initalized_task_db_review):
+        """test getting and creating review in product"""
+        factory = APIRequestFactory()
+        product = initalized_task_db_review["product"]
+        count_prod = product.reviews.all().count()
+        assert count_prod == 0
+        user = initalized_task_db_review["user"]
+        request_add_review = factory.post(
+            redirect("auth_comments", pk=product.id),
+            {"title": "string", "body": "string"},
+        )
+        # add new comment
+        force_authenticate(request_add_review, user=user)
+        view = AuthComments.as_view()
+        response = view(request_add_review, pk=product.id)
+        assert response.status_code == 200
+        # count comments should be 1
+        count_prod = product.reviews.all().count()
+        assert count_prod == 1
