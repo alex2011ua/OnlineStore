@@ -2,7 +2,7 @@ import csv
 import os
 
 from django.core.management.base import BaseCommand
-from my_apps.shop.models import Banner, Category, Product
+from my_apps.shop.models import Banner, Category, Product, Settings
 
 
 class Command(BaseCommand):
@@ -91,6 +91,40 @@ class Command(BaseCommand):
         # self.create_banners()
         # Product.objects.all().delete()
         # self.create_products()
+        # Settings.objects.all().delete()
+        # self.create_settings()
+
+    def create_settings(self):
+        """
+        agreement
+        Payment and delivery
+        return conditions
+        Privacy Policy
+        """
+        Settings.objects.create(
+            name_en="agreement",
+            name="Договір",
+            description_en="Agreement",
+            description="Договір",
+        )
+        Settings.objects.create(
+            name_en="payment_delivery",
+            description_en="Payment and delivery",
+            name="Доставка",
+            description="доставка",
+        )
+        Settings.objects.create(
+            name_en="return_conditions",
+            description_en="Return conditions",
+            name="Возврат",
+            description="Повернення",
+        )
+        Settings.objects.create(
+            name_en="privacy_policy",
+            description_en="Privacy policy",
+            name="Політика",
+            description="Політика",
+        )
 
     def create_categories(self):
         self.stdout.write(self.style.SUCCESS("Start creating main category"))

@@ -13,6 +13,7 @@ faker
 pytest
 pytest-django
 drf-spectacular
+django-querycount # for show SQL requests
 
 django-cors-headers
 llama_index

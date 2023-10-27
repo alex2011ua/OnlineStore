@@ -10,6 +10,7 @@ from drf_spectacular.utils import (
     extend_schema_view,
 )
 from rest_framework.exceptions import NotFound
+from django.core import serializers
 
 from my_apps.shop.models import Banner, Category, Order, OrderItem, Product, Settings
 from rest_framework import generics, status, viewsets
@@ -108,36 +109,6 @@ class TestGuestUser(APIView):
 @extend_schema(tags=["Guest_user"])
 @extend_schema_view(
     get=extend_schema(
-        summary="most popular products with rate > 3",
-        responses={
-            status.HTTP_200_OK: ProductSerializer,
-        },
-        parameters=[
-            OpenApiParameter(
-                name="page",
-                location=OpenApiParameter.QUERY,
-                description="page of pagination",
-                type=int,
-            ),
-        ],
-    ),
-)
-class ListPopularGifts(APIView, StandardResultsSetPagination):
-    """
-    List most popular products with rate > 3.
-    """
-    red_line = 3  # rate_limit.value
-
-    def get(self, request, format=None):
-        products = Product.objects.filter(global_rating__gt=3).order_by("-sold")
-        results = self.paginate_queryset(products, request, view=self)
-        serializer = ProductSerializer(results, context={"request": request}, many=True)
-        return self.get_paginated_response(serializer.data)
-
-
-@extend_schema(tags=["Guest_user"])
-@extend_schema_view(
-    get=extend_schema(
         summary="Search by name and slug",
         responses={
             status.HTTP_200_OK: ProductSerializer,
@@ -150,6 +121,7 @@ class ListPopularGifts(APIView, StandardResultsSetPagination):
                 location=OpenApiParameter.QUERY,
                 description="search string",
                 type=str,
+                required=False,
             ),
             OpenApiParameter(
                 name="page",
@@ -194,44 +166,18 @@ class ListSearchGifts(APIView, StandardResultsSetPagination):
 
     def get(self, request, format=None):
         search_string = request.query_params.get("search", None)
-        if search_string is None:
-            data = {"detail": "required search param"}
-            return Response(status=status.HTTP_417_EXPECTATION_FAILED, data=data)
+        if search_string:
+            products1 = Product.objects.filter(slug__icontains=search_string)
+            products2 = Product.objects.filter(name__icontains=search_string)
+            products = products1 | products2  # get products according to search string
+        else:
+            products = Product.objects.all()
 
-        products1 = Product.objects.filter(slug__icontains=search_string)
-        products2 = Product.objects.filter(name__icontains=search_string)
-        products = products1 | products2  # get products according to search string
         filtered_products = products_filter_sort(
             request, products
         )  # get filtered and sorded products
+
         results = self.paginate_queryset(filtered_products, request, view=self)
-        serializer = ProductSerializer(results, context={"request": request}, many=True)
-        return self.get_paginated_response(serializer.data)
-
-
-@extend_schema(tags=["Guest_user"])
-@extend_schema_view(
-    get=extend_schema(
-        summary="Return products ordered by date of creation.",
-        responses={
-            status.HTTP_200_OK: ProductSerializer,
-        },
-        parameters=[
-            OpenApiParameter(
-                name="page",
-                location=OpenApiParameter.QUERY,
-                description="page of pagination",
-                type=int,
-            )
-        ],
-    ),
-)
-class ListNewGifts(APIView, SmallResultsSetPagination):
-    """Return products ordered by date of creation with pagination and limit=30"""
-
-    def get(self, request, format=None):
-        products = Product.objects.all().order_by("-created_at")[:30]
-        results = self.paginate_queryset(products, request, view=self)
         serializer = ProductSerializer(results, context={"request": request}, many=True)
         return self.get_paginated_response(serializer.data)
 
@@ -431,7 +377,7 @@ class GetAllCategories(viewsets.ViewSet):
 class GetProductsByCategory(viewsets.ViewSet, StandardResultsSetPagination):
     def list(self, request, category_id):
         category = Category.get_by_id(category_id)
-        products = Product.objects.filter(
+        products = Product.objects.prefetch_related("category").filter(
             category=category
         )  # get all products in category
         filtered_products = products_filter_sort(
@@ -462,6 +408,7 @@ def get_category_by_slug(request, url_category):
         cat = Category.get_category(url_category)
         return Response(cat.id)
 
+
 @extend_schema(
     tags=["Guest_user"],
     responses={
@@ -473,7 +420,35 @@ class Comments(viewsets.ReadOnlyModelViewSet):
     serializer_class = ReviewSerializer
 
     def get_queryset(self):
-
         product_id = self.kwargs["prod_pk"]
         product = Product.get_by_id(product_id)
         return product.reviews.all()
+
+
+@extend_schema(
+    tags=["Guest_user"],
+    summary="store info",
+)
+@api_view(["GET"])
+def store_info(request):
+    """
+    get an array of objects title and text:
+        "agreement",
+        "payment_delivery",
+        "return_conditions",
+        "privacy_policy"
+    """
+
+    agreement = Settings.objects.get(name_en="agreement")
+    payment_delivery = Settings.objects.get(name_en="payment_delivery")
+    return_conditions = Settings.objects.get(name_en="return_conditions")
+    privacy_policy = Settings.objects.get(name_en="privacy_policy")
+
+    return Response(
+        [
+            agreement.to_dict(),
+            payment_delivery.to_dict(),
+            return_conditions.to_dict(),
+            privacy_policy.to_dict(),
+        ]
+    )

@@ -74,6 +74,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
+    "querycount.middleware.QueryCountMiddleware",
+
 
 ]
 
@@ -190,4 +192,16 @@ SPECTACULAR_SETTINGS = {
         "filter": True, # включить поиск по тегам
     },
     "COMPONENT_SPLIT_REQUEST": True
+}
+QUERYCOUNT = {
+    'THRESHOLDS': {
+        'MEDIUM': 10,
+        'HIGH': 20,
+        'MIN_TIME_TO_LOG': 0,
+        'MIN_QUERY_COUNT_TO_LOG': 1
+    },
+    'IGNORE_REQUEST_PATTERNS': [r'^/admin/'],
+    'IGNORE_SQL_PATTERNS': [],
+    'DISPLAY_DUPLICATES': True,
+    'RESPONSE_HEADER': 'X-DjangoQueryCount-Count'
 }

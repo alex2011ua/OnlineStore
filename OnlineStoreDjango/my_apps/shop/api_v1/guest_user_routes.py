@@ -4,14 +4,8 @@ from . import guest_user_views
 
 urlpatterns = [
     path("test/", guest_user_views.TestGuestUser.as_view()),
-    path("popular/", guest_user_views.ListPopularGifts.as_view(), name="list_popular"),
     path("search/", guest_user_views.ListSearchGifts.as_view(), name="search"),
     path("gpt/", guest_user_views.Gpt.as_view(), name="gpt"),
-    path(
-        "new-products/",
-        guest_user_views.ListNewGifts.as_view(),
-        name="list_new_products",
-    ),
     path(
         "random-gifts/", guest_user_views.ListRandomGifts.as_view(), name="random_gifts"
     ),
@@ -46,4 +40,5 @@ urlpatterns = [
         guest_user_views.Comments.as_view({'get': 'retrieve'}),
         name="get_product_comment",
     ),
+    path("store_info/", guest_user_views.store_info, name="store_info"),
 ]

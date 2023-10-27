@@ -30,14 +30,9 @@ def test_list_popular_gifts_true():
             sold=i,
             global_rating=i,
         )
-    # get rating limit from DB
-    rate_limit, _ = Settings.objects.get_or_create(
-        name="rate_limit",
-        defaults={"description": "show gifts with rate more then value", "value": 6},
-    )
 
     # get list of most popular products with rate more than ate_limit.value
-    response = client.get("/api/v1/shop/guest_user/popular/")
+    response = client.get("/api/v1/shop/guest_user/search/", {"rate": 4})
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data["count"] == 10 - 3
@@ -86,8 +81,8 @@ def test_list_new_gifts():
     p_second = Product.objects.create(
         name="product2", slug="slug_2", category=category, price=10.00
     )
-    url = reverse("list_new_products")
-    response = client.get(url, {"search": "product"})
+    url = reverse("search")
+    response = client.get(url, {"sort": "new"})
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data["count"] == 3

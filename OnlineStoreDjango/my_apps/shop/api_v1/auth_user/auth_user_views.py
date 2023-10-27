@@ -166,7 +166,6 @@ class Wishlist(APIView):
 )
 class AuthComments(APIView):
     permission_classes = [IsAuthenticated, AuthUserPermission]
-    serializer_class = ReviewSerializer
 
     def post(self, request, pk):
         product = Product.get_by_id(pk)

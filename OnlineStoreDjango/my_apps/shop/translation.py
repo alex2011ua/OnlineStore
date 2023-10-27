@@ -1,6 +1,6 @@
 from modeltranslation.translator import TranslationOptions, translator
 
-from .models import Banner, Category, Product
+from .models import Banner, Category, Product, Settings
 
 
 class CategoryTranslationOption(TranslationOptions):
@@ -15,6 +15,11 @@ class BannerTranslationOption(TranslationOptions):
     fields = ("title", "description")
 
 
+class SettingsTranslationOption(TranslationOptions):
+    fields = ("name", "description")
+
+
 translator.register(Category, CategoryTranslationOption)
 translator.register(Product, ProductTranslationOption)
 translator.register(Banner, BannerTranslationOption)
+translator.register(Settings, SettingsTranslationOption)
