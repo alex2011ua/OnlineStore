@@ -1,24 +1,21 @@
-from random import randint, sample
+from random import sample
 from uuid import UUID
 
 from django.db.models import QuerySet
-from django.utils.translation import get_language
 from drf_spectacular.utils import (
     OpenApiParameter,
     OpenApiResponse,
     extend_schema,
     extend_schema_view,
 )
-from rest_framework.exceptions import NotFound
-from django.core import serializers
 
-from my_apps.shop.models import Banner, Category, Order, OrderItem, Product, Settings
+from my_apps.shop.models import Banner, Category, Product, Settings, Order, OrderItem
 from rest_framework import generics, status, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .paginators import SmallResultsSetPagination, StandardResultsSetPagination
+from .paginators import StandardResultsSetPagination
 from .serializers import (
     BannerSerializer,
     CategorySerializer,
@@ -27,11 +24,12 @@ from .serializers import (
 )
 
 
-def version_uuid(uuid):
+def version_uuid(uuid: str) -> bool:
+    """Verification of incoming text as UUID."""
     try:
-        return UUID(uuid).version
+        return UUID(uuid).version == 4
     except ValueError:
-        return None
+        return False
 
 
 def products_filter_sort(request, queryset):
@@ -81,10 +79,10 @@ def products_filter_sort(request, queryset):
     for product_filter in request.query_params.getlist("main"):
         match product_filter:
             case "available":
-                # add only available products whith quantity > 0
+                # add only available products with quantity > 0
                 params_filtering["quantity__gt"] = 0
             case "pending":
-                # add only products whith quantity = 0
+                # add only products with quantity = 0
                 params_filtering["quantity"] = 0
             case "sale":
                 # only product with discount
@@ -96,14 +94,6 @@ def products_filter_sort(request, queryset):
                 )
     filtered_queryset = queryset.filter(**params_filtering).order_by(order_by)
     return filtered_queryset
-
-
-@extend_schema(tags=["Guest_user"])
-class TestGuestUser(APIView):
-    """Return product according to input price"""
-
-    def get(self, request):
-        return Response({"detail": "Test_OK", "code": "Test permission OK"})
 
 
 @extend_schema(tags=["Guest_user"])
@@ -164,18 +154,18 @@ class TestGuestUser(APIView):
 class ListSearchGifts(APIView, StandardResultsSetPagination):
     """Search products by name and slug."""
 
-    def get(self, request, format=None):
+    def get(self, request):
         search_string = request.query_params.get("search", None)
         if search_string:
-            products1 = Product.objects.filter(slug__icontains=search_string)
-            products2 = Product.objects.filter(name__icontains=search_string)
+            products1 = Product.objects.select_related("category").filter(slug__icontains=search_string)
+            products2 = Product.objects.select_related("category").filter(name__icontains=search_string)
             products = products1 | products2  # get products according to search string
         else:
-            products = Product.objects.all()
+            products = Product.objects.select_related("category").all()
 
         filtered_products = products_filter_sort(
             request, products
-        )  # get filtered and sorded products
+        )  # get filtered and sorted products
 
         results = self.paginate_queryset(filtered_products, request, view=self)
         serializer = ProductSerializer(results, context={"request": request}, many=True)
@@ -223,7 +213,7 @@ class ListSearchGifts(APIView, StandardResultsSetPagination):
     ),
 )
 class ListRandomGifts(APIView):
-    """Return list of products according to input price
+    """Return list of products according to input price.
     price_from: number (default: 0)
     price_to: number (default: 2000)
     quantity: number (default: 5)
@@ -239,7 +229,7 @@ class ListRandomGifts(APIView):
         if category_id:
             products_queryset: QuerySet = Product.get_products_in_category(category_id)
         else:
-            products_queryset: QuerySet = Product.objects.all()
+            products_queryset: QuerySet = Product.objects.select_related("category").all()
         products = list(
             products_queryset.filter(price__gte=float(from_price), price__lte=to_price)
         )
@@ -292,7 +282,7 @@ class ListBanners(generics.ListAPIView):
 class Gpt(APIView):
     """Search products by name and slug."""
 
-    def get(self, request, format=None):
+    def get(self, request):
         search_string = request.query_params.get("search", None)
         if search_string is None:
             data = {"detail": "required search param", "code": "required_search"}
@@ -314,9 +304,7 @@ class Gpt(APIView):
     ),
 )
 class GetAllCategories(viewsets.ViewSet):
-    """
-    Endpoint to get all categories with sub categories
-    """
+    """Endpoint to get all categories with sub categories."""
 
     def list(self, request):
         queryset = Category.get_main_categories()
@@ -375,6 +363,7 @@ class GetAllCategories(viewsets.ViewSet):
     ),
 )
 class GetProductsByCategory(viewsets.ViewSet, StandardResultsSetPagination):
+    """Get filtered and sorted product in given category."""
     def list(self, request, category_id):
         category = Category.get_by_id(category_id)
         products = Product.objects.prefetch_related("category").filter(
@@ -390,6 +379,7 @@ class GetProductsByCategory(viewsets.ViewSet, StandardResultsSetPagination):
 
 @extend_schema(tags=["Guest_user"])
 class GetProduct(generics.RetrieveAPIView):
+    """Get one product by ID."""
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
@@ -404,6 +394,7 @@ class GetProduct(generics.RetrieveAPIView):
 )
 @api_view()
 def get_category_by_slug(request, url_category):
+    """Get category ID by category slug."""
     if request.method == "GET":
         cat = Category.get_category(url_category)
         return Response(cat.id)
@@ -417,6 +408,7 @@ def get_category_by_slug(request, url_category):
     summary="get all reviews in product",
 )
 class Comments(viewsets.ReadOnlyModelViewSet):
+    """List or retrieve comments in given product."""
     serializer_class = ReviewSerializer
 
     def get_queryset(self):
@@ -436,7 +428,7 @@ def store_info(request):
         "agreement",
         "payment_delivery",
         "return_conditions",
-        "privacy_policy"
+        "privacy_policy".
     """
 
     agreement = Settings.objects.get(name_en="agreement")

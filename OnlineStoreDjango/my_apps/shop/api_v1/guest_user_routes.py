@@ -3,7 +3,6 @@ from django.urls import path
 from . import guest_user_views
 
 urlpatterns = [
-    path("test/", guest_user_views.TestGuestUser.as_view()),
     path("search/", guest_user_views.ListSearchGifts.as_view(), name="search"),
     path("gpt/", guest_user_views.Gpt.as_view(), name="gpt"),
     path(

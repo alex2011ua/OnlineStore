@@ -148,7 +148,7 @@ class Product(models.Model):
     def get_products_in_category(category: uuid.UUID):
         """return all products in category or subcategories."""
         category = Category.get_by_id(category)
-        products = Product.objects.filter(
+        products = Product.objects.select_related("category").filter(
             Q(category__category=category) | Q(category=category)
         )
         return products
