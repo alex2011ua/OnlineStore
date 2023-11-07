@@ -115,7 +115,7 @@ class PasswordChangeSerializer(serializers.Serializer):
 class RegisterAuthUser(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["email", "password"]
+        fields = ["email", "password", "first_name", "last_name"]
         extra_kwargs = {"password": {"write_only": True}}
 
     def save(self):
@@ -124,6 +124,8 @@ class RegisterAuthUser(serializers.ModelSerializer):
         )
         password = self.validated_data["password"]
         user.set_password(password)
+        user.first_name = self.validated_data["first_name"]
+        user.last_name = self.validated_data["last_name"]
         user.save()
         return user
 
