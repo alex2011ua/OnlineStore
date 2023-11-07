@@ -88,7 +88,7 @@ class User(AbstractUser):
         Returns:
              str: Full name
         """
-        return f"{self.first_name} {self.middle_name} {self.last_name}"
+        return f"{self.first_name} {self.middle_name if self.middle_name else ''} {self.last_name}"
 
     def get_age(self) -> None | int | bool | Any:
         """Return age user.

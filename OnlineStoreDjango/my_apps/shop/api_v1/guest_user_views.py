@@ -1,6 +1,7 @@
 from random import sample
 from uuid import UUID
 
+from django.core.mail import send_mail
 from django.db.models import QuerySet
 from drf_spectacular.utils import (
     OpenApiParameter,
@@ -9,6 +10,7 @@ from drf_spectacular.utils import (
     extend_schema_view,
 )
 
+from OnlineStoreDjango import settings
 from my_apps.shop.models import Banner, Category, Product, Settings, Order, OrderItem
 from rest_framework import generics, status, viewsets
 from rest_framework.decorators import api_view
@@ -157,8 +159,12 @@ class ListSearchGifts(APIView, StandardResultsSetPagination):
     def get(self, request):
         search_string = request.query_params.get("search", None)
         if search_string:
-            products1 = Product.objects.select_related("category").filter(slug__icontains=search_string)
-            products2 = Product.objects.select_related("category").filter(name__icontains=search_string)
+            products1 = Product.objects.select_related("category").filter(
+                slug__icontains=search_string
+            )
+            products2 = Product.objects.select_related("category").filter(
+                name__icontains=search_string
+            )
             products = products1 | products2  # get products according to search string
         else:
             products = Product.objects.select_related("category").all()
@@ -229,7 +235,9 @@ class ListRandomGifts(APIView):
         if category_id:
             products_queryset: QuerySet = Product.get_products_in_category(category_id)
         else:
-            products_queryset: QuerySet = Product.objects.select_related("category").all()
+            products_queryset: QuerySet = Product.objects.select_related(
+                "category"
+            ).all()
         products = list(
             products_queryset.filter(price__gte=float(from_price), price__lte=to_price)
         )
@@ -364,6 +372,7 @@ class GetAllCategories(viewsets.ViewSet):
 )
 class GetProductsByCategory(viewsets.ViewSet, StandardResultsSetPagination):
     """Get filtered and sorted product in given category."""
+
     def list(self, request, category_id):
         category = Category.get_by_id(category_id)
         products = Product.objects.prefetch_related("category").filter(
@@ -380,6 +389,7 @@ class GetProductsByCategory(viewsets.ViewSet, StandardResultsSetPagination):
 @extend_schema(tags=["Guest_user"])
 class GetProduct(generics.RetrieveAPIView):
     """Get one product by ID."""
+
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
@@ -409,6 +419,7 @@ def get_category_by_slug(request, url_category):
 )
 class Comments(viewsets.ReadOnlyModelViewSet):
     """List or retrieve comments in given product."""
+
     serializer_class = ReviewSerializer
 
     def get_queryset(self):
