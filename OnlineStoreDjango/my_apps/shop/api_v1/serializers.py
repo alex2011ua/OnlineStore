@@ -1,3 +1,7 @@
+from typing import Any
+
+from rest_framework.utils.serializer_helpers import ReturnDict
+
 from my_apps.shop.models import (
     Banner,
     BasketItem,
@@ -26,7 +30,7 @@ class CategorySerializer(serializers.ModelSerializer):
             "sub",
         ]
 
-    def get_sub(self, obj) -> list[dict]:
+    def get_sub(self, obj) -> ReturnDict[Any, Any]:
         serializer = CategorySerializer(
             obj.get_sub_categories(), context=self.context, many=True
         )

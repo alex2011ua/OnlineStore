@@ -1,6 +1,6 @@
 import uuid
 from datetime import date
-from typing import Any
+from typing import Any, ClassVar
 
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
@@ -44,7 +44,7 @@ class UserManager(BaseUserManager):
         )
 
 
-class User(AbstractUser):
+class User(AbstractUser):  # type: ignore
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     GENDER_CHOICES = [
         ("M", "male"),
@@ -58,15 +58,15 @@ class User(AbstractUser):
         ("G", "guest_user"),
     ]
     USERNAME_FIELD: str = "email"
-    REQUIRED_FIELDS: list[str] = []
+    REQUIRED_FIELDS: ClassVar[list[str]] = []
 
     first_name = models.CharField(
-        _("first name"), blank=True, null=True, max_length=100
-    )
+        _("first name"), name="first_name", max_length=100, blank=True, null=True,
+    )  # type: ignore
     middle_name = models.CharField(
         _("middle name"), blank=True, null=True, max_length=100
-    )
-    last_name = models.CharField(_("last name"), blank=True, null=True, max_length=100)
+    )  # type: ignore
+    last_name = models.CharField(_("last name"), blank=True, null=True, max_length=100)  # type: ignore
 
     email = models.EmailField(_("email address"), unique=True)
     mobile = PhoneNumberField(null=True, blank=True, unique=True)
@@ -80,7 +80,7 @@ class User(AbstractUser):
     )
     role = models.CharField(_("role"), max_length=1, choices=ROLE_CHOICES, default="U")
     notice = models.TextField(_("notice"), blank=True)
-    username = models.CharField(blank=True, null=True, max_length=100)  # not use
+    username = models.CharField(blank=True, null=True, max_length=100)    # type: ignore
 
     def get_full_name(self) -> str:
         """Return full name.
@@ -88,16 +88,17 @@ class User(AbstractUser):
         Returns:
              str: Full name
         """
-        return f"{self.first_name} {self.middle_name if self.middle_name else ''} {self.last_name}"
+        return f"{self.first_name} {self.middle_name if self.middle_name else ''} {self.last_name}"   # type: ignore
 
-    def get_age(self) -> None | int | bool | Any:
+    def get_age(self) -> None | int:
         """Return age user.
 
         Returns:
             int: user age
+            None: not in db
         """
         if not self.dob:
-            return
+            return 0
         today: date = date.today()
         return (
             today.year
@@ -109,4 +110,4 @@ class User(AbstractUser):
         """Return full name."""
         return self.get_full_name()
 
-    objects: Any = UserManager()
+    objects = UserManager() # type: ignore

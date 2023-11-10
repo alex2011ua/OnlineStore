@@ -8,7 +8,7 @@ from my_apps.accounts.models import User
 from rest_framework.exceptions import NotFound, ValidationError
 
 
-class Settings(models.Model):
+class Settings(models.Model):   # type: ignore
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(_("name settimgs"), max_length=100, unique=True)
     description = models.TextField(_("category description"), blank=True, null=True)
@@ -30,7 +30,7 @@ def is_valid_uuid(uuid_to_test, version=4):
     return True
 
 
-class Category(models.Model):
+class Category(models.Model):  # type: ignore
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     category = models.ForeignKey(
         "self",
@@ -93,7 +93,7 @@ class Category(models.Model):
         ordering = ["-category__name", "name"]
 
 
-class Product(models.Model):
+class Product(models.Model):  # type: ignore
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(_("product name"), max_length=200)
     slug = models.SlugField(_("product slug"), unique=True)
@@ -118,7 +118,7 @@ class Product(models.Model):
     wishlist = models.ManyToManyField(
         User, related_name="wishlist"
     )  # add products to user wishlist
-    basket = models.ManyToManyField(User, through="BasketItem")
+    basket = models.ManyToManyField(User, through="BasketItem")  # type: ignore
     global_rating = models.IntegerField(
         _("global rating"),
         choices=[(i, i) for i in range(0, 6)],
@@ -212,7 +212,7 @@ class Order(models.Model):
     manager = models.ForeignKey(
         User, related_name="manager", on_delete=models.CASCADE, blank=True, null=True
     )
-    products = models.ManyToManyField(Product, through="OrderItem")
+    products = models.ManyToManyField(Product, through="OrderItem")  # type: ignore
     order_date = models.DateTimeField(_("create order"), auto_now_add=True)
     updated_at = models.DateTimeField(_("update order"), auto_now=True)
     total_amount = models.DecimalField(
@@ -239,11 +239,11 @@ class Order(models.Model):
             oi.quantity = amount
             oi.save()
         else:
-            self.products.add(product, through_defaults={"quantity": amount})
+            self.products.add(product, through_defaults={"quantity": amount})  # type: ignore
 
     def get_products_order(self):
         oi = OrderItem.objects.filter(order=self)
-        product_list_in_order: list = []
+        product_list_in_order = []
         for prod in oi:
             product_list_in_order.append(
                 {"prodID": prod.product.id, "quantity": prod.quantity}
@@ -355,7 +355,7 @@ class Rating(models.Model):
         return f"{self.value} stars - {self.product.name}"
 
 
-class Banner(models.Model):
+class Banner(models.Model):  # type: ignore
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     slug = models.SlugField(_("product slug"), unique=True)
     title = models.CharField(_("title"), max_length=200)

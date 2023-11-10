@@ -35,20 +35,6 @@ class ProductAdmin(admin.ModelAdmin):
     )
 
 
-@admin.register(Order)
-class OrderAdmin(admin.ModelAdmin):
-    list_display = (
-        "id",
-        "status",
-        "customer",
-        "manager",
-        "order_date",
-        "updated_at",
-        "total_amount",
-    )
-    raw_id_fields = ("products",)
-
-
 @admin.register(OrderItem)
 class OrderItemAdmin(admin.ModelAdmin):
     list_display = (
@@ -68,23 +54,6 @@ class OrderAdmin(admin.ModelAdmin):
         "created_at",
         "updated_at",
     )
-
-
-@admin.register(Rating)
-class RatingItemAdmin(admin.ModelAdmin):
-    list_display = (
-        "product",
-        "customer",
-        "global_value",
-        "quality",
-        "delivery",
-        "foto_quality",
-        "description_quality",
-        "value",
-        "created_at",
-        "updated_at",
-    )
-
 
 @admin.register(Banner)
 class RatingItemAdmin(admin.ModelAdmin):

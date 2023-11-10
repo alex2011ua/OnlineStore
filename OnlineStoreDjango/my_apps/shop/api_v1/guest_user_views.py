@@ -153,13 +153,13 @@ def products_filter_sort(request, queryset):
         ],
     ),
 )
-class ListSearchGifts(APIView, StandardResultsSetPagination):
+class ListSearchGifts(APIView, StandardResultsSetPagination):  # type: ignore
     """Search products by name and slug."""
 
     def get(self, request):
-        search_string = request.query_params.get("search", None)
+        search_string: None | str = request.query_params.get("search", None)
         if search_string:
-            products1 = Product.objects.select_related("category").filter(
+            products1: QuerySet = Product.objects.select_related("category").filter(
                 slug__icontains=search_string
             )
             products2 = Product.objects.select_related("category").filter(
@@ -370,7 +370,7 @@ class GetAllCategories(viewsets.ViewSet):
         ],
     ),
 )
-class GetProductsByCategory(viewsets.ViewSet, StandardResultsSetPagination):
+class GetProductsByCategory(viewsets.ViewSet, StandardResultsSetPagination):  # type: ignore
     """Get filtered and sorted product in given category."""
 
     def list(self, request, category_id):

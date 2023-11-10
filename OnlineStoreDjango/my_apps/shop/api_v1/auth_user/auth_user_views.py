@@ -157,7 +157,7 @@ class Wishlist(APIView):
         serializer = ProductIdSerializer(data=request.query_params)
         serializer.is_valid(raise_exception=True)
         product = Product.get_by_id(serializer.validated_data["id"])
-        user.wishlist.remove(product)
+        user.wishlist.remove(product)  # type: ignore
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 

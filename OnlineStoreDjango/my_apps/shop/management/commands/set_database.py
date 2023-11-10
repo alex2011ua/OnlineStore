@@ -128,7 +128,7 @@ class Command(BaseCommand):
 
     def create_categories(self):
         self.stdout.write(self.style.SUCCESS("Start creating main category"))
-        main_category_obj: dict = {}
+        main_category_obj = {}
         for slug, name in self.main_category.items():
             cat, created = Category.objects.update_or_create(
                 slug=slug,
