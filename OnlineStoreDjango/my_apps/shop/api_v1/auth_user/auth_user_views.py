@@ -64,6 +64,8 @@ class TestAuthUser(APIView):
     ),
 )
 class Basket(APIView):
+    """Endpoint for get post and delete products in basket current user."""
+
     permission_classes = [IsAuthenticated, AuthUserPermission]
 
     def post(self, request):
@@ -72,10 +74,12 @@ class Basket(APIView):
         product_id: str = serializer.validated_data.get("product_id")
         amount: int = serializer.validated_data.get("amount")
 
-        product = Product.get_by_id(product_id)
+        product: Product = Product.get_by_id(product_id)
         user: User = request.user
-        BasketItem.objects.create(
-            registered_user=user, product=product, quantity=amount
+
+        BasketItem.objects.update_or_create(
+            product=product,
+            defaults={"quantity": amount, "registered_user": user},
         )
         return Response(status=status.HTTP_200_OK)
 
@@ -89,7 +93,10 @@ class Basket(APIView):
         user: User = request.user
         product_id: str = request.query_params.get("product_id")
         product = Product.get_by_id(product_id)
-        user.basket.get(registered_user=user, product=product).delete()
+        try:
+            user.basket.get(registered_user=user, product=product).delete()
+        except BasketItem.DoesNotExist:
+            raise NotFound
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -135,11 +142,12 @@ class Basket(APIView):
     ),
 )
 class Wishlist(APIView):
+    """Endpoint for get post and delete products in wishlist current user."""
     permission_classes = [IsAuthenticated, AuthUserPermission]
 
     def get(self, request):
         user = get_user(request)
-        products = ProductSerializer(user.wishlist.all(), many=True)
+        products = ProductSerializer(user.wishlist.all(), many=True)   # type: ignore
         for product in products.data:
             product["wishlist"] = True
         return Response(products.data)
@@ -149,7 +157,7 @@ class Wishlist(APIView):
         serializer = ProductIdSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         product = Product.get_by_id(serializer.validated_data["id"])
-        user.wishlist.add(product)
+        user.wishlist.add(product)    # type: ignore
         return Response(status=status.HTTP_201_CREATED)
 
     def delete(self, request) -> Response:
@@ -177,8 +185,6 @@ class AuthComments(APIView):
         if serializer.is_valid(raise_exception=True):
             comment = serializer.save()
             return Response(comment.id)
-
-
 
     #
     # def create(self, request, *args, **kwargs):

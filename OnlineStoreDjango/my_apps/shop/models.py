@@ -186,7 +186,7 @@ class BasketItem(models.Model):
         User, on_delete=models.CASCADE, related_name="basket"
     )
     product = models.ForeignKey(
-        Product, on_delete=models.CASCADE, related_name="prod_in_basket"
+        Product, on_delete=models.CASCADE, related_name="prod_in_basket", unique=True
     )
     quantity = models.PositiveIntegerField(_("quantity product"), default=0)
 
