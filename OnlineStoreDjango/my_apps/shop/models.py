@@ -173,6 +173,9 @@ class Product(models.Model):  # type: ignore
     def get_category_name(self):
         return self.category.name
 
+    def get_rewievs(self):
+        return self.reviews.select_related("customer").all()
+
     class Meta:
         ordering = ["category"]
         indexes = [models.Index(fields=["created_at", "price"])]
@@ -305,6 +308,8 @@ class Review(models.Model):
     def __str__(self):
         return f"{self.title} - {self.product.name}"
 
+    def get_user_name(self):
+        return self.customer.get_full_name()
 
 class Rating(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

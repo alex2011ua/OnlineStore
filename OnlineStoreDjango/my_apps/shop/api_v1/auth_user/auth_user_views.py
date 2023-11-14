@@ -20,6 +20,7 @@ from my_apps.shop.api_v1.serializers import (
     BasketItemSerializer,
     BasketSerializer,
     ReviewSerializer,
+    CreateReviewSerializer,
 )
 from my_apps.shop.models import BasketItem, Order, OrderItem, Product, Review
 from rest_framework import serializers, status, viewsets
@@ -143,25 +144,26 @@ class Basket(APIView):
 )
 class Wishlist(APIView):
     """Endpoint for get post and delete products in wishlist current user."""
+
     permission_classes = [IsAuthenticated, AuthUserPermission]
 
     def get(self, request):
-        user = get_user(request)
-        products = ProductSerializer(user.wishlist.all(), many=True)   # type: ignore
+        user: User = request.user
+        products = ProductSerializer(user.wishlist.all(), many=True)  # type: ignore
         for product in products.data:
             product["wishlist"] = True
         return Response(products.data)
 
     def post(self, request):
-        user = get_user(request)
+        user: User = request.user
         serializer = ProductIdSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         product = Product.get_by_id(serializer.validated_data["id"])
-        user.wishlist.add(product)    # type: ignore
+        user.wishlist.add(product)  # type: ignore
         return Response(status=status.HTTP_201_CREATED)
 
     def delete(self, request) -> Response:
-        user = get_user(request)
+        user: User = request.user
         serializer = ProductIdSerializer(data=request.query_params)
         serializer.is_valid(raise_exception=True)
         product = Product.get_by_id(serializer.validated_data["id"])
@@ -171,6 +173,7 @@ class Wishlist(APIView):
 
 @extend_schema(
     tags=["Auth_user"],
+    request=ReviewSerializer,
 )
 class AuthComments(APIView):
     permission_classes = [IsAuthenticated, AuthUserPermission]
@@ -178,12 +181,9 @@ class AuthComments(APIView):
     def post(self, request, pk):
         product = Product.get_by_id(pk)
         data = request.data.copy()
-        data["customer"] = self.request.user.id
-        data["product"] = product.id
-
-        serializer = ReviewSerializer(data=data)
+        serializer = CreateReviewSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
-            comment = serializer.save()
+            comment = serializer.save(owner=request.user, product=product)
             return Response(comment.id)
 
     #

@@ -19,3 +19,6 @@ primary_region = "mad"
   processes = ["app"]
 
 
+[[statics]]
+  guest_path = "/code/shop/media/admin"
+  url_prefix = "/static/admin"

@@ -39,6 +39,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     category = serializers.CharField(source="get_category_name")
+    reviews = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
@@ -55,7 +56,14 @@ class ProductSerializer(serializers.ModelSerializer):
             "price",
             "discount",
             "global_rating",
+            "reviews",
         ]
+
+    def get_reviews(self, obj):
+        serializer = ReviewSerializer(
+            obj.get_rewievs(), context=self.context, many=True
+        )
+        return serializer.data
 
 
 class OrderSerializer(serializers.HyperlinkedModelSerializer):
@@ -66,17 +74,25 @@ class OrderSerializer(serializers.HyperlinkedModelSerializer):
     status = serializers.CharField(source="get_status_display")
 
 
-class ReviewSerializer(serializers.ModelSerializer):
+class CreateReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
-        fields = ["id", "product", "customer", "title", "body", "created_at"]
+        fields = ["id", "title", "body", "created_at"]
 
-    # def create(self, validated_data):
-    #     user = self.context["request"].user
-    #     valid = validated_data.copy()
-    #     valid["customer"] = user.id
-    #
-    #     return Review(validated_data)
+    def save(self, owner, product):
+        title = self.validated_data["title"]
+        body = self.validated_data["body"]
+        rewiev = Review(title=title, body=body, customer=owner, product=product)
+        rewiev.save()
+        return rewiev
+
+
+class ReviewSerializer(serializers.ModelSerializer):
+    user_name = serializers.CharField(source="get_user_name")
+    class Meta:
+        model = Review
+        fields = ["id", "user_name", "title", "body", "created_at"]
+
 
 class RatingSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

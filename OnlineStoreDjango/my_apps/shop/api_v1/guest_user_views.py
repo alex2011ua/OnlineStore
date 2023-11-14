@@ -75,8 +75,12 @@ def products_filter_sort(request, queryset):
     if request.query_params.get("price_to"):
         params_filtering["price__lte"] = request.query_params.get("price_to")
     # sort by rating
-    if request.query_params.get("rate"):
-        params_filtering["global_rating__gte"] = request.query_params.get("rate")
+    if len(request.query_params.getlist("rate")) > 0:
+        rate_list: list = []
+        for rate_ in request.query_params.getlist("rate"):
+            rate_list.append(rate_)
+        params_filtering["global_rating__in"] = rate_list
+
     #  add list of main filters
     for product_filter in request.query_params.getlist("main"):
         match product_filter:
@@ -149,6 +153,13 @@ def products_filter_sort(request, queryset):
                 description="main(available |& pending  |& sale)",
                 required=False,
                 type=str,
+            ),
+            OpenApiParameter(
+                name="rate",
+                location=OpenApiParameter.QUERY,
+                description="rate",
+                required=False,
+                type=int,
             ),
         ],
     ),
@@ -366,6 +377,13 @@ class GetAllCategories(viewsets.ViewSet):
                 description="main(available |& pending  |& sale)",
                 required=False,
                 type=str,
+            ),
+            OpenApiParameter(
+                name="rate",
+                location=OpenApiParameter.QUERY,
+                description="rate",
+                required=False,
+                type=int,
             ),
         ],
     ),
