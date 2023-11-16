@@ -1,5 +1,6 @@
 from random import sample
 from uuid import UUID
+import logging
 
 from django.core.mail import send_mail
 from django.db.models import QuerySet
@@ -24,6 +25,9 @@ from .serializers import (
     ProductSerializer,
     ReviewSerializer,
 )
+
+
+logger = logging.getLogger(__name__)
 
 
 def version_uuid(uuid: str) -> bool:
@@ -258,6 +262,8 @@ class ListRandomGifts(APIView):
         serializer = ProductSerializer(
             sample(products, count), context={"request": request}, many=True
         )
+
+        logger.warning("test warning")
         return Response(serializer.data)
 
 
