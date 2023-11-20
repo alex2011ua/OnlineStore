@@ -1,0 +1,11 @@
+wemake-python-styleguide==0.15.3
+flake8==3.9.2
+black==21.9b0
+isort==5.10.1
+mypy==0.910
+django-stubs==1.9.0
+django-debug-toolbar==3.2.4
+
+django-querycount # for show SQL requests
+bandit
+locust

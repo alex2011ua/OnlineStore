@@ -169,7 +169,7 @@ def products_filter_sort(request, queryset):
     ),
 )
 class ListSearchGifts(APIView, StandardResultsSetPagination):  # type: ignore
-    """Search products by name and slug."""
+    """Search products by name, slug and category name."""
 
     def get(self, request):
         search_string: None | str = request.query_params.get("search", None)
@@ -180,7 +180,10 @@ class ListSearchGifts(APIView, StandardResultsSetPagination):  # type: ignore
             products2 = Product.objects.select_related("category").filter(
                 name__icontains=search_string
             )
-            products = products1 | products2  # get products according to search string
+            products3 = Product.objects.select_related("category").filter(
+                category__name__icontains=search_string
+            )
+            products = products1 | products2 | products3 # get products according to search string
         else:
             products = Product.objects.select_related("category").all()
 

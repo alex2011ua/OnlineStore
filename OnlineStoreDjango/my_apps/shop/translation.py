@@ -12,7 +12,7 @@ class ProductTranslationOption(TranslationOptions):
 
 
 class BannerTranslationOption(TranslationOptions):
-    fields = ("title", "description")
+    fields = ("title", "description", "img", "mobileImg")
 
 
 class SettingsTranslationOption(TranslationOptions):

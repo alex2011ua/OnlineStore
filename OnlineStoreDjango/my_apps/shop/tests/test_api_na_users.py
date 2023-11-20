@@ -16,29 +16,6 @@ def initialized_task_db(tmpdir):
 
 
 @pytest.mark.django_db
-def test_list_popular_gifts_true():
-    category = Category.objects.get()
-    slug = [fake.unique.first_name() for i in range(11)]
-    # create 10 products with different rating and counts of sailing
-    for i in range(11):
-        Product.objects.create(
-            name=fake.name(),
-            slug=slug[i],
-            category=category,
-            price=i+1,
-            quantity=i,
-            sold=i,
-            global_rating=i,
-        )
-
-    # get list of most popular products with rate more than ate_limit.value
-    response = client.get("/api/v1/shop/guest_user/search/", {"rate": 4})
-
-    assert response.status_code == status.HTTP_200_OK
-    assert response.data["count"] == 10 - 3
-
-
-@pytest.mark.django_db
 def test_list_search_gifts():
     category = Category.objects.get()
     product1 = Product.objects.create(

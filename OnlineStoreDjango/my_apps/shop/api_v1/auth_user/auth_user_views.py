@@ -8,7 +8,12 @@ from drf_spectacular.utils import (
     extend_schema_view,
     inline_serializer,
 )
+from rest_framework import serializers, status, viewsets
+from rest_framework.exceptions import NotFound, ParseError
 from rest_framework.generics import CreateAPIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from my_apps.accounts.models import User
 from my_apps.shop.api_v1.auth_user.serializers_auth_user import (
@@ -19,15 +24,10 @@ from my_apps.shop.api_v1.permissions import AuthUserPermission
 from my_apps.shop.api_v1.serializers import (
     BasketItemSerializer,
     BasketSerializer,
-    ReviewSerializer,
     CreateReviewSerializer,
+    ReviewSerializer,
 )
 from my_apps.shop.models import BasketItem, Order, OrderItem, Product, Review
-from rest_framework import serializers, status, viewsets
-from rest_framework.exceptions import NotFound, ParseError
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from rest_framework.views import APIView
 
 
 @extend_schema(tags=["Auth_user"])

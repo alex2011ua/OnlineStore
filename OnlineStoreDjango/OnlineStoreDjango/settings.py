@@ -229,10 +229,10 @@ LOGGING = {
                 "class": "logging.StreamHandler",
             }
         },
-        "loggers": {
-            "django.db.backends": {
-                "level": "DEBUG",
-                "handlers": ["console"],
-            }
-        },
+        # "loggers": {
+        #     "django.db.backends": {
+        #         "level": "DEBUG",
+        #         "handlers": ["console"],
+        #     }
+        # },
     }

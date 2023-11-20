@@ -371,12 +371,14 @@ class Banner(models.Model):  # type: ignore
         blank=True,
         null=True,
     )
+
     mobileImg = models.ImageField(
         _("banner for mobile"),
         upload_to="foto/banners/",
         blank=True,
         null=True,
     )
+
     link = models.CharField(_("link"), default="/catalog")
     created_at = models.DateTimeField(_("created"), auto_now_add=True)
     updated_at = models.DateTimeField(_("update"), auto_now=True)

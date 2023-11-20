@@ -9,11 +9,7 @@ psycopg2-binary==2.9.6
 djangorestframework-simplejwt==5.2.2
 django-phonenumber-field[phonenumberslite]
 django-extensions
-pytest
-pytest-django
 drf-spectacular
-django-querycount # for show SQL requests
-
 django-cors-headers
 llama_index
 nltk
@@ -25,6 +21,3 @@ google-auth
 google-auth-oauthlib
 google-auth-httplib2
 requests
-
-black
-isort

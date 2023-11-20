@@ -1,5 +1,6 @@
 from typing import Any
 
+from django.utils.translation import get_language
 from rest_framework.utils.serializer_helpers import ReturnDict
 
 from my_apps.shop.models import (
@@ -31,9 +32,7 @@ class CategorySerializer(serializers.ModelSerializer):
         ]
 
     def get_sub(self, obj) -> ReturnDict[Any, Any]:
-        serializer = CategorySerializer(
-            obj.get_sub_categories(), context=self.context, many=True
-        )
+        serializer = CategorySerializer(obj.get_sub_categories(), context=self.context, many=True)
         return serializer.data
 
 
@@ -60,9 +59,7 @@ class ProductSerializer(serializers.ModelSerializer):
         ]
 
     def get_reviews(self, obj):
-        serializer = ReviewSerializer(
-            obj.get_rewievs(), context=self.context, many=True
-        )
+        serializer = ReviewSerializer(obj.get_rewievs(), context=self.context, many=True)
         return serializer.data
 
 
@@ -89,6 +86,7 @@ class CreateReviewSerializer(serializers.ModelSerializer):
 
 class ReviewSerializer(serializers.ModelSerializer):
     user_name = serializers.CharField(source="get_user_name")
+
     class Meta:
         model = Review
         fields = ["id", "user_name", "title", "body", "created_at"]
@@ -101,9 +99,10 @@ class RatingSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class BannerSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Banner
-        fields = ["id", "title", "description", "img", "mobileImg", "link"]
+        fields = ["id", "img", "mobileImg", "link"]
 
 
 class BasketSerializer(serializers.Serializer):

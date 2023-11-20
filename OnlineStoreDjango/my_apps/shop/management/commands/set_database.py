@@ -87,8 +87,8 @@ class Command(BaseCommand):
         """Create content in DB"""
         # Category.objects.all().delete()
         # self.create_categories()
-        # Banner.objects.all().delete()
-        # self.create_banners()
+        Banner.objects.all().delete()
+        self.create_banners()
         # Product.objects.all().delete()
         # self.create_products()
         # Settings.objects.all().delete()
@@ -181,8 +181,10 @@ class Command(BaseCommand):
                 "title": "Знижка",
                 "description": "Будьте готові заощадити до 150",
                 "description_en": "Get ready to save up to 150",
-                "img": "foto/banners/banner150.webp",
-                "mobileImg": "foto/banners/banner150_mobile.webp",
+                "img": "foto/banners/ua-banner_150-large.webp",
+                "img_en": "foto/banners/en-banner_150-large.webp",
+                "mobileImg": "foto/banners/ua-banner_150-small.webp",
+                "mobileImg_en": "foto/banners/en-banner_150-small.webp",
                 "link": "/catalog",
             },
         )
@@ -193,8 +195,10 @@ class Command(BaseCommand):
                 "title_en": "Sales",
                 "description": "Будьте готові заощадити до 250",
                 "description_en": "Get ready to save up to 250",
-                "img": "foto/banners/banner250.webp",
-                "mobileImg": "foto/banners/banner250_mobile.webp",
+                "img": "foto/banners/ua-banner_250-large.webp",
+                "img_en": "foto/banners/en-banner_250-large.webp",
+                "mobileImg": "foto/banners/ua-banner_250-small.webp",
+                "mobileImg_en": "foto/banners/en-banner_250-small.webp",
                 "link": "/catalog",
             },
         )
@@ -205,8 +209,10 @@ class Command(BaseCommand):
                 "title_en": "Sales",
                 "description": "Будьте готові заощадити до 360",
                 "description_en": "Get ready to save up to 360",
-                "img": "foto/banners/banner360.webp",
-                "mobileImg": "foto/banners/banner360_mobile.webp",
+                "img": "foto/banners/ua-banner_360-large.webp",
+                "img_en": "foto/banners/en-banner_360-large.webp",
+                "mobileImg": "foto/banners/ua-banner_360-small.webp",
+                "mobileImg_en": "foto/banners/en-banner_360-small.webp",
                 "link": "/catalog",
             },
         )
