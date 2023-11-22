@@ -1,6 +1,14 @@
 from django.contrib import admin
-from my_apps.shop.models import (Banner, Category, Order, OrderItem, Product,
-                                 Rating, Review)
+from my_apps.shop.models import (
+    Banner,
+    Category,
+    Order,
+    OrderItem,
+    Product,
+    Rating,
+    Review,
+    BasketItem,
+)
 
 
 @admin.register(Category)
@@ -10,6 +18,8 @@ class CategoryAdmin(admin.ModelAdmin):
         "name",
         "category",
         "slug",
+        "img_small",
+        "img",
         "description",
         "created_at",
         "updated_at",
@@ -35,17 +45,22 @@ class ProductAdmin(admin.ModelAdmin):
     )
 
 
-@admin.register(OrderItem)
-class OrderItemAdmin(admin.ModelAdmin):
+@admin.register(Banner)
+class BanerAdmin(admin.ModelAdmin):
     list_display = (
-        "order",
-        "product",
-        "quantity",
+        "id",
+        "slug",
+        "img",
+        "mobileImg",
+        "link",
+        "created_at",
+        "updated_at",
+        "title",
     )
 
 
 @admin.register(Review)
-class OrderAdmin(admin.ModelAdmin):
+class ReviewAdmin(admin.ModelAdmin):
     list_display = (
         "product",
         "customer",
@@ -55,6 +70,11 @@ class OrderAdmin(admin.ModelAdmin):
         "updated_at",
     )
 
-@admin.register(Banner)
-class RatingItemAdmin(admin.ModelAdmin):
-    list_display = ("id", "title", "description", "img", "link")
+
+@admin.register(BasketItem)
+class OrderItemAdmin(admin.ModelAdmin):
+    list_display = (
+        "registered_user",
+        "product",
+        "quantity",
+    )

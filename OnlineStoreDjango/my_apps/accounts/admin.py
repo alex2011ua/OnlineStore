@@ -16,13 +16,15 @@ class UserAdmin(BaseUserAdmin):
         "middle_name",
         "last_name",
         "email",
-        "password",
         "mobile",
         "gender",
         "role",
         "notice",
         "created_at",
         "updated_at",
+        'is_superuser',
+        "is_staff",
+        "password",
     )
     list_filter = ("dob", "created_at", "gender")
     fieldsets = (
@@ -30,13 +32,7 @@ class UserAdmin(BaseUserAdmin):
         ("Personal info", {"fields": ("first_name", "middle_name", "last_name")}),
         (
             "Some info",
-            {
-                "fields": (
-                    "gender",
-                    "role",
-                    "notice",
-                )
-            },
+            {"fields": ("gender", "role", "notice", 'is_superuser', "is_staff",)},
         ),
     )
 

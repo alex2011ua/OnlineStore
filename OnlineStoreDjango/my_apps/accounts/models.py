@@ -61,7 +61,11 @@ class User(AbstractUser):  # type: ignore
     REQUIRED_FIELDS: ClassVar[list[str]] = []
 
     first_name = models.CharField(
-        _("first name"), name="first_name", max_length=100, blank=True, null=True,
+        _("first name"),
+        name="first_name",
+        max_length=100,
+        blank=True,
+        null=True,
     )  # type: ignore
     middle_name = models.CharField(
         _("middle name"), blank=True, null=True, max_length=100
@@ -75,12 +79,10 @@ class User(AbstractUser):  # type: ignore
     dob = models.DateField(_("Date of birthday"), blank=True, null=True)
     created_at = models.DateTimeField(_("created"), auto_now_add=True)
     updated_at = models.DateTimeField(_("update"), auto_now=True)
-    gender = models.CharField(
-        _("gender"), max_length=1, choices=GENDER_CHOICES, default="O"
-    )
+    gender = models.CharField(_("gender"), max_length=1, choices=GENDER_CHOICES, default="O")
     role = models.CharField(_("role"), max_length=1, choices=ROLE_CHOICES, default="U")
     notice = models.TextField(_("notice"), blank=True)
-    username = models.CharField(blank=True, null=True, max_length=100)    # type: ignore
+    username = models.CharField(blank=True, null=True, max_length=100)  # type: ignore
 
     def get_full_name(self) -> str:
         """Return full name.
@@ -88,7 +90,7 @@ class User(AbstractUser):  # type: ignore
         Returns:
              str: Full name
         """
-        return f"{self.first_name} {self.middle_name if self.middle_name else ''} {self.last_name}"   # type: ignore
+        return f"{self.first_name} {self.middle_name if self.middle_name else ''} {self.last_name}"  # type: ignore
 
     def get_age(self) -> None | int:
         """Return age user.
@@ -101,13 +103,11 @@ class User(AbstractUser):  # type: ignore
             return 0
         today: date = date.today()
         return (
-            today.year
-            - self.dob.year
-            - ((today.month, today.day) < (self.dob.month, self.dob.day))
+            today.year - self.dob.year - ((today.month, today.day) < (self.dob.month, self.dob.day))
         )
 
     def __str__(self) -> str:
         """Return full name."""
         return self.get_full_name()
 
-    objects = UserManager() # type: ignore
+    objects = UserManager()  # type: ignore

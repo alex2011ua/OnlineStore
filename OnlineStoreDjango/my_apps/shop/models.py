@@ -116,7 +116,7 @@ class Product(models.Model):  # type: ignore
     sold = models.PositiveIntegerField(_("number sold"), default=0)
 
     wishlist = models.ManyToManyField(
-        User, related_name="wishlist"
+        User, related_name="wishlist", blank=True,
     )  # add products to user wishlist
     basket = models.ManyToManyField(User, through="BasketItem")  # type: ignore
     global_rating = models.IntegerField(
