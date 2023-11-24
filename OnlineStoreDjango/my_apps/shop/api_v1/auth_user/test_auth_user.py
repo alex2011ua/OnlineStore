@@ -1,23 +1,22 @@
-import sys
 import logging
+import sys
 
 import pytest
 from django.shortcuts import redirect
-from my_apps.accounts.models import User
-from my_apps.shop.models import Category, Product
 from rest_framework.test import APIRequestFactory, force_authenticate
 
-from .auth_user_views import Basket
-from my_apps.shop.api_v1.guest_user_views import Comments
+from my_apps.accounts.models import User
 from my_apps.shop.api_v1.auth_user.auth_user_views import AuthComments
+from my_apps.shop.api_v1.guest_user_views import Comments
+from my_apps.shop.models import Category, Product
+
+from .auth_user_views import Basket
 
 
 @pytest.fixture()
 def initalized_task_db():
     category1 = Category.objects.create(name="cat1", slug="slugcat1")
-    product1 = Product.objects.create(
-        name="prod1", slug="prod1", category=category1, price=1
-    )
+    product1 = Product.objects.create(name="prod1", slug="prod1", category=category1, price=1)
     user_auth = User.objects.create(email="auth_user@gmail.com", role="U")
     return {"user": user_auth, "product": product1, "category": category1}
 
@@ -34,9 +33,7 @@ def test_basket_endpoints(initalized_task_db):
     assert response.data == []
 
     p = Product.objects.all()[0]
-    request = factory.post(
-        redirect("auth_user_basket"), {"product_id": p.id, "amount": 2}
-    )
+    request = factory.post(redirect("auth_user_basket"), {"product_id": p.id, "amount": 2})
     force_authenticate(request, user=user)
     response = view(request)
     assert response.status_code == 200
@@ -52,9 +49,7 @@ class TestReviewProduct:
     @pytest.fixture()
     def initalized_task_db_review(self):
         category1 = Category.objects.create(name="cat1", slug="slugcat1")
-        product1 = Product.objects.create(
-            name="prod1", slug="prod1", category=category1, price=1
-        )
+        product1 = Product.objects.create(name="prod1", slug="prod1", category=category1, price=1)
         user_auth = User.objects.create(email="auth_user@gmail.com", role="U")
         return {"product": product1, "user": user_auth, "category": category1}
 
@@ -63,9 +58,7 @@ class TestReviewProduct:
         factory = APIRequestFactory()
         product = initalized_task_db_review["product"]
         user = initalized_task_db_review["user"]
-        request_get_reviews = factory.get(
-            redirect("get_product_comments", prod_pk=product.id)
-        )
+        request_get_reviews = factory.get(redirect("get_product_comments", prod_pk=product.id))
         view_get_comment = Comments.as_view({"get": "list"})
         response = view_get_comment(request_get_reviews, prod_pk=product.id)
 

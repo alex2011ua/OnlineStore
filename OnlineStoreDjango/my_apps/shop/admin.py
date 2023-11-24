@@ -1,20 +1,22 @@
 from django.contrib import admin
+
 from my_apps.shop.models import (
     Banner,
+    BasketItem,
     Category,
+    Faq,
     Order,
     OrderItem,
     Product,
     Rating,
     Review,
-    BasketItem,
+    Settings,
 )
 
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = (
-        "id",
         "name",
         "category",
         "slug",
@@ -23,26 +25,36 @@ class CategoryAdmin(admin.ModelAdmin):
         "description",
         "created_at",
         "updated_at",
+        "id",
     )
 
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = (
-        "id",
         "name",
         "slug",
         "type",
         "category",
         "price",
         "img",
+        "img1",
+        "img2",
+        "img3",
         "discount",
         "quantity",
         "sold",
         "global_rating",
+        "quality",
+        "price",
+        "photo_match",
+        "description_match",
         "created_at",
         "updated_at",
+        "id",
     )
+    list_filter = ("category", "price")
+    ordering = ["name"]
 
 
 @admin.register(Banner)
@@ -78,3 +90,34 @@ class OrderItemAdmin(admin.ModelAdmin):
         "product",
         "quantity",
     )
+
+
+@admin.register(Settings)
+class SettingsAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "name",
+        "description",
+        "value",
+    )
+
+
+@admin.register(Rating)
+class RatingAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "product",
+        "customer",
+        "rate_by_stars",
+        "quality",
+        "price",
+        "photo_match",
+        "description_match",
+        "created_at",
+        "updated_at",
+    )
+
+
+@admin.register(Faq)
+class FaqAdmin(admin.ModelAdmin):
+    list_display = ("id", "question", "answer")

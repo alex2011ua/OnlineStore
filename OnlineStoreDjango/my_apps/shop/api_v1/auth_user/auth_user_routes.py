@@ -1,4 +1,5 @@
 from django.urls import path
+
 from my_apps.shop.api_v1.auth_user import auth_user_views
 
 urlpatterns = [

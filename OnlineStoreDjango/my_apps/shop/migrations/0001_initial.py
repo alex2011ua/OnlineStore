@@ -75,9 +75,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "order_date",
-                    models.DateTimeField(
-                        auto_now_add=True, verbose_name="create order"
-                    ),
+                    models.DateTimeField(auto_now_add=True, verbose_name="create order"),
                 ),
                 (
                     "updated_at",
@@ -135,9 +133,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "price",
-                    models.DecimalField(
-                        decimal_places=2, max_digits=10, verbose_name="price"
-                    ),
+                    models.DecimalField(decimal_places=2, max_digits=10, verbose_name="price"),
                 ),
                 (
                     "discount",
@@ -150,9 +146,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "quantity",
-                    models.PositiveIntegerField(
-                        default=0, verbose_name="count of product"
-                    ),
+                    models.PositiveIntegerField(default=0, verbose_name="count of product"),
                 ),
                 (
                     "image",
@@ -385,15 +379,11 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "quantity",
-                    models.PositiveIntegerField(
-                        default=0, verbose_name="quantity product"
-                    ),
+                    models.PositiveIntegerField(default=0, verbose_name="quantity product"),
                 ),
                 (
                     "order",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE, to="shop.order"
-                    ),
+                    models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="shop.order"),
                 ),
                 (
                     "product",

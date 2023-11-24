@@ -1,12 +1,17 @@
 from drf_spectacular.utils import extend_schema
-from my_apps.shop.models import Category, Order, Product, Rating, Review
 from rest_framework import permissions, status, viewsets
 from rest_framework.mixins import DestroyModelMixin
 from rest_framework.response import Response
 
-from .serializers import (CategorySerializer, OrderSerializer,
-                          ProductSerializer, RatingSerializer,
-                          ReviewSerializer)
+from my_apps.shop.models import Category, Order, Product, Rating, Review
+
+from .serializers import (
+    CategorySerializer,
+    OrderSerializer,
+    ProductCatalogSerializer,
+    RatingSerializer,
+    ReviewSerializer,
+)
 
 
 class MyDestroyModelMixin(DestroyModelMixin):
@@ -19,9 +24,7 @@ class MyDestroyModelMixin(DestroyModelMixin):
         return Response(status=status.HTTP_204_NO_CONTENT, data=data)
 
 
-@extend_schema(
-        exclude=True
-    )
+@extend_schema(exclude=True)
 class CategoryViewSet(viewsets.ModelViewSet, MyDestroyModelMixin):
     """
     API endpoint that allows made CRUD operations with Category.
@@ -32,21 +35,7 @@ class CategoryViewSet(viewsets.ModelViewSet, MyDestroyModelMixin):
     permission_classes = [permissions.AllowAny]
 
 
-@extend_schema(
-        exclude=True
-    )
-class ProductViewSet(viewsets.ModelViewSet, MyDestroyModelMixin):
-    """
-    API endpoint that allows made CRUD operations with Product.
-    """
-
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
-    permission_classes = [permissions.AllowAny]
-
-@extend_schema(
-        exclude=True
-    )
+@extend_schema(exclude=True)
 class OrderViewSet(viewsets.ModelViewSet, MyDestroyModelMixin):
     """
     .
@@ -56,9 +45,8 @@ class OrderViewSet(viewsets.ModelViewSet, MyDestroyModelMixin):
     serializer_class = OrderSerializer
     permission_classes = [permissions.AllowAny]
 
-@extend_schema(
-        exclude=True
-    )
+
+@extend_schema(exclude=True)
 class ReviewViewSet(viewsets.ModelViewSet, MyDestroyModelMixin):
     """
     API endpoint that allows made CRUD operations with users reviews.
@@ -68,9 +56,8 @@ class ReviewViewSet(viewsets.ModelViewSet, MyDestroyModelMixin):
     serializer_class = ReviewSerializer
     permission_classes = [permissions.AllowAny]
 
-@extend_schema(
-        exclude=True
-    )
+
+@extend_schema(exclude=True)
 class RatingViewSet(viewsets.ModelViewSet, MyDestroyModelMixin):
     """
     API endpoint that allows made CRUD operations with Rating.

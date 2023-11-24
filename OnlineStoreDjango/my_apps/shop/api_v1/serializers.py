@@ -1,18 +1,11 @@
+import json
 from typing import Any
 
 from django.utils.translation import get_language
+from rest_framework import serializers
 from rest_framework.utils.serializer_helpers import ReturnDict
 
-from my_apps.shop.models import (
-    Banner,
-    BasketItem,
-    Category,
-    Order,
-    Product,
-    Rating,
-    Review,
-)
-from rest_framework import serializers
+from my_apps.shop.models import Banner, BasketItem, Category, Faq, Order, Product, Rating, Review
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -36,31 +29,64 @@ class CategorySerializer(serializers.ModelSerializer):
         return serializer.data
 
 
-class ProductSerializer(serializers.ModelSerializer):
+class ProductCatalogSerializer(serializers.ModelSerializer):
     category = serializers.CharField(source="get_category_name")
-    reviews = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
         fields = [
             "id",
             "name",
-            "slug",
-            "type",
-            "description",
             "quantity",
-            "sold",
             "img",
             "category",
             "price",
             "discount",
             "global_rating",
-            "reviews",
+        ]
+
+
+class ProductCardSerializer(serializers.ModelSerializer):
+    category = serializers.CharField(source="get_category_name")
+    code = serializers.CharField(source="slug")
+    img = serializers.SerializerMethodField()
+    faq = serializers.CharField(source="get_faq_list")
+
+    class Meta:
+        model = Product
+        fields = [
+            "id",
+            "name",
+            "category",
+            "price",
+            "discount",
+            "img",
+            "quantity",
+            "code",
+            "global_rating",
+            "description",
+            "faq",
+            "rate_by_criteria",
+            "rate_by_stars",
         ]
 
     def get_reviews(self, obj):
         serializer = ReviewSerializer(obj.get_rewievs(), context=self.context, many=True)
         return serializer.data
+
+    def get_faq(self, obj) -> str:
+        list_faq: list = obj.get_list_faq()
+        return json.dumps(list_faq)
+
+    def get_img(self, obj):
+        request = self.context.get("request")
+        domain = request.build_absolute_uri("/")
+
+        list_foto = obj.images()
+        list_link = []
+        for image in list_foto:
+            list_link.append(domain + image)
+        return list_link
 
 
 class OrderSerializer(serializers.HyperlinkedModelSerializer):
@@ -99,7 +125,6 @@ class RatingSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class BannerSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Banner
         fields = ["id", "img", "mobileImg", "link"]

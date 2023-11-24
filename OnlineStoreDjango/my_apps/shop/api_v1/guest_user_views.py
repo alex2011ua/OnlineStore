@@ -1,6 +1,6 @@
+import logging
 from random import sample
 from uuid import UUID
-import logging
 
 from django.core.mail import send_mail
 from django.db.models import QuerySet
@@ -10,22 +10,22 @@ from drf_spectacular.utils import (
     extend_schema,
     extend_schema_view,
 )
-
-from OnlineStoreDjango import settings
-from my_apps.shop.models import Banner, Category, Product, Settings, Order, OrderItem
-from rest_framework import generics, status, viewsets
+from rest_framework import generics, mixins, status, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from my_apps.shop.models import Banner, Category, Order, OrderItem, Product, Settings
+from OnlineStoreDjango import settings
 
 from .paginators import StandardResultsSetPagination
 from .serializers import (
     BannerSerializer,
     CategorySerializer,
-    ProductSerializer,
+    ProductCardSerializer,
+    ProductCatalogSerializer,
     ReviewSerializer,
 )
-
 
 logger = logging.getLogger(__name__)
 
@@ -111,7 +111,7 @@ def products_filter_sort(request, queryset):
     get=extend_schema(
         summary="Search by name and slug",
         responses={
-            status.HTTP_200_OK: ProductSerializer,
+            status.HTTP_200_OK: ProductCatalogSerializer,
             417: OpenApiResponse(description="required search param"),
             422: OpenApiResponse(description="wrong query param: "),
         },
@@ -192,7 +192,7 @@ class ListSearchGifts(APIView, StandardResultsSetPagination):  # type: ignore
         )  # get filtered and sorted products
 
         results = self.paginate_queryset(filtered_products, request, view=self)
-        serializer = ProductSerializer(results, context={"request": request}, many=True)
+        serializer = ProductCatalogSerializer(results, context={"request": request}, many=True)
         return self.get_paginated_response(serializer.data)
 
 
@@ -201,7 +201,7 @@ class ListSearchGifts(APIView, StandardResultsSetPagination):  # type: ignore
     get=extend_schema(
         summary="get random products",
         responses={
-            status.HTTP_200_OK: ProductSerializer,
+            status.HTTP_200_OK: ProductCatalogSerializer,
             404: OpenApiResponse(description="id not UUID or not found"),
         },
         parameters=[
@@ -262,7 +262,7 @@ class ListRandomGifts(APIView):
         if len(products) < count:  # if count products less as existing, correct count
             count = len(products)
         # get random products from products list
-        serializer = ProductSerializer(
+        serializer = ProductCatalogSerializer(
             sample(products, count), context={"request": request}, many=True
         )
 
@@ -295,7 +295,7 @@ class ListBanners(generics.ListAPIView):
     get=extend_schema(
         summary="GPT test",
         responses={
-            status.HTTP_200_OK: ProductSerializer,
+            status.HTTP_200_OK: ProductCatalogSerializer,
         },
         parameters=[
             OpenApiParameter(
@@ -347,7 +347,7 @@ class GetAllCategories(viewsets.ViewSet):
     list=extend_schema(
         summary="products in category filtered and ordered",
         responses={
-            status.HTTP_200_OK: ProductSerializer,
+            status.HTTP_200_OK: ProductCatalogSerializer,
             422: OpenApiResponse(description="wrong query param: "),
             404: OpenApiResponse(description="category not found "),
         },
@@ -409,7 +409,7 @@ class GetProductsByCategory(viewsets.ViewSet, StandardResultsSetPagination):  # 
             request, products
         )  # get filtered and sorted product
         results = self.paginate_queryset(filtered_products, request, view=self)
-        serializer = ProductSerializer(results, context={"request": request}, many=True)
+        serializer = ProductCatalogSerializer(results, context={"request": request}, many=True)
         return self.get_paginated_response(serializer.data)
 
 
@@ -418,7 +418,8 @@ class GetProduct(generics.RetrieveAPIView):
     """Get one product by ID."""
 
     queryset = Product.objects.all()
-    serializer_class = ProductSerializer
+    serializer_class = ProductCardSerializer
+
 
 
 @extend_schema(
@@ -441,11 +442,12 @@ def get_category_by_slug(request, url_category):
     tags=["Guest_user"],
     responses={
         404: OpenApiResponse(description="product not found "),
+        200: ReviewSerializer,
     },
     summary="get all reviews in product",
 )
-class Comments(viewsets.ReadOnlyModelViewSet):
-    """List or retrieve comments in given product."""
+class Comments(mixins.ListModelMixin, viewsets.GenericViewSet):
+    """List comments in given product."""
 
     serializer_class = ReviewSerializer
 

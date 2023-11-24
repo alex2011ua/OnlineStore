@@ -5,9 +5,7 @@ from . import guest_user_views
 urlpatterns = [
     path("search/", guest_user_views.ListSearchGifts.as_view(), name="search"),
     path("gpt/", guest_user_views.Gpt.as_view(), name="gpt"),
-    path(
-        "random-gifts/", guest_user_views.ListRandomGifts.as_view(), name="random_gifts"
-    ),
+    path("random-gifts/", guest_user_views.ListRandomGifts.as_view(), name="random_gifts"),
     path("banner_list/", guest_user_views.ListBanners.as_view(), name="banner_list"),
     path(
         "get_all_categories/",
@@ -31,13 +29,8 @@ urlpatterns = [
     ),
     path(
         "product/<prod_pk>/comments",
-        guest_user_views.Comments.as_view({'get': 'list'}),
+        guest_user_views.Comments.as_view({"get": "list"}),
         name="get_product_comments",
-    ),
-    path(
-        "product/<prod_pk>/comments/<pk>",
-        guest_user_views.Comments.as_view({'get': 'retrieve'}),
-        name="get_product_comment",
     ),
     path("store_info/", guest_user_views.store_info, name="store_info"),
 ]

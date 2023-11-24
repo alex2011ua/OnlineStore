@@ -2,6 +2,7 @@ import csv
 import os
 
 from django.core.management.base import BaseCommand
+
 from my_apps.shop.models import Banner, Category, Product, Settings
 
 
@@ -157,19 +158,13 @@ class Command(BaseCommand):
                         },
                     )
                     if created:
-                        self.stdout.write(
-                            self.style.WARNING(f"Category {slug} created")
-                        )
+                        self.stdout.write(self.style.WARNING(f"Category {slug} created"))
                     else:
                         self.stdout.write(
-                            self.style.WARNING(
-                                f"Category {slug}  has acready created before"
-                            )
+                            self.style.WARNING(f"Category {slug}  has acready created before")
                         )
                 except Exception as ex:
-                    self.stdout.write(
-                        self.style.WARNING(f"---( \r Error create category")
-                    )
+                    self.stdout.write(self.style.WARNING(f"---( \r Error create category"))
                     self.stdout.write(self.style.WARNING(f"cat: {cat}, \r )---"))
 
     def create_banners(self):
@@ -274,15 +269,11 @@ class Command(BaseCommand):
                     )
                     cout_products += 1
                 except Exception as ex:
-                    self.stdout.write(
-                        self.style.WARNING(f"---( \r Error read from csv file: {ex}")
-                    )
+                    self.stdout.write(self.style.WARNING(f"---( \r Error read from csv file: {ex}"))
                     self.stdout.write(
                         self.style.WARNING(
                             f"slug: {slug}, name: {name}, category: {category_str}\r )---"
                         )
                     )
 
-            self.stdout.write(
-                self.style.SUCCESS("count products:" + str(cout_products))
-            )
+            self.stdout.write(self.style.SUCCESS("count products:" + str(cout_products)))

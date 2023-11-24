@@ -1,7 +1,7 @@
 from django.core.exceptions import ObjectDoesNotExist
-from my_apps.shop.models import (Banner, Category, Order, Product, Rating,
-                                 Review)
 from rest_framework import serializers
+
+from my_apps.shop.models import Banner, Category, Order, Product, Rating, Review
 
 
 class ProductIdSerializer(serializers.Serializer):

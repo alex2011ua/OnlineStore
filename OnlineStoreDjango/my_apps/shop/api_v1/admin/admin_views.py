@@ -1,12 +1,13 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view
-from my_apps.shop.api_v1.permissions import AdminPermission
-from my_apps.shop.api_v1.serializers import BannerSerializer, ProductSerializer
-from my_apps.shop.models import Banner, Product
 from rest_framework import status, viewsets
 from rest_framework.mixins import DestroyModelMixin
 from rest_framework.permissions import BasePermission, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from my_apps.shop.api_v1.permissions import AdminPermission
+from my_apps.shop.api_v1.serializers import BannerSerializer
+from my_apps.shop.models import Banner, Product
 
 
 class MyDestroyModelMixin(DestroyModelMixin):
