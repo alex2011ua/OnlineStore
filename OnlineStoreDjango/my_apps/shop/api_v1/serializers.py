@@ -50,7 +50,7 @@ class ProductCardSerializer(serializers.ModelSerializer):
     category = serializers.CharField(source="get_category_name")
     code = serializers.CharField(source="slug")
     img = serializers.SerializerMethodField()
-    faq = serializers.CharField(source="get_faq_list")
+    # faq = serializers.CharField(source="get_faq_list")
 
     class Meta:
         model = Product
@@ -65,7 +65,7 @@ class ProductCardSerializer(serializers.ModelSerializer):
             "code",
             "global_rating",
             "description",
-            "faq",
+            # "faq",
             "rate_by_criteria",
             "rate_by_stars",
         ]
@@ -73,10 +73,10 @@ class ProductCardSerializer(serializers.ModelSerializer):
     def get_reviews(self, obj):
         serializer = ReviewSerializer(obj.get_rewievs(), context=self.context, many=True)
         return serializer.data
-
-    def get_faq(self, obj) -> str:
-        list_faq: list = obj.get_list_faq()
-        return json.dumps(list_faq)
+    #
+    # def get_faq(self, obj) -> str:
+    #     list_faq: list = obj.get_list_faq()
+    #     return json.dumps(list_faq)
 
     def get_img(self, obj):
         request = self.context.get("request")

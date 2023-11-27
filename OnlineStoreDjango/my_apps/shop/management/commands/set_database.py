@@ -170,47 +170,46 @@ class Command(BaseCommand):
     def create_banners(self):
         self.stdout.write(self.style.SUCCESS("Start creating banners"))
         Banner.objects.update_or_create(
-            slug="banner150",
+            slug="banner1",
             defaults={
-                "title_en": "Sales",
-                "title": "Знижка",
-                "description": "Будьте готові заощадити до 150",
-                "description_en": "Get ready to save up to 150",
-                "img": "foto/banners/ua-banner_150-large.webp",
-                "img_en": "foto/banners/en-banner_150-large.webp",
-                "mobileImg": "foto/banners/ua-banner_150-small.webp",
-                "mobileImg_en": "foto/banners/en-banner_150-small.webp",
-                "link": "/catalog",
+                "img": "foto/banners/ua/large/Banner1.webp",
+                "img_en": "foto/banners/en/large/Banner1.webp",
+                "mobileImg": "foto/banners/ua/small/Banner1.webp",
+                "mobileImg_en": "foto/banners/en/small/Banner1.webp",
+                "link": "/catalog/datebook",
             },
         )
         Banner.objects.update_or_create(
-            slug="banner250",
+            slug="banner2",
             defaults={
-                "title": "Знижка",
-                "title_en": "Sales",
-                "description": "Будьте готові заощадити до 250",
-                "description_en": "Get ready to save up to 250",
-                "img": "foto/banners/ua-banner_250-large.webp",
-                "img_en": "foto/banners/en-banner_250-large.webp",
-                "mobileImg": "foto/banners/ua-banner_250-small.webp",
-                "mobileImg_en": "foto/banners/en-banner_250-small.webp",
-                "link": "/catalog",
+                "img": "foto/banners/ua/large/Banner2.webp",
+                "img_en": "foto/banners/en/large/Banner2.webp",
+                "mobileImg": "foto/banners/ua/small/Banner2.webp",
+                "mobileImg_en": "foto/banners/en/small/Banner2.webp",
+                "link": "/catalog/tea",
             },
         )
         Banner.objects.update_or_create(
-            slug="banner360",
+            slug="banner3",
             defaults={
-                "title": "Знижка",
-                "title_en": "Sales",
-                "description": "Будьте готові заощадити до 360",
-                "description_en": "Get ready to save up to 360",
-                "img": "foto/banners/ua-banner_360-large.webp",
-                "img_en": "foto/banners/en-banner_360-large.webp",
-                "mobileImg": "foto/banners/ua-banner_360-small.webp",
-                "mobileImg_en": "foto/banners/en-banner_360-small.webp",
-                "link": "/catalog",
+                "img": "foto/banners/ua/large/Banner3.webp",
+                "img_en": "foto/banners/en/large/Banner3.webp",
+                "mobileImg": "foto/banners/ua/small/Banner3.webp",
+                "mobileImg_en": "foto/banners/en/small/Banner3.webp",
+                "link": "/catalog/tea",
             },
         )
+        Banner.objects.update_or_create(
+            slug="banner4",
+            defaults={
+                "img": "foto/banners/ua/large/Banner4.webp",
+                "img_en": "foto/banners/en/large/Banner4.webp",
+                "mobileImg": "foto/banners/ua/small/Banner4.webp",
+                "mobileImg_en": "foto/banners/en/small/Banner4.webp",
+                "link": "/catalog/courses",
+            },
+        )
+
 
     def get_category_by_name(self, name):
         for cat in self.subcat_dict.values():
