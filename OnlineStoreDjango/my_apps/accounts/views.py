@@ -5,6 +5,14 @@ from django.shortcuts import render, redirect
 import google_auth_oauthlib.flow
 
 
+def log(request):
+    logs = []
+    with open("information.log") as log_file:
+        for line in log_file:
+            logs.append(line)
+    return render(request, "accounts/logs.html", {"logs": logs[::-1]})
+
+
 def google_login(request):
     flow = google_auth_oauthlib.flow.Flow.from_client_config(
         client_config={
@@ -42,7 +50,6 @@ def google_login(request):
     return redirect(authorization_url)
 
 
-
 def ok(request):
     state = request.GET.get("state")
     code = request.GET.get("code")
@@ -75,8 +82,6 @@ def ok(request):
     }
     print(credentials)
     GOOGLE_USER_INFO_URL = "https://www.googleapis.com/oauth2/v3/userinfo"
-    response = requests.get(
-        GOOGLE_USER_INFO_URL, params={"access_token": credentials["token"]}
-    )
+    response = requests.get(GOOGLE_USER_INFO_URL, params={"access_token": credentials["token"]})
     response_dict = response.json()
     return render(request, "oauth/ok.html", {"detail": response_dict["email"]})

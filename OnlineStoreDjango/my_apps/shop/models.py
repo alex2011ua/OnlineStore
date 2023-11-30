@@ -425,17 +425,17 @@ class OrderItem(models.Model):
 class Review(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="reviews")
-    customer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="reviews")
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="reviews")
     title = models.CharField(_("title"), max_length=200)
-    body = models.TextField(blank=True, null=True)
-    created_at = models.DateTimeField(_("create"), auto_now_add=True)
+    text = models.TextField(blank=True, null=True)
+    date = models.DateTimeField(_("create"), auto_now_add=True)
     updated_at = models.DateTimeField(_("update"), auto_now=True)
 
     def __str__(self):
-        return f"{self.title} - {self.product.name}"
+        return f"{self.date} - {self.product.name}"
 
     def get_user_name(self):
-        return self.customer.get_full_name()
+        return self.author.get_full_name()
 
 
 class Rating(models.Model):

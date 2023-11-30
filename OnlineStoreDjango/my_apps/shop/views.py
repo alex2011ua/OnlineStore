@@ -15,7 +15,9 @@ def get_foto_product(request, image_path):
         raise Http404(f"file {image_path} not found!")
 
 
-def get_foto_banner(request, image_path):
+def get_foto_banner(request, image_path: str):
+    if image_path.endswith("/"):
+        image_path = image_path[:-1]
     try:
         img = open(f"shop/media/foto/banners/{image_path}", "rb")
         response = FileResponse(img)

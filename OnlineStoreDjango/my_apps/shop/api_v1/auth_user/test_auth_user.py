@@ -64,7 +64,7 @@ class TestReviewProduct:
 
         assert response.data["count"] == 0
         # creating review
-        product.reviews.create(customer=user, title="test_title")
+        product.reviews.create(author=user, title="test_title")
         response = view_get_comment(request_get_reviews, prod_pk=product.id)
         assert response.data["count"] == 1
 
@@ -78,7 +78,7 @@ class TestReviewProduct:
         user = initalized_task_db_review["user"]
         request_add_review = factory.post(
             redirect("auth_comments", pk=product.id),
-            {"title": "string", "body": "string"},
+            {"title": "string", "text": "string"},
         )
         # add new comment
         force_authenticate(request_add_review, user=user)

@@ -1,3 +1,4 @@
+from django.contrib.postgres.search import SearchVector
 import logging
 from random import sample
 from uuid import UUID
@@ -16,7 +17,6 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from my_apps.shop.models import Banner, Category, Order, OrderItem, Product, Settings
-from OnlineStoreDjango import settings
 
 from .paginators import StandardResultsSetPagination
 from .serializers import (
@@ -27,7 +27,7 @@ from .serializers import (
     ReviewSerializer,
 )
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("main")
 
 
 def version_uuid(uuid: str) -> bool:
@@ -173,6 +173,7 @@ class ListSearchGifts(APIView, StandardResultsSetPagination):  # type: ignore
 
     def get(self, request):
         search_string: None | str = request.query_params.get("search", None)
+
         if search_string:
             products1: QuerySet = Product.objects.select_related("category").filter(
                 slug__icontains=search_string
@@ -184,6 +185,7 @@ class ListSearchGifts(APIView, StandardResultsSetPagination):  # type: ignore
                 category__name__icontains=search_string
             )
             products = products1 | products2 | products3 # get products according to search string
+            logger.info("ListSearchGifts - search_string:" + search_string + "; count: " + str(len(products)))
         else:
             products = Product.objects.select_related("category").all()
 
@@ -194,7 +196,18 @@ class ListSearchGifts(APIView, StandardResultsSetPagination):  # type: ignore
         results = self.paginate_queryset(filtered_products, request, view=self)
         serializer = ProductCatalogSerializer(results, context={"request": request}, many=True)
         return self.get_paginated_response(serializer.data)
-
+    # def get_queryset(self):
+    #     logging.warning("sdfsvefsdvdfvdf")
+    #     queryset = Product.objects.all()
+    #     search_string: None | str = self.request.query_params.get("search", None)
+    #     if search_string:
+    #         search_vector = SearchVector("slug", "name", "category__name")
+    #         queryset = queryset.annotate(search=search_vector).filter(search=search_string)
+    #     filtered_products = products_filter_sort(
+    #             self.request, queryset
+    #         )  # get filtered and sorted products
+    #     logging.warning(filtered_products)
+    #     return filtered_products
 
 @extend_schema(tags=["Guest_user"])
 @extend_schema_view(
@@ -265,8 +278,6 @@ class ListRandomGifts(APIView):
         serializer = ProductCatalogSerializer(
             sample(products, count), context={"request": request}, many=True
         )
-
-        logger.warning("test warning")
         return Response(serializer.data)
 
 

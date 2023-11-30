@@ -75,13 +75,13 @@ class BanerAdmin(admin.ModelAdmin):
 class ReviewAdmin(admin.ModelAdmin):
     list_display = (
         "product",
-        "customer",
-        "title",
-        "body",
-        "created_at",
-        "updated_at",
+        "author",
+        "text",
+        "date",
+        "id",
     )
-
+    list_filter = ("product", "author", "date")
+    ordering = ["-date"]
 
 @admin.register(BasketItem)
 class OrderItemAdmin(admin.ModelAdmin):
