@@ -8,7 +8,6 @@ from my_apps.shop.models import (
     Order,
     OrderItem,
     Product,
-    Rating,
     Review,
     Settings,
 )
@@ -37,6 +36,7 @@ class ProductAdmin(admin.ModelAdmin):
         "type",
         "category",
         "price",
+        "id",
         "img",
         "img1",
         "img2",
@@ -51,7 +51,6 @@ class ProductAdmin(admin.ModelAdmin):
         "description_match",
         "created_at",
         "updated_at",
-        "id",
     )
     list_filter = ("category", "price")
     ordering = ["name"]
@@ -77,11 +76,17 @@ class ReviewAdmin(admin.ModelAdmin):
         "product",
         "author",
         "text",
+        "rate_by_stars",
+        "quality",
+        "description_match",
+        "photo_match",
+        "price",
         "date",
         "id",
     )
     list_filter = ("product", "author", "date")
     ordering = ["-date"]
+
 
 @admin.register(BasketItem)
 class OrderItemAdmin(admin.ModelAdmin):
@@ -99,22 +104,6 @@ class SettingsAdmin(admin.ModelAdmin):
         "name",
         "description",
         "value",
-    )
-
-
-@admin.register(Rating)
-class RatingAdmin(admin.ModelAdmin):
-    list_display = (
-        "id",
-        "product",
-        "customer",
-        "rate_by_stars",
-        "quality",
-        "price",
-        "photo_match",
-        "description_match",
-        "created_at",
-        "updated_at",
     )
 
 

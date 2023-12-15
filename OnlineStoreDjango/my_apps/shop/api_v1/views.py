@@ -3,13 +3,12 @@ from rest_framework import permissions, status, viewsets
 from rest_framework.mixins import DestroyModelMixin
 from rest_framework.response import Response
 
-from my_apps.shop.models import Category, Order, Product, Rating, Review
+from my_apps.shop.models import Category, Order, Product, Review
 
 from .serializers import (
     CategorySerializer,
     OrderSerializer,
     ProductCatalogSerializer,
-    RatingSerializer,
     ReviewSerializer,
 )
 
@@ -54,15 +53,4 @@ class ReviewViewSet(viewsets.ModelViewSet, MyDestroyModelMixin):
 
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-    permission_classes = [permissions.AllowAny]
-
-
-@extend_schema(exclude=True)
-class RatingViewSet(viewsets.ModelViewSet, MyDestroyModelMixin):
-    """
-    API endpoint that allows made CRUD operations with Rating.
-    """
-
-    queryset = Rating.objects.all()
-    serializer_class = RatingSerializer
     permission_classes = [permissions.AllowAny]

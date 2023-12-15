@@ -108,7 +108,7 @@ DATABASES = {
         "PASSWORD": os.getenv("POSTGRES_PASSWORD", "online_store"),
         "HOST": os.getenv(
             "DB_HOST",
-            "172.20.0.2",
+            "172.22.0.3",
         ),
         "PORT": str(os.getenv("PORT_DB", 5432)),
     }

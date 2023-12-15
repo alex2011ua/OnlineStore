@@ -5,7 +5,7 @@ from django.utils.translation import get_language
 from rest_framework import serializers
 from rest_framework.utils.serializer_helpers import ReturnDict
 
-from my_apps.shop.models import Banner, BasketItem, Category, Faq, Order, Product, Rating, Review
+from my_apps.shop.models import Banner, BasketItem, Category, Faq, Order, Product, Review
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -73,6 +73,7 @@ class ProductCardSerializer(serializers.ModelSerializer):
     def get_reviews(self, obj):
         serializer = ReviewSerializer(obj.get_rewievs(), context=self.context, many=True)
         return serializer.data
+
     #
     # def get_faq(self, obj) -> str:
     #     list_faq: list = obj.get_list_faq()
@@ -114,13 +115,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Review
-        fields = ["id", "author", "text", "date"]
-
-
-class RatingSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Rating
-        fields = ["id", "url", "product", "customer", "value", "created_at"]
+        fields = ["id", "author", "text", "rate_by_stars", "rate_by_criteria"]
 
 
 class BannerSerializer(serializers.ModelSerializer):

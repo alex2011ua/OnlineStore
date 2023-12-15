@@ -88,8 +88,8 @@ class Command(BaseCommand):
         """Create content in DB"""
         # Category.objects.all().delete()
         # self.create_categories()
-        Banner.objects.all().delete()
-        self.create_banners()
+        # Banner.objects.all().delete()
+        # self.create_banners()
         # Product.objects.all().delete()
         # self.create_products()
         # Settings.objects.all().delete()

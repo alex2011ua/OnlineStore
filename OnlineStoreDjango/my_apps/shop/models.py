@@ -130,34 +130,19 @@ class Product(models.Model):  # type: ignore
     )  # add products to user wishlist
     basket = models.ManyToManyField(User, through="BasketItem")  # type: ignore
     global_rating = models.IntegerField(
-        _("global rating"),
-        choices=[(i, i) for i in range(0, 6)],
-        blank=True,
-        null=True,
+        _("global rating"), choices=[(i, i) for i in range(0, 6)], default=0
     )
     quality = models.IntegerField(
-        _("quality rating"),
-        choices=[(i, i) for i in range(1, 11)],
-        blank=True,
-        null=True,
+        _("quality rating"), choices=[(i, i) for i in range(0, 11)], default=0
     )
     rating_price = models.IntegerField(
-        _("price"),
-        choices=[(i, i) for i in range(1, 11)],
-        blank=True,
-        null=True,
+        _("price"), choices=[(i, i) for i in range(0, 11)], default=0
     )
     photo_match = models.IntegerField(
-        _("photo_match"),
-        choices=[(i, i) for i in range(1, 11)],
-        blank=True,
-        null=True,
+        _("photo_match"), choices=[(i, i) for i in range(0, 11)], default=0
     )
     description_match = models.IntegerField(
-        _("description_match"),
-        choices=[(i, i) for i in range(1, 11)],
-        blank=True,
-        null=True,
+        _("description_match"), choices=[(i, i) for i in range(0, 11)], default=0
     )
     _1 = models.IntegerField("number of reviews 1*", blank=True, null=True)
     _2 = models.IntegerField("number of reviews 2*", blank=True, null=True)
@@ -201,7 +186,7 @@ class Product(models.Model):  # type: ignore
         """
         Actualize rate for product.
         """
-        all_rates = self.ratings.all()
+        all_rates = self.reviews.all()
         global_rating: list = []
         stars: dict = {1: [], 2: [], 3: [], 4: [], 5: []}
         description_match: list = []
@@ -431,51 +416,41 @@ class Review(models.Model):
     date = models.DateTimeField(_("create"), auto_now_add=True)
     updated_at = models.DateTimeField(_("update"), auto_now=True)
 
-    def __str__(self):
-        return f"{self.date} - {self.product.name}"
+    rate_by_stars = models.IntegerField(
+        _("rate by stars"), choices=[(i, i) for i in range(0, 6)], default=0
+    )
+
+    quality = models.IntegerField(
+        _("quality rating"), choices=[(i, i) for i in range(0, 11)], default=0
+    )
+    price = models.IntegerField(_("price"), choices=[(i, i) for i in range(0, 11)], default=0)
+    photo_match = models.IntegerField(
+        _("foto quality rating"), choices=[(i, i) for i in range(0, 11)], default=0
+    )
+    description_match = models.IntegerField(
+        _("description match"), choices=[(i, i) for i in range(0, 11)], default=0
+    )
 
     def get_user_name(self):
         return self.author.get_full_name()
 
+    def rate_by_criteria(self) -> dict:
+        """rating by criteria. arithmetic mean of all comments by criteria.
 
-class Rating(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="ratings")
-    customer = models.ForeignKey(User, on_delete=models.CASCADE)
-    rate_by_stars = models.IntegerField(
-        _("rate by stars"),
-        choices=[(i, i) for i in range(0, 6)],
-        blank=True,
-        null=True,
-    )
+        return: {
+            quality: number
+            photo_match: number
+            description_match: number
+            price: number
+        }
+        """
 
-    quality = models.IntegerField(
-        _("quality rating"),
-        choices=[(i, i) for i in range(1, 11)],
-        blank=True,
-        null=True,
-    )
-    price = models.IntegerField(
-        _("price"),
-        choices=[(i, i) for i in range(1, 11)],
-        blank=True,
-        null=True,
-    )
-    photo_match = models.IntegerField(
-        _("foto quality rating"),
-        choices=[(i, i) for i in range(1, 11)],
-        blank=True,
-        null=True,
-    )
-    description_match = models.IntegerField(
-        _("description match"),
-        choices=[(i, i) for i in range(1, 11)],
-        blank=True,
-        null=True,
-    )
-
-    created_at = models.DateTimeField(_("create"), auto_now_add=True)
-    updated_at = models.DateTimeField(_("update"), auto_now=True)
+        return {
+            "quality": self.quality,
+            "photo_match": self.photo_match,
+            "description_match": self.description_match,
+            "price": self.price,
+        }
 
     def __str__(self):
         return f"{self.rate_by_stars} stars - {self.product.name}"
