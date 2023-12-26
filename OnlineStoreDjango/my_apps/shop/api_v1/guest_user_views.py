@@ -38,6 +38,7 @@ def version_uuid(uuid: str) -> bool:
         return False
 
 
+
 def products_filter_sort(request, queryset):
     """
      Filter and sort queryset.
@@ -184,8 +185,13 @@ class ListSearchGifts(APIView, StandardResultsSetPagination):  # type: ignore
             products3 = Product.objects.select_related("category").filter(
                 category__name__icontains=search_string
             )
-            products = products1 | products2 | products3 # get products according to search string
-            logger.info("ListSearchGifts - search_string:" + search_string + "; count: " + str(len(products)))
+            products = products1 | products2 | products3  # get products according to search string
+            logger.info(
+                "ListSearchGifts - search_string:"
+                + search_string
+                + "; count: "
+                + str(len(products))
+            )
         else:
             products = Product.objects.select_related("category").all()
 
@@ -196,6 +202,7 @@ class ListSearchGifts(APIView, StandardResultsSetPagination):  # type: ignore
         results = self.paginate_queryset(filtered_products, request, view=self)
         serializer = ProductCatalogSerializer(results, context={"request": request}, many=True)
         return self.get_paginated_response(serializer.data)
+
     # def get_queryset(self):
     #     logging.warning("sdfsvefsdvdfvdf")
     #     queryset = Product.objects.all()
@@ -208,6 +215,7 @@ class ListSearchGifts(APIView, StandardResultsSetPagination):  # type: ignore
     #         )  # get filtered and sorted products
     #     logging.warning(filtered_products)
     #     return filtered_products
+
 
 @extend_schema(tags=["Guest_user"])
 @extend_schema_view(
@@ -266,12 +274,8 @@ class ListRandomGifts(APIView):
         if category_id:
             products_queryset: QuerySet = Product.get_products_in_category(category_id)
         else:
-            products_queryset: QuerySet = Product.objects.select_related(
-                "category"
-            ).all()
-        products = list(
-            products_queryset.filter(price__gte=float(from_price), price__lte=to_price)
-        )
+            products_queryset: QuerySet = Product.objects.select_related("category").all()
+        products = list(products_queryset.filter(price__gte=float(from_price), price__lte=to_price))
         if len(products) < count:  # if count products less as existing, correct count
             count = len(products)
         # get random products from products list
@@ -347,9 +351,7 @@ class GetAllCategories(viewsets.ViewSet):
 
     def list(self, request):
         queryset = Category.get_main_categories()
-        serializer = CategorySerializer(
-            queryset, context={"request": request}, many=True
-        )
+        serializer = CategorySerializer(queryset, context={"request": request}, many=True)
         return Response(serializer.data)
 
 
@@ -432,7 +434,9 @@ class GetProduct(viewsets.ReadOnlyModelViewSet):
     serializer_class = ProductCardSerializer
     pagination_class = None
 
-    @extend_schema(tags=["Guest_user"],
+    @extend_schema(
+        tags=["Guest_user"],
+        responses={200: ProductCatalogSerializer},
         parameters=[
             OpenApiParameter(
                 name="product_id",
@@ -440,14 +444,14 @@ class GetProduct(viewsets.ReadOnlyModelViewSet):
                 description="product_id",
                 required=False,
                 type=str,
-            )]
-        )
+            )
+        ],
+    )
     def list(self, request):
         list_id = request.query_params.getlist("product_id")
         queryset = Product.objects.filter(pk__in=list_id)
         serializer = ProductCatalogSerializer(queryset, many=True)
         return Response(serializer.data)
-
 
 
 @extend_schema(
