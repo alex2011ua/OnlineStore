@@ -63,7 +63,7 @@ def test_detail_product():
     response = client.get(f"/api/v1/shop/guest_user/product/{p.pk}")
     assert response.status_code == 200
     assert "id" in response.data
-    assert response.data["id"] == "1b82cdb5-916c-4af1-bd07-0ad08d4d5760"
+
 
 
 

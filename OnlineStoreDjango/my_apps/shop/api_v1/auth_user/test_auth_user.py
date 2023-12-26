@@ -3,6 +3,7 @@ import sys
 
 import pytest
 from django.shortcuts import redirect
+from django.urls import reverse
 from rest_framework.test import APIRequestFactory, force_authenticate
 
 from my_apps.accounts.models import User
@@ -27,18 +28,18 @@ def test_basket_endpoints(initalized_task_db):
     user = User.objects.get(email="auth_user@gmail.com")
     view = Basket.as_view()
 
-    request = factory.get(redirect("auth_user_basket"))
+    request = factory.get(reverse("auth_user_basket"))
     force_authenticate(request, user=user)
     response = view(request)
     assert response.data == []
 
     p = Product.objects.all()[0]
-    request = factory.post(redirect("auth_user_basket"), {"product_id": p.id, "amount": 2})
+    request = factory.post(reverse("auth_user_basket"), {"product_id": p.id, "amount": 2})
     force_authenticate(request, user=user)
     response = view(request)
     assert response.status_code == 200
 
-    request = factory.get(redirect("auth_user_basket"))
+    request = factory.get(reverse("auth_user_basket"))
     force_authenticate(request, user=user)
     response = view(request)
     assert response.data != []
@@ -58,7 +59,7 @@ class TestReviewProduct:
         factory = APIRequestFactory()
         product = initalized_task_db_review["product"]
         user = initalized_task_db_review["user"]
-        request_get_reviews = factory.get(redirect("get_product_comments", prod_pk=product.id))
+        request_get_reviews = factory.get(reverse("get_product_comments", kwargs={"prod_pk": product.id}))
         view_get_comment = Comments.as_view({"get": "list"})
         response = view_get_comment(request_get_reviews, prod_pk=product.id)
 
@@ -77,7 +78,7 @@ class TestReviewProduct:
         assert count_prod == 0
         user = initalized_task_db_review["user"]
         request_add_review = factory.post(
-            redirect("auth_comments", pk=product.id),
+            reverse("auth_comments", kwargs={"pk": product.id}),
             {"title": "string", "text": "string"},
         )
         # add new comment

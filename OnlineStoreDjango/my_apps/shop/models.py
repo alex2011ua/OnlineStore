@@ -214,23 +214,23 @@ class Product(models.Model):  # type: ignore
         if global_rating:
             self.global_rating = round(mean(global_rating))
         else:
-            self.global_rating = None
+            self.global_rating = 0
         if description_match:
             self.description_match = round(mean(description_match))
         else:
-            self.description_match = None
+            self.description_match = 0
         if photo_match:
             self.photo_match = round(mean(photo_match))
         else:
-            self.photo_match = None
+            self.photo_match = 0
         if rating_price:
             self.rating_price = round(mean(rating_price))
         else:
-            self.rating_price = None
+            self.rating_price = 0
         if quality:
             self.quality = round(mean(quality))
         else:
-            self.quality = None
+            self.quality = 0
 
         self.save()
 

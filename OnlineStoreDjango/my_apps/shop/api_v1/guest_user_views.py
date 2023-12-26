@@ -425,11 +425,28 @@ class GetProductsByCategory(viewsets.ViewSet, StandardResultsSetPagination):  # 
 
 
 @extend_schema(tags=["Guest_user"])
-class GetProduct(generics.RetrieveAPIView):
-    """Get one product by ID."""
+class GetProduct(viewsets.ReadOnlyModelViewSet):
+    """Get product by ID."""
 
     queryset = Product.objects.all()
     serializer_class = ProductCardSerializer
+    pagination_class = None
+
+    @extend_schema(tags=["Guest_user"],
+        parameters=[
+            OpenApiParameter(
+                name="product_id",
+                location=OpenApiParameter.QUERY,
+                description="product_id",
+                required=False,
+                type=str,
+            )]
+        )
+    def list(self, request):
+        list_id = request.query_params.getlist("product_id")
+        queryset = Product.objects.filter(pk__in=list_id)
+        serializer = ProductCatalogSerializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 

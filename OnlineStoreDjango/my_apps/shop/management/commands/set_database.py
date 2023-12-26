@@ -210,7 +210,6 @@ class Command(BaseCommand):
             },
         )
 
-
     def get_category_by_name(self, name):
         for cat in self.subcat_dict.values():
             for sub_cat in cat:
@@ -240,6 +239,7 @@ class Command(BaseCommand):
                 type_product_en = row[14]
                 description = row[8]
                 description_en = row[15]
+
                 try:
                     category = self.get_category_by_name(category_str)
                     price = float(row[5].replace(" ", ""))
@@ -247,6 +247,9 @@ class Command(BaseCommand):
                     sold = int(row[10]) if row[10].isdigit() else 0
                     global_rating = int(row[11]) if row[11].isdigit() else None
                     discount = int(row[12]) if row[12].isdigit() else 0
+                    image1 = "foto/products/" + row[16] if row[16] else None
+                    image2 = "foto/products/" + row[17] if row[17] else None
+                    image3 = "foto/products/" + row[18] if row[18] else None
 
                     product, created = Product.objects.update_or_create(
                         slug=slug,
@@ -258,6 +261,10 @@ class Command(BaseCommand):
                             "description": description,
                             "description_en": description_en,
                             "img": image,
+                            "img1": image1,
+                            "img2": image2,
+                            "img3": image3,
+
                             "type": type_product,
                             "type_en": type_product_en,
                             "quantity": quantity,
