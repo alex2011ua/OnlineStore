@@ -450,7 +450,7 @@ class GetProduct(viewsets.ReadOnlyModelViewSet):
     def list(self, request):
         list_id = request.query_params.getlist("product_id")
         queryset = Product.objects.filter(pk__in=list_id)
-        serializer = ProductCatalogSerializer(queryset, many=True)
+        serializer = ProductCatalogSerializer(queryset, many=True, context={"request": request})
         return Response(serializer.data)
 
 
