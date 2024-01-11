@@ -71,7 +71,7 @@ class ProductCardSerializer(serializers.ModelSerializer):
         ]
 
     def get_reviews(self, obj):
-        serializer = ReviewSerializer(obj.get_rewievs(), context=self.context, many=True)
+        serializer = ReviewSerializer(obj.get_reviews(), context=self.context, many=True)
         return serializer.data
 
     #

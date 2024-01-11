@@ -1,6 +1,4 @@
-import json
 import uuid
-from statistics import mean
 
 from django.db import models
 from django.db.models import Q, QuerySet
@@ -179,67 +177,11 @@ class Product(models.Model):  # type: ignore
     def get_category_name(self):
         return self.category.name
 
-    def get_rewievs(self):
+    def get_reviews(self):
         return self.reviews.select_related("customer").all()
 
-    def refresh_rating(self) -> None:
-        """
-        Actualize rate for product.
-        """
-        all_rates = self.reviews.all()
-        global_rating: list = []
-        stars: dict = {1: [], 2: [], 3: [], 4: [], 5: []}
-        description_match: list = []
-        photo_match: list = []
-        rating_price: list = []
-        quality: list = []
-        for i in all_rates:
-            if i.rate_by_stars:
-                global_rating.append(i.rate_by_stars)
-                stars[i.rate_by_stars].append(1)
-            if i.description_match:
-                description_match.append(i.description_match)
-            if i.price:
-                rating_price.append(i.price)
-            if i.quality:
-                quality.append(i.quality)
-            if i.photo_match:
-                photo_match.append(i.photo_match)
-        self._1 = len(stars[1]) if stars[1] else None
-        self._2 = len(stars[2]) if stars[2] else None
-        self._3 = len(stars[3]) if stars[3] else None
-        self._4 = len(stars[4]) if stars[4] else None
-        self._5 = len(stars[5]) if stars[5] else None
 
-        if global_rating:
-            self.global_rating = round(mean(global_rating))
-        else:
-            self.global_rating = 0
-        if description_match:
-            self.description_match = round(mean(description_match))
-        else:
-            self.description_match = 0
-        if photo_match:
-            self.photo_match = round(mean(photo_match))
-        else:
-            self.photo_match = 0
-        if rating_price:
-            self.rating_price = round(mean(rating_price))
-        else:
-            self.rating_price = 0
-        if quality:
-            self.quality = round(mean(quality))
-        else:
-            self.quality = 0
 
-        self.save()
-
-    def get_faq_list(self) -> list:
-        faq: list = []
-        qwer: QuerySet = self.faq.all()
-        for item in qwer:
-            faq.append({item.question: item.answer})
-        return faq
 
     def images(self):
         img = [str(self.img)]
@@ -455,14 +397,6 @@ class Review(models.Model):
     def __str__(self):
         return f"{self.rate_by_stars} stars - {self.product.name}"
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        self.product.refresh_rating()
-
-    def delete(self, *args, **kwargs):
-        super().delete(*args, **kwargs)
-        self.product.refresh_rating()
-
 
 class Banner(models.Model):  # type: ignore
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -504,3 +438,5 @@ class Faq(models.Model):  # type: ignore
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="faq")
     question = models.CharField(_("question"), max_length=200)
     answer = models.TextField(_("answer"))
+
+

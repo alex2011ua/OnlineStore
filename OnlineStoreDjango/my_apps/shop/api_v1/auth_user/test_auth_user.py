@@ -8,7 +8,7 @@ from rest_framework.test import APIRequestFactory, force_authenticate
 
 from my_apps.accounts.models import User
 from my_apps.shop.api_v1.auth_user.auth_user_views import AuthComments
-from my_apps.shop.api_v1.guest_user_views import Comments
+from my_apps.shop.api_v1.guest_user.guest_user_views import Comments
 from my_apps.shop.models import Category, Product
 
 from .auth_user_views import Basket

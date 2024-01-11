@@ -18,8 +18,8 @@ from rest_framework.views import APIView
 
 from my_apps.shop.models import Banner, Category, Order, OrderItem, Product, Settings
 
-from .paginators import StandardResultsSetPagination
-from .serializers import (
+from ..paginators import StandardResultsSetPagination
+from ..serializers import (
     BannerSerializer,
     CategorySerializer,
     ProductCardSerializer,
@@ -202,19 +202,6 @@ class ListSearchGifts(APIView, StandardResultsSetPagination):  # type: ignore
         results = self.paginate_queryset(filtered_products, request, view=self)
         serializer = ProductCatalogSerializer(results, context={"request": request}, many=True)
         return self.get_paginated_response(serializer.data)
-
-    # def get_queryset(self):
-    #     logging.warning("sdfsvefsdvdfvdf")
-    #     queryset = Product.objects.all()
-    #     search_string: None | str = self.request.query_params.get("search", None)
-    #     if search_string:
-    #         search_vector = SearchVector("slug", "name", "category__name")
-    #         queryset = queryset.annotate(search=search_vector).filter(search=search_string)
-    #     filtered_products = products_filter_sort(
-    #             self.request, queryset
-    #         )  # get filtered and sorted products
-    #     logging.warning(filtered_products)
-    #     return filtered_products
 
 
 @extend_schema(tags=["Guest_user"])

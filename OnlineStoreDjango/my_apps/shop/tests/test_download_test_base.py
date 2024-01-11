@@ -56,15 +56,3 @@ def test_link_category():
 
     testing_sub_categories(response.data)
 
-
-@pytest.mark.django_db
-def test_detail_product():
-    p = Product.objects.all()[0]
-    response = client.get(f"/api/v1/shop/guest_user/product/{p.pk}")
-    assert response.status_code == 200
-    assert "id" in response.data
-
-
-
-
-

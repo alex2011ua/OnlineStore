@@ -3,6 +3,8 @@ import pytest
 from my_apps.shop.models import Product, Category
 from django.urls import reverse
 from rest_framework.test import APIClient
+
+
 class TestProduct:
     @pytest.fixture()
     def initialize_task_db(self):
@@ -21,3 +23,11 @@ class TestProduct:
         response = client.get(url)
         assert response.status_code == 200
         assert response.data["id"] == str(product.id)
+
+    @pytest.mark.django_db
+    def test_detail_product(self, initialize_task_db):
+        client = APIClient()
+        p = Product.objects.all()[0]
+        response = client.get(f"/api/v1/shop/guest_user/product/{p.pk}/")
+        assert response.status_code == 200
+        assert "id" in response.data
