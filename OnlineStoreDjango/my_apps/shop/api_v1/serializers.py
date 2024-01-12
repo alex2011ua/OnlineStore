@@ -101,13 +101,7 @@ class OrderSerializer(serializers.HyperlinkedModelSerializer):
 class CreateReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
-        fields = ["text", "date"]
-
-    def save(self, owner, product):
-        text = self.validated_data["text"]
-        rewiev = Review(text=text, author=owner, product=product)
-        rewiev.save()
-        return rewiev
+        fields = ["text", "rate_by_stars", "quality", "description_match", "photo_match", "price"]
 
 
 class ReviewSerializer(serializers.ModelSerializer):

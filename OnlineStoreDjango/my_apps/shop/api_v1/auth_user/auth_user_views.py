@@ -182,17 +182,6 @@ class AuthComments(APIView):
         product = Product.get_by_id(pk)
         data = request.data.copy()
         serializer = CreateReviewSerializer(data=data)
-        if serializer.is_valid(raise_exception=True):
-            comment = serializer.save(owner=request.user, product=product)
-            return Response(comment.id)
-
-    #
-    # def create(self, request, *args, **kwargs):
-    #     request.data["customer"] = self.request.user
-    #     serializer = self.get_serializer(data=request.data)
-    #     serializer.is_valid(raise_exception=True)
-    #     self.perform_create(serializer)
-    #     headers = self.get_success_headers(serializer.data)
-    #     return Response(
-    #         serializer.data, status=status.HTTP_201_CREATED, headers=headers
-    #     )
+        serializer.is_valid(raise_exception=True)
+        comment = Review.objects.create(author=request.user, product=product, **serializer.validated_data)
+        return Response(comment.id)

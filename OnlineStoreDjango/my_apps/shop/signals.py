@@ -1,16 +1,16 @@
 from django.dispatch import receiver
-from django.db import models
+from django.db.models.signals import pre_save, post_save, pre_init, post_delete
 from statistics import mean
 
 from my_apps.shop.models import Review
 
 
-@receiver(models.signals.post_delete, sender=Review)
-@receiver(models.signals.post_save, sender=Review)
+@receiver([post_save, post_delete], sender=Review)
 def refresh_rating(sender, instance, **kwargs) -> None:
     """
     Actualize rate for product.
     """
+
     product = instance.product
     all_rates = product.reviews.all()
     global_rating: list = []
@@ -19,7 +19,7 @@ def refresh_rating(sender, instance, **kwargs) -> None:
     photo_match: list = []
     rating_price: list = []
     quality: list = []
-    for i in all_rates:
+    for i in all_rates:  # todo make more clarify
         if i.rate_by_stars:
             global_rating.append(i.rate_by_stars)
             stars[i.rate_by_stars].append(1)
