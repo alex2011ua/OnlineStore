@@ -5,6 +5,8 @@ from django.db.models import Q, QuerySet
 from django.utils.translation import gettext_lazy as _
 from rest_framework.exceptions import NotFound, ValidationError
 
+from phonenumber_field.modelfields import PhoneNumberField
+
 from my_apps.accounts.models import User
 
 
@@ -180,9 +182,6 @@ class Product(models.Model):  # type: ignore
     def get_reviews(self):
         return self.reviews.select_related("customer").all()
 
-
-
-
     def images(self):
         img = [str(self.img)]
         if self.img1:
@@ -245,108 +244,9 @@ class Product(models.Model):  # type: ignore
 
 class BasketItem(models.Model):
     registered_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="basket")
-    product = models.ForeignKey(
-        Product, on_delete=models.CASCADE, related_name="prod_in_basket", unique=True
-    )
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="prod_in_basket")
     quantity = models.PositiveIntegerField(_("quantity product"), default=0)
 
-
-class Order(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    new_order = 1
-    ready = 2
-    on_its_way = 3
-    delivered = 4
-
-    STATUS_CHOICES = (
-        (new_order, "new order"),
-        (ready, "ready"),
-        (on_its_way, "on its way"),
-        (delivered, "delivered"),
-    )
-    status = models.SmallIntegerField(choices=STATUS_CHOICES, default=1)
-
-    customer = models.ForeignKey(
-        User, related_name="customer", on_delete=models.CASCADE, blank=True, null=True
-    )
-    manager = models.ForeignKey(
-        User, related_name="manager", on_delete=models.CASCADE, blank=True, null=True
-    )
-    products = models.ManyToManyField(Product, through="OrderItem")  # type: ignore
-    order_date = models.DateTimeField(_("create order"), auto_now_add=True)
-    updated_at = models.DateTimeField(_("update order"), auto_now=True)
-    total_amount = models.DecimalField(
-        _("total amount order"),
-        max_digits=10,
-        decimal_places=2,
-        blank=True,
-        null=True,
-        default=0,
-    )
-
-    @classmethod
-    def get_by_id(cls, pk: str):
-        try:
-            order = cls.objects.get(id=pk)
-        except Order.DoesNotExist:
-            raise NotFound(detail="order not found")
-        return order
-
-    def add_product_to_order(self, product: Product, amount):
-        products_in_order = self.products.all()
-        if product in products_in_order:
-            oi = OrderItem.objects.get(product=product, order=self)
-            oi.quantity = amount
-            oi.save()
-        else:
-            self.products.add(product, through_defaults={"quantity": amount})  # type: ignore
-
-    def get_products_order(self):
-        oi = OrderItem.objects.filter(order=self)
-        product_list_in_order = []
-        for prod in oi:
-            product_list_in_order.append({"prodID": prod.product.id, "quantity": prod.quantity})
-        return product_list_in_order
-
-    def delete_product_order(self, product: Product):
-        products_in_order = self.products.all()
-        if product in products_in_order:
-            self.products.remove(product)
-
-    @staticmethod
-    def get_current_order_id(user):
-        order, _ = Order.objects.get_or_create(customer=user, status=Order.new_order)
-        return order
-
-    def __str__(self):
-        return f"Order #{self.pk} by {self.customer}"
-
-    class Meta:
-        ordering = ["-order_date"]
-
-
-class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(_("quantity product"), default=0)
-
-    def save(self, *args, **kwargs):
-        """modify total_amount in order (add to order)"""
-
-        self.order.total_amount += self.product.price * self.quantity
-        self.order.save()
-        # call the save() method of the parent
-        super().save(*args, **kwargs)
-
-    def delete(self, *args, **kwargs):
-        """modify total_amount in order (minus from order)"""
-        self.order.total_amount -= self.product.price * self.quantity
-        self.order.save()
-        # call the save() method of the parent
-        super().delete(*args, **kwargs)
-
-    def __str__(self):
-        return f"{self.quantity} x {self.product.name} in Order #{self.order.pk}"
 
 
 class Review(models.Model):
@@ -439,4 +339,148 @@ class Faq(models.Model):  # type: ignore
     question = models.CharField(_("question"), max_length=200)
     answer = models.TextField(_("answer"))
 
+
+class Order(models.Model):
+    id = models.AutoField(primary_key=True, editable=False)
+
+    STATUS_CHOICES = (
+        ("new_order", "new order"),
+        ("ready", "ready"),
+        ("on_its_way", "on its way"),
+        ("delivered", "delivered"),
+    )
+    DELIVERY_TYPE = [
+        ("self", "self"),
+        ("nova", "nova"),
+        ("ukr", "ukr"),
+    ]
+    DELIVERY_OPTION = [
+        ("courier", "courier"),
+        ("post_office", "post_office"),
+    ]
+    status = models.CharField(choices=STATUS_CHOICES, default="NEW_ORDER", max_length=11)
+
+    customer = models.ForeignKey(
+        User, related_name="customer", on_delete=models.CASCADE, blank=True, null=True
+    )
+    manager = models.ForeignKey(
+        User, related_name="manager", on_delete=models.CASCADE, blank=True, null=True
+    )
+    products = models.ManyToManyField(Product, through="OrderItem")  # type: ignore
+    order_date = models.DateTimeField(_("create order"), auto_now_add=True)
+    updated_at = models.DateTimeField(_("update order"), auto_now=True)
+    total_amount = models.DecimalField(
+        _("total amount order"),
+        max_digits=10,
+        decimal_places=2,
+        blank=True,
+        null=True,
+        default=0,
+    )
+    first_name = models.CharField(_("first name"), max_length=50, blank=True, null=True)
+    last_name = models.CharField(_("last name"), max_length=50, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True, max_length=254)
+    tel = PhoneNumberField(null=True, blank=True)
+    delivery_type = models.CharField(
+        choices=DELIVERY_TYPE, max_length=5, default="SELF"
+    )  # вид доставки (самовивіз, через нову або укр пошту)
+    delivery_option = models.CharField(
+        choices=DELIVERY_OPTION, max_length=12, blank=True, null=True
+    )  # якщо обрана пошту як вид, то кур'єром чи на відділення
+    town = models.CharField(max_length=50, blank=True, null=True)  # місто (якщо вказаний вид пошта)
+    address = models.CharField(
+        max_length=150, blank=True, null=True
+    )  # вулиця (якщо вказаний вид пошта + кур'єр)
+    building = models.CharField(
+        max_length=50, blank=True, null=True
+    )  # номер дому (якщо вказаний вид пошта + кур'єр)
+    flat = models.CharField(
+        max_length=50, blank=True, null=True
+    )  # номер квартири (якщо вказаний вид пошта + кур'єр)
+    post_office = models.CharField(
+        max_length=50, blank=True, null=True
+    )  # відділення (якщо вказаний вид пошта + відділення)
+    comment = models.TextField(blank=True, null=True)  # текст коментаря (якщо is_comment: true)
+    is_not_recall = models.BooleanField(default=False)  # флаг не треба телефонувати
+    is_another_person = models.BooleanField(default=False)  # флаг отримувач інша людина
+    is_gift = models.BooleanField(default=False)  # флаг святкова упаковка
+    is_comment = models.BooleanField(default=False)  # флаг чи є коментар
+
+    another_person_tel = PhoneNumberField(null=True, blank=True)
+    another_person_firstName = models.CharField(
+        _("another person first name"), max_length=50, blank=True, null=True
+    )
+    another_person_lastName = models.CharField(
+        _("another person last name"), max_length=50, blank=True, null=True
+    )
+    """
+        another_person?: { // дані отримувача інша людина (якщо is_another_person:true)
+        tel: string;
+        firstName: string;
+        lastName: string;
+    """
+
+    @classmethod
+    def get_by_id(cls, pk: str):
+        try:
+            order = cls.objects.get(id=pk)
+        except Order.DoesNotExist:
+            raise NotFound(detail="order not found")
+        return order
+
+    def add_product_to_order(self, product: Product, amount):
+        products_in_order = self.products.all()
+        if product in products_in_order:
+            oi = OrderItem.objects.get(product=product, order=self)
+            oi.quantity = amount
+            oi.save()
+        else:
+            self.products.add(product, through_defaults={"quantity": amount})  # type: ignore
+
+    def get_products_order(self):
+        oi = OrderItem.objects.filter(order=self)
+        product_list_in_order = []
+        for prod in oi:
+            product_list_in_order.append({"prodID": prod.product.id, "quantity": prod.quantity})
+        return product_list_in_order
+
+    def delete_product_order(self, product: Product):
+        products_in_order = self.products.all()
+        if product in products_in_order:
+            self.products.remove(product)
+
+    @staticmethod
+    def get_current_order_id(user):
+        order, _ = Order.objects.get_or_create(customer=user, status=Order.new_order)
+        return order
+
+    def __str__(self):
+        return f"Order #{self.pk} by {self.customer}"
+
+    class Meta:
+        ordering = ["-order_date"]
+
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(_("quantity product"), default=0)
+
+    def save(self, *args, **kwargs):
+        """modify total_amount in order (add to order)"""
+
+        self.order.total_amount += self.product.price * self.quantity
+        self.order.save()
+        # call the save() method of the parent
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        """modify total_amount in order (minus from order)"""
+        self.order.total_amount -= self.product.price * self.quantity
+        self.order.save()
+        # call the save() method of the parent
+        super().delete(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.quantity} x {self.product.name} in Order #{self.order.pk}"
 

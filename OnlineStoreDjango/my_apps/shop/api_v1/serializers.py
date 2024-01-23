@@ -5,7 +5,7 @@ from django.utils.translation import get_language
 from rest_framework import serializers
 from rest_framework.utils.serializer_helpers import ReturnDict
 
-from my_apps.shop.models import Banner, BasketItem, Category, Faq, Order, Product, Review
+from my_apps.shop.models import Banner, BasketItem, Category, Faq, Product, Review
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -89,13 +89,6 @@ class ProductCardSerializer(serializers.ModelSerializer):
             list_link.append(domain + image)
         return list_link
 
-
-class OrderSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Order
-        fields = ["id", "customer", "manager", "status", "order_date", "total_amount"]
-
-    status = serializers.CharField(source="get_status_display")
 
 
 class CreateReviewSerializer(serializers.ModelSerializer):

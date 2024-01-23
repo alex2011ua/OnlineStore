@@ -3,11 +3,10 @@ from rest_framework import permissions, status, viewsets
 from rest_framework.mixins import DestroyModelMixin
 from rest_framework.response import Response
 
-from my_apps.shop.models import Category, Order, Product, Review
+from my_apps.shop.models import Category, Product, Review
 
 from .serializers import (
     CategorySerializer,
-    OrderSerializer,
     ProductCatalogSerializer,
     ReviewSerializer,
 )
@@ -31,17 +30,6 @@ class CategoryViewSet(viewsets.ModelViewSet, MyDestroyModelMixin):
 
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = [permissions.AllowAny]
-
-
-@extend_schema(exclude=True)
-class OrderViewSet(viewsets.ModelViewSet, MyDestroyModelMixin):
-    """
-    .
-    """
-
-    queryset = Order.objects.all()
-    serializer_class = OrderSerializer
     permission_classes = [permissions.AllowAny]
 
 

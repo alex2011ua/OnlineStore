@@ -27,7 +27,7 @@ from my_apps.shop.api_v1.serializers import (
     CreateReviewSerializer,
     ReviewSerializer,
 )
-from my_apps.shop.models import BasketItem, Order, OrderItem, Product, Review
+from my_apps.shop.models import BasketItem, Product, Review
 
 
 @extend_schema(tags=["Auth_user"])

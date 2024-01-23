@@ -15,9 +15,9 @@ from rest_framework import generics, mixins, status, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework import serializers
 
-from my_apps.shop.models import Banner, Category, Order, OrderItem, Product, Settings
-
+from my_apps.shop.models import Banner, Category, Product, Settings, Order, OrderItem
 from ..paginators import StandardResultsSetPagination
 from ..serializers import (
     BannerSerializer,
@@ -26,6 +26,8 @@ from ..serializers import (
     ProductCatalogSerializer,
     ReviewSerializer,
 )
+from ...servises import order_create
+from ...utils import inline_serializer
 
 logger = logging.getLogger("main")
 
@@ -503,3 +505,53 @@ def store_info(request):
             privacy_policy.to_dict(),
         ]
     )
+
+from phonenumber_field.modelfields import PhoneNumberField
+class OrderGuestUserCreate(APIView):
+    class InputItemsSerializer(serializers.ModelSerializer):
+        class Meta:
+            fields = "__all__"
+            model = OrderItem
+
+    class InputSerializer(serializers.Serializer):
+        is_another_person = serializers.BooleanField(default=False)
+        firstName = serializers.CharField(max_length=50)
+        lastName = serializers.CharField(max_length=50)
+        email = serializers.EmailField()
+        tel = serializers.CharField(max_length=50)
+
+        delivery_type = serializers.ChoiceField(choices=Order.DELIVERY_TYPE)
+        delivery_option = serializers.ChoiceField(choices=Order.DELIVERY_OPTION, allow_blank=True, required=False)
+        town= serializers.CharField(max_length=150, allow_blank=True, required=False)
+        address= serializers.CharField(max_length=250, allow_blank=True, required=False)
+        building= serializers.CharField(max_length=50, allow_blank=True, required=False)
+        flat= serializers.CharField(max_length=50, allow_blank=True, required=False)
+        post_office= serializers.CharField(max_length=250, allow_blank=True, required=False)
+        comment = serializers.CharField(max_length=350, allow_blank=True, required=False)
+        is_not_recall = serializers.BooleanField(required=False)
+
+        is_gift = serializers.BooleanField(required=False)
+        is_comment = serializers.BooleanField()
+        another_person = inline_serializer(name = "another_person", required=False, fields={
+            "tel": serializers.CharField(max_length=50, required=False),
+            "firstName": serializers.CharField(max_length=50, required=False),
+            "lastName": serializers.CharField(max_length=50, required=False),
+        })
+        items = inline_serializer(name="items", many=True, fields={
+            "quantity": serializers.IntegerField(),
+            "product": serializers.UUIDField(),
+        })
+
+
+
+    @extend_schema(
+        tags=["Guest_user"],
+        request=InputSerializer,
+    )
+    def post(self, request):
+        serializer = self.InputSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        print(serializer.validated_data)
+        order_create(**serializer.validated_data)
+
+        return Response(status=status.HTTP_201_CREATED)

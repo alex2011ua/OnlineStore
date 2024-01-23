@@ -110,3 +110,7 @@ class SettingsAdmin(admin.ModelAdmin):
 @admin.register(Faq)
 class FaqAdmin(admin.ModelAdmin):
     list_display = ("id", "question", "answer")
+
+
+admin.site.register(Order)
+admin.site.register(OrderItem)
