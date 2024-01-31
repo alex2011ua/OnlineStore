@@ -1,8 +1,8 @@
-from django.contrib.postgres.search import SearchVector
 import logging
 from random import sample
 from uuid import UUID
 
+from django.contrib.postgres.search import SearchVector
 from django.core.mail import send_mail
 from django.db.models import QuerySet
 from drf_spectacular.utils import (
@@ -11,13 +11,14 @@ from drf_spectacular.utils import (
     extend_schema,
     extend_schema_view,
 )
-from rest_framework import generics, mixins, status, viewsets
+from phonenumber_field.serializerfields import PhoneNumberField
+from rest_framework import generics, mixins, serializers, status, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import serializers
 
-from my_apps.shop.models import Banner, Category, Product, Settings, Order, OrderItem
+from my_apps.shop.models import Banner, Category, Order, OrderItem, Product, Settings
+
 from ..paginators import StandardResultsSetPagination
 from ..serializers import (
     BannerSerializer,
@@ -38,7 +39,6 @@ def version_uuid(uuid: str) -> bool:
         return UUID(uuid).version == 4
     except ValueError:
         return False
-
 
 
 def products_filter_sort(request, queryset):
@@ -506,52 +506,84 @@ def store_info(request):
         ]
     )
 
-from phonenumber_field.modelfields import PhoneNumberField
+
 class OrderGuestUserCreate(APIView):
     class InputItemsSerializer(serializers.ModelSerializer):
         class Meta:
             fields = "__all__"
             model = OrderItem
 
-    class InputSerializer(serializers.Serializer):
-        is_another_person = serializers.BooleanField(default=False)
+    class OutputOrderGuestUserSerializer(serializers.ModelSerializer):
+        class Meta:
+            fields = "__all__"
+            model = Order
+
+    class InputOrderGuestUserSerializer(serializers.Serializer):
+        # Rrequired
         firstName = serializers.CharField(max_length=50)
         lastName = serializers.CharField(max_length=50)
         email = serializers.EmailField()
-        tel = serializers.CharField(max_length=50)
-
+        tel = PhoneNumberField(region="UA")
         delivery_type = serializers.ChoiceField(choices=Order.DELIVERY_TYPE)
-        delivery_option = serializers.ChoiceField(choices=Order.DELIVERY_OPTION, allow_blank=True, required=False)
-        town= serializers.CharField(max_length=150, allow_blank=True, required=False)
-        address= serializers.CharField(max_length=250, allow_blank=True, required=False)
-        building= serializers.CharField(max_length=50, allow_blank=True, required=False)
-        flat= serializers.CharField(max_length=50, allow_blank=True, required=False)
-        post_office= serializers.CharField(max_length=250, allow_blank=True, required=False)
+        # Optional
+        delivery_option = serializers.ChoiceField(
+            choices=Order.DELIVERY_OPTION, allow_blank=True, required=False
+        )
+        town = serializers.CharField(max_length=150, allow_blank=True, required=False)
+        address = serializers.CharField(max_length=250, allow_blank=True, required=False)
+        building = serializers.CharField(max_length=50, allow_blank=True, required=False)
+        flat = serializers.CharField(max_length=50, allow_blank=True, required=False)
+        post_office = serializers.CharField(max_length=250, allow_blank=True, required=False)
+
         comment = serializers.CharField(max_length=350, allow_blank=True, required=False)
-        is_not_recall = serializers.BooleanField(required=False)
 
-        is_gift = serializers.BooleanField(required=False)
-        is_comment = serializers.BooleanField()
-        another_person = inline_serializer(name = "another_person", required=False, fields={
-            "tel": serializers.CharField(max_length=50, required=False),
-            "firstName": serializers.CharField(max_length=50, required=False),
-            "lastName": serializers.CharField(max_length=50, required=False),
-        })
-        items = inline_serializer(name="items", many=True, fields={
-            "quantity": serializers.IntegerField(),
-            "product": serializers.UUIDField(),
-        })
+        is_comment = serializers.BooleanField(required=False)
+        is_another_person = serializers.BooleanField(required=False)
+        another_person = inline_serializer(
+            name="another_person",
+            required=False,
+            fields={
+                "tel": PhoneNumberField(region="UA", required=False),
+                "firstName": serializers.CharField(max_length=50, required=False),
+                "lastName": serializers.CharField(max_length=50, required=False),
+            },
+        )
+        items = inline_serializer(
+            name="items",
+            many=True,
+            fields={
+                "quantity": serializers.IntegerField(),
+                "product": serializers.UUIDField(),
+            },
+        )
 
-
+        def validate(self, attrs):
+            if attrs.get("is_another_person"):
+                if attrs.get("another_person") is None:
+                    raise serializers.ValidationError("lastName: This field is required.")
+            if attrs.get("delivery_type") != "self":
+                if attrs.get("delivery_option") == "post_office":
+                    if attrs.get("post_office") is None:
+                        raise serializers.ValidationError("post_office: This field is required.")
+                elif attrs.get("delivery_option") == "courier":
+                    if attrs.get("address") is None:
+                        raise serializers.ValidationError("address: This field is required.")
+            if attrs.get("is_comment"):
+                if attrs.get("comment") is None:
+                    raise serializers.ValidationError("comment: This field is required.")
+            return attrs
 
     @extend_schema(
         tags=["Guest_user"],
-        request=InputSerializer,
+        request=InputOrderGuestUserSerializer,
+        responses={
+            201: OutputOrderGuestUserSerializer,
+            404: OpenApiResponse(description="detail"),
+        },
     )
     def post(self, request):
-        serializer = self.InputSerializer(data=request.data)
+        serializer = self.InputOrderGuestUserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        print(serializer.validated_data)
-        order_create(**serializer.validated_data)
-
-        return Response(status=status.HTTP_201_CREATED)
+        order = order_create(**serializer.validated_data)
+        output_serializer = self.OutputOrderGuestUserSerializer(order)
+        return Response(status=status.HTTP_201_CREATED, data=output_serializer.data)

@@ -358,7 +358,7 @@ class Order(models.Model):
         ("courier", "courier"),
         ("post_office", "post_office"),
     ]
-    status = models.CharField(choices=STATUS_CHOICES, default="NEW_ORDER", max_length=11)
+    status = models.CharField(choices=STATUS_CHOICES, default="new_order", max_length=11)
 
     customer = models.ForeignKey(
         User, related_name="customer", on_delete=models.CASCADE, blank=True, null=True

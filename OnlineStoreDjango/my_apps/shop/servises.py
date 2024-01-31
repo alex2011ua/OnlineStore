@@ -1,51 +1,26 @@
-from my_apps.shop.models import Order, OrderItem
+from my_apps.shop.models import Order, OrderItem, Product
 
 
 def order_create(*args, **kwargs) -> Order:
-    print(kwargs)
     items = kwargs.pop("items")
-    is_another_person = kwargs["is_another_person"]
-    if is_another_person:
-        another_person = kwargs["another_person"]
-    first_name = kwargs["firstName"]
-    last_name = kwargs["lastName"]
-    email = kwargs["email"]
-    tel = kwargs["tel"]
-    delivery_type = kwargs["delivery_type"]
-    deliveries = {}
-    if delivery_type != "self":
-        deliveries = {
-            "delivery_option": kwargs["delivery_option"],
-            "town": kwargs["town"],
-            "building": kwargs["building"],
-            "flat": kwargs["flat"],
-            "post_office": kwargs["post_office"],
-        }
+    another_person = {"another_person_tel": None}
+    if kwargs.get("is_another_person", False):
+        a_p = kwargs.pop("another_person")
+        another_person["another_person_firstName"] = a_p.get("firstName")
+        another_person["another_person_lastName"] = a_p.get("lastName")
+        another_person["another_person_tel"] = a_p.get("tel")
 
-        delivery_option = kwargs["delivery_option"]
-        town = kwargs["town"]
-        building = kwargs["building"]
-        flat = kwargs["flat"]
-        post_office = kwargs["post_office"]
-    is_comment = kwargs["is_comment"]
-    if is_comment:
-        comment = kwargs["comment"]
-    is_not_recall = kwargs["is_not_recall"]
-    is_gift = kwargs["is_gift"]
+    first_name = kwargs.pop("firstName")
+    last_name = kwargs.pop("lastName")
 
-    obj = Order(
-        first_name=first_name,
-        last_name=last_name,
-        email=email,
-        tel=tel,
-        delivery_type=delivery_type,
-        is_not_recall=is_not_recall,
-        is_gift=is_gift,
-        is_comment=is_comment,
-        **deliveries,
-    )
+    obj = Order(first_name=first_name, last_name=last_name, **kwargs, **another_person)
 
     obj.full_clean()
     obj.save()
+
+    for item in items:
+        product = Product.get_by_id(item.get("product"))
+        quantity = item.get("quantity")
+        OrderItem(order=obj, product=product, quantity=quantity).save()
 
     return obj
