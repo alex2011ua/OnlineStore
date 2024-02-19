@@ -7,19 +7,48 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 from rest_framework_simplejwt.views import TokenObtainPairView
-
-from .serializers import (
-    MyTokenObtainPairSerializer,
-    PasswordChangeSerializer,
-    RegistrationSerializer,
-    UserUrlSerializer,
-)
+from django.conf import settings
+from rest_framework.request import Request
+from rest_framework.response import Response
+from rest_framework import serializers, status
 
 
 class MyTokenObtainPairView(TokenObtainPairView):
     """Custom clas for add user info in tocken response"""
 
-    serializer_class = MyTokenObtainPairSerializer
+    class TokenObtainPairResponseSerializer(serializers.Serializer):
+        access = serializers.CharField()
+        refresh = serializers.CharField()
+
+        def create(self, validated_data):
+            raise NotImplementedError()
+
+        def update(self, instance, validated_data):
+            raise NotImplementedError()
+
+    @extend_schema(
+        tags=["User"],
+        # responses={
+        #     status.HTTP_200_OK: TokenObtainPairResponseSerializer,
+        # },
+    )
+    def post(self, request: Request, *args, **kwargs) -> Response:
+        response = super().post(request, *args, **kwargs)
+        access_token = response.data["access"]
+        user = User.objects.get(email=request.data["email"])
+        response.data["email"] = user.email
+        response.data["user_id"] = user.id
+        response.set_cookie(
+            key=settings.SIMPLE_JWT["AUTH_COOKIE"],
+            value=access_token,
+            domain=settings.SIMPLE_JWT["AUTH_COOKIE_DOMAIN"],
+            path=settings.SIMPLE_JWT["AUTH_COOKIE_PATH"],
+            expires=settings.SIMPLE_JWT["ACCESS_TOKEN_LIFETIME"],
+            secure=settings.SIMPLE_JWT["AUTH_COOKIE_SECURE"],
+            httponly=settings.SIMPLE_JWT["AUTH_COOKIE_HTTP_ONLY"],
+            samesite=settings.SIMPLE_JWT["AUTH_COOKIE_SAMESITE"],
+        )
+        return response
 
 
 @extend_schema(tags=["User"])
@@ -33,6 +62,28 @@ class UserViewSet(
     """
     API endpoint that allows users to be viewed.
     """
+
+    class UserUrlSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = User
+
+            fields = [
+                "id",
+                "url",
+                "email",
+                "first_name",
+                "middle_name",
+                "last_name",
+                "address",
+                "dob",
+                "gender",
+                "role",
+                "notice",
+                "get_age",
+            ]
+
+        gender = serializers.CharField(source="get_gender_display")
+        role = serializers.CharField(source="get_role_display")
 
     queryset = User.objects.all().order_by("-date_joined")
     serializer_class = UserUrlSerializer
@@ -55,8 +106,47 @@ class CreateUserView(generics.CreateAPIView):
 
     permission_classes = [IsAuthenticated, GuestUserPermission]
 
+    class RegistrationSerializer(serializers.ModelSerializer):
+        role = serializers.CharField(source="get_role_display")
+
+        def validate_role(self, value):
+            ROLE_CHOICES = {
+                "admin": "A",
+                "manager": "M",
+                "auth_user": "U",
+                "guest_user": "G",
+            }
+            if value in ROLE_CHOICES:
+                return ROLE_CHOICES[value]
+            else:
+                raise serializers.ValidationError({"detail": "wrong role field"})
+
+        class Meta:
+            model = User
+            fields = ["email", "password", "role"]
+            extra_kwargs = {"password": {"write_only": True}}
+
+        def create(self, validated_data):
+            password = validated_data.pop("password", None)
+            instance = self.Meta.model(**validated_data)
+            if password is not None:
+                instance.set_password(password)
+            instance.save()
+            return instance
+
+        def save(self):
+            user = User(
+                email=self.validated_data["email"],
+                role=self.validated_data["get_role_display"],
+            )
+            password = self.validated_data["password"]
+
+            user.set_password(password)
+            user.save()
+            return user
+
     def post(self, request):
-        serializer = RegistrationSerializer(data=request.data)
+        serializer = self.RegistrationSerializer(data=request.data)
         if serializer.is_valid():
             if self.validate_roles(request):
                 return Response(
@@ -98,10 +188,17 @@ class ChangePasswordView(APIView):
         IsAuthenticated,
     ]
 
+    class PasswordChangeSerializer(serializers.Serializer):
+        current_password = serializers.CharField(style={"input_type": "password"}, required=True)
+        new_password = serializers.CharField(style={"input_type": "password"}, required=True)
+
+        def validate_current_password(self, value):
+            if not self.context["request"].user.check_password(value):
+                raise serializers.ValidationError({"current_password": "Does not match"})
+            return value
+
     def post(self, request):
-        serializer = PasswordChangeSerializer(
-            context={"request": request}, data=request.data
-        )
+        serializer = self.PasswordChangeSerializer(context={"request": request}, data=request.data)
         serializer.is_valid(raise_exception=True)
         request.user.set_password(serializer.validated_data["new_password"])
         request.user.save()
@@ -149,8 +246,9 @@ class GoogleAuth(APIView):
             include_granted_scopes="true",
         )
 
-        #return redirect(authorization_url)
+        # return redirect(authorization_url)
         return Response(data={"authorization_url": authorization_url})
+
 
 class GoogleMail(APIView):
     def get(self, request):
