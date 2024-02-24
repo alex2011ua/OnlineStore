@@ -18,7 +18,6 @@ from dotenv import load_dotenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv()
-load_dotenv("../.env")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -26,7 +25,6 @@ load_dotenv("../.env")
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = (
     os.getenv("DJANGO_SECRET_KEY")
-    or "django-insecure-u#koj3@4+s+#nns0j6lk!+jxi6n8r))l1nejiyhkw*9mbf*u9x"
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -37,6 +35,7 @@ ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost").split()
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "https://main--lighthearted-cocada-0d2e37.netlify.app",
+    "https://alex-online-store.fly.dev"
 ]
 # CORS_ALLOW_ALL_ORIGINS = True
 
@@ -52,6 +51,7 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
+    'whitenoise.runserver_nostatic',  # <-- Updated! whitenoise
     "django.contrib.staticfiles",
     #
     "rest_framework",
@@ -69,6 +69,7 @@ MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # <-- Updated! whitenoise
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -76,7 +77,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    #"querycount.middleware.QueryCountMiddleware",
+    # "querycount.middleware.QueryCountMiddleware",
 ]
 
 ROOT_URLCONF = "OnlineStoreDjango.urls"
@@ -98,22 +99,22 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "OnlineStoreDjango.wsgi.application"
+import dj_database_url
 
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": os.getenv("POSTGRES_DB", "online_store_db"),
-        "USER": os.getenv("POSTGRES_USER", "AlexUA"),
-        "PASSWORD": os.getenv("POSTGRES_PASSWORD", "online_store"),
-        "HOST": os.getenv(
-            "DB_HOST",
-            "172.22.0.3",
-        ),
-        "PORT": str(os.getenv("PORT_DB", 5432)),
-    }
-}
-
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql_psycopg2",
+#         "NAME": os.getenv("POSTGRES_DB", "online_store_db"),
+#         "USER": os.getenv("POSTGRES_USER", "AlexUA"),
+#         "PASSWORD": os.getenv("POSTGRES_PASSWORD", "online_store"),
+#         "HOST": os.getenv(
+#             "DB_HOST",
+#             "172.19.0.2",
+#         ),
+#         "PORT": str(os.getenv("PORT_DB", 5432)),
+#     }
+# }
+DATABASES = {"default": dj_database_url.config(default=os.environ.get("DATABASE_URL"))}
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "my_apps.accounts.api_v1.authenticate.CustomAuthentication",

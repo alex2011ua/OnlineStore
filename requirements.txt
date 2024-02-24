@@ -6,7 +6,7 @@ django-filter
 Pillow==10.0.0
 gunicorn
 python-dotenv
-
+whitenoise==6.3.0
 djangorestframework-simplejwt==5.2.2
 django-phonenumber-field[phonenumberslite]
 django-extensions
@@ -16,9 +16,6 @@ drf-spectacular
 django-querycount # for show SQL requests
 
 django-cors-headers
-llama_index
-nltk
-llama-cpp-python
 django-modeltranslation
 
 google-api-python-client
@@ -29,3 +26,5 @@ requests
 
 black
 isort
+
+dj-database-url
