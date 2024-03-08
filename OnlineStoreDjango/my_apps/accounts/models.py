@@ -55,7 +55,6 @@ class User(AbstractUser):  # type: ignore
         ("A", "admin"),
         ("M", "manager"),
         ("U", "auth_user"),
-        ("G", "guest_user"),
     ]
     USERNAME_FIELD: str = "email"
     REQUIRED_FIELDS: ClassVar[list[str]] = []

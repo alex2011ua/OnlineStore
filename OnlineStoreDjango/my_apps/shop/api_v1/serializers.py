@@ -46,6 +46,33 @@ class ProductCatalogSerializer(serializers.ModelSerializer):
         ]
 
 
+class AuthProductCatalogSerializer(serializers.ModelSerializer):
+    category = serializers.CharField(source="get_category_name")
+    isInCart = serializers.SerializerMethodField()
+    isInWishlist = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Product
+        fields = [
+            "id",
+            "name",
+            "quantity",
+            "img",
+            "category",
+            "price",
+            "discount",
+            "global_rating",
+            "isInCart",
+            "isInWishlist",
+        ]
+
+    def get_isInCart(self, obj):
+        return True if obj in self.context['products'] else False
+
+    def get_isInWishlist(self, obj):
+        return True if obj in self.context['wishlist'] else False
+
+
 class ProductCardSerializer(serializers.ModelSerializer):
     category = serializers.CharField(source="get_category_name")
     code = serializers.CharField(source="slug")

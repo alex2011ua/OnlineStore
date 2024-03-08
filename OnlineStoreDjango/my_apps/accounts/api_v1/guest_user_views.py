@@ -3,7 +3,6 @@ from drf_spectacular.utils import extend_schema
 from rest_framework.views import APIView
 
 from OnlineStoreDjango import settings
-from my_apps.accounts.models import User
 from my_apps.shop.api_v1.permissions import AdminPermission, GuestUserPermission
 from rest_framework import generics, mixins, status
 from rest_framework.response import Response
@@ -13,6 +12,18 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import serializers
 
 from my_apps.accounts.models import User
+from .utils import create_user
+from django.core.mail import send_mail
+from django.shortcuts import render
+from my_apps.accounts.models import User
+from rest_framework.views import APIView
+from django.conf import settings
+from rest_framework.response import Response
+import os
+import requests
+from .utils import get_user_by_email, create_user, get_tokens_for_user
+import google_auth_oauthlib.flow
+from rest_framework.exceptions import NotFound
 
 EMAIL = """
 We wanted to extend our warmest gratitude to you for choosing GiftHub and completing the registration process. 
@@ -34,17 +45,6 @@ class CreateUserView(APIView):
             fields = ["email", "password", "first_name", "last_name"]
             extra_kwargs = {"password": {"write_only": True}}
 
-        def save(self):
-            user = User(
-                email=self.validated_data["email"],
-            )
-            password = self.validated_data["password"]
-            user.set_password(password)
-            user.first_name = self.validated_data["first_name"]
-            user.last_name = self.validated_data["last_name"]
-            user.save()
-            return user
-
     class RegisterAuthUserWithToken(serializers.ModelSerializer):
         access = serializers.CharField()
         refresh = serializers.CharField()
@@ -62,30 +62,172 @@ class CreateUserView(APIView):
     )
     def post(self, request):
         serializer = self.RegisterAuthUser(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            user = User.objects.get(email=serializer.data["email"])
-            send_mail(
-                subject="Registration on the GiftHub",
-                message=f"Dear {user.get_full_name()} \n " + EMAIL,
-                from_email=settings.EMAIL_HOST_USER,
-                recipient_list=[user.email],
+        serializer.is_valid(raise_exception=True)
+
+        user = create_user(**serializer.validated_data)
+
+        send_mail(
+            subject="Registration on the GiftHub",
+            message=f"Dear {user.get_full_name()} \n " + EMAIL,
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[user.email],
+        )
+        data = serializer.data
+        data["id"] = user.id
+        refresh = RefreshToken.for_user(user)
+        data["access"] = str(refresh.access_token)
+        data["refresh"] = str(refresh)
+        response = Response(data, status=status.HTTP_201_CREATED)
+        response.set_cookie(
+            key=settings.SIMPLE_JWT["AUTH_COOKIE"],
+            value=data["access"],
+            domain=settings.SIMPLE_JWT["AUTH_COOKIE_DOMAIN"],
+            path=settings.SIMPLE_JWT["AUTH_COOKIE_PATH"],
+            expires=settings.SIMPLE_JWT["ACCESS_TOKEN_LIFETIME"],
+            secure=settings.SIMPLE_JWT["AUTH_COOKIE_SECURE"],
+            httponly=settings.SIMPLE_JWT["AUTH_COOKIE_HTTP_ONLY"],
+            samesite=settings.SIMPLE_JWT["AUTH_COOKIE_SAMESITE"],
+        )
+        return response
+
+
+SCOPES = [
+    "https://www.googleapis.com/auth/userinfo.email",
+    "https://www.googleapis.com/auth/userinfo.profile",
+    "openid",
+]
+
+
+class GoogleAuthURL(APIView):
+    class OutputGoogleAuthURLSerializer(serializers.Serializer):
+        authorization_url = serializers.CharField(max_length=1000)
+
+    @extend_schema(
+        summary="Get url to send request to gogle",
+        tags=["Accounts"],
+        responses=OutputGoogleAuthURLSerializer,
+    )
+    def get(self, request):
+        flow = google_auth_oauthlib.flow.Flow.from_client_config(
+            client_config={
+                "web": {
+                    "client_id": os.getenv("GOOGLE_CLIENT_ID"),
+                    "project_id": os.getenv("GOOGLE_PROJECT_ID"),
+                    "auth_uri": os.getenv("GOOGLE_AUTH_URI"),
+                    "token_uri": os.getenv("GOOGLE_TOKEN_URI"),
+                    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+                    # "client_secret": os.getenv("GOOGLE_CLIENT_SECRET"),
+                }
+            },
+            scopes=SCOPES,
+        )
+
+        # Indicate where the API server will redirect the user after the user completes
+        # the authorization flow. The redirect URI is required. The value must exactly
+        # match one of the authorized redirect URIs for the OAuth 2.0 client, which you
+        # configured in the API Console. If this value doesn't match an authorized URI,
+        # you will get a 'redirect_uri_mismatch' error.
+        BASE_URL = os.getenv("BASE_URL")
+        print("redirect_uri:", f"{BASE_URL}api/v1/accounts/google_mail")
+        flow.redirect_uri = f"{BASE_URL}api/v1/accounts/google_mail"
+
+        # Generate URL for request to Google's OAuth 2.0 server.
+        # Use kwargs to set optional request parameters.
+        authorization_url, state = flow.authorization_url(
+            # Enable offline access so that you can refresh an access token without
+            # re-prompting the user for permission. Recommended for web server apps.
+            access_type="offline",
+            # Enable incremental authorization. Recommended as a best practice.
+            include_granted_scopes="true",
+        )
+
+        # return redirect(authorization_url)
+        return Response(data={"authorization_url": authorization_url})
+
+
+class GoogleAuth(APIView):
+    class InputGoogleAuthSerializer(serializers.Serializer):
+        state = serializers.CharField(max_length=1000)
+        code = serializers.CharField(max_length=1000)
+
+    class OutputGoogleAuthSerializer(serializers.Serializer):
+        first_name = serializers.CharField(max_length=150)
+        last_name = serializers.CharField(max_length=150)
+        email = serializers.EmailField()
+        token = serializers.CharField(max_length=150)
+
+    @extend_schema(
+        summary="Get an access token using Google authorization.",
+        tags=["Accounts"],
+        request=InputGoogleAuthSerializer,
+        responses=OutputGoogleAuthSerializer,
+    )
+    def post(self, request):
+        serializer = self.InputGoogleAuthSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        code = serializer.validated_data["code"]
+        state = serializer.validated_data["state"]
+
+        flow = google_auth_oauthlib.flow.Flow.from_client_config(
+            client_config={
+                "web": {
+                    "client_id": os.getenv("GOOGLE_CLIENT_ID"),
+                    "project_id": os.getenv("GOOGLE_PROJECT_ID"),
+                    "auth_uri": os.getenv("GOOGLE_AUTH_URI"),
+                    "token_uri": os.getenv("GOOGLE_TOKEN_URI"),
+                    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+                    "client_secret": os.getenv("GOOGLE_CLIENT_SECRET"),
+                }
+            },
+            scopes=SCOPES,
+            state=state,
+        )
+        BASE_URL = os.getenv("BASE_URL")
+        flow.redirect_uri = f"{BASE_URL}api/v1/accounts/google_mail"
+        # get token from code
+        access_credentials_payload = flow.fetch_token(code=code)
+
+        credentials = flow.credentials
+        credentials = {
+            "token": credentials.token,
+            "refresh_token": credentials.refresh_token,
+            "token_uri": credentials.token_uri,
+            "client_id": credentials.client_id,
+            "client_secret": credentials.client_secret,
+            "scopes": credentials.scopes,
+        }
+        GOOGLE_USER_INFO_URL = "https://www.googleapis.com/oauth2/v3/userinfo"
+        response = requests.get(GOOGLE_USER_INFO_URL, params={"access_token": credentials["token"]})
+        response_dict = response.json()
+        """{
+        'sub': '115165345443703227013', 
+        'name': 'OleksiiKovalenkoDeveloper', 
+        'given_name': 'OleksiiKovalenkoDeveloper', 
+        'picture': 'https://lh3.googleusercontent.com/a/ACg8ocLoxKHmKvyi82r-EpjfPa9qRXakUq7Qg0kDaMR7hRfC=s96-c', 
+        'email': 'oleksiikovalenkodeveloper@gmail.com', 
+        'email_verified': True, 
+        'locale': 'uk'
+
+        'name': 'Oleksii Kovalenko', 
+        'given_name': 'Oleksii', 
+        'family_name': 'Kovalenko',
+        }"""
+        try:
+            user = get_user_by_email(response_dict["email"])
+        except NotFound:
+            user = create_user(
+                response_dict["email"],
+                "some_password",
+                first_name=response_dict.get("given_name", None),
+                last_name=response_dict.get("family_name", None),
             )
-            data = serializer.data
-            data["id"] = user.id
-            refresh = RefreshToken.for_user(user)
-            data["access"] = str(refresh.access_token)
-            data["refresh"] = str(refresh)
-            response = Response(data, status=status.HTTP_201_CREATED)
-            response.set_cookie(
-                key=settings.SIMPLE_JWT["AUTH_COOKIE"],
-                value=data["access"],
-                domain=settings.SIMPLE_JWT["AUTH_COOKIE_DOMAIN"],
-                path=settings.SIMPLE_JWT["AUTH_COOKIE_PATH"],
-                expires=settings.SIMPLE_JWT["ACCESS_TOKEN_LIFETIME"],
-                secure=settings.SIMPLE_JWT["AUTH_COOKIE_SECURE"],
-                httponly=settings.SIMPLE_JWT["AUTH_COOKIE_HTTP_ONLY"],
-                samesite=settings.SIMPLE_JWT["AUTH_COOKIE_SAMESITE"],
-            )
-            return response
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        token = get_tokens_for_user(user)
+        return Response(
+            data={
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+                "role": user.get_role_display(),
+                "email": user.email,
+                "token": token.get("access"),
+            }
+        )

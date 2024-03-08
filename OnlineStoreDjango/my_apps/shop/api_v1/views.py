@@ -7,7 +7,6 @@ from my_apps.shop.models import Category, Product, Review
 
 from .serializers import (
     CategorySerializer,
-    ProductCatalogSerializer,
     ReviewSerializer,
 )
 

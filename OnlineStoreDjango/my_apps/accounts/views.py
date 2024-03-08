@@ -34,8 +34,8 @@ def google_login(request):
     # configured in the API Console. If this value doesn't match an authorized URI,
     # you will get a 'redirect_uri_mismatch' error.
     BASE_URL = os.getenv("BASE_URL")
-    print("redirect_uri:", f"{BASE_URL}/auth/ok")
-    flow.redirect_uri = f"{BASE_URL}/auth/ok"
+    print("redirect_uri:", f"{BASE_URL}auth/ok")
+    flow.redirect_uri = f"{BASE_URL}auth/ok"
 
     # Generate URL for request to Google's OAuth 2.0 server.
     # Use kwargs to set optional request parameters.
@@ -68,7 +68,7 @@ def ok(request):
         state=state,
     )
     BASE_URL = os.getenv("BASE_URL")
-    flow.redirect_uri = f"{BASE_URL}/auth/ok"
+    flow.redirect_uri = f"{BASE_URL}auth/ok"
     flow.fetch_token(code=code)
 
     credentials = flow.credentials

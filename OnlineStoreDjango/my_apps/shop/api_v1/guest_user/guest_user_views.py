@@ -25,7 +25,7 @@ from ..serializers import (
     CategorySerializer,
     ProductCardSerializer,
     ProductCatalogSerializer,
-    ReviewSerializer,
+    ReviewSerializer, AuthProductCatalogSerializer,
 )
 from ...servises import order_create
 from ...utils import inline_serializer
@@ -202,7 +202,18 @@ class ListSearchGifts(APIView, StandardResultsSetPagination):  # type: ignore
         )  # get filtered and sorted products
 
         results = self.paginate_queryset(filtered_products, request, view=self)
-        serializer = ProductCatalogSerializer(results, context={"request": request}, many=True)
+        if request.user.is_authenticated:
+            basket = request.user.basket.all()
+            products_in_basket = [product.product for product in basket]
+            wishlist = request.user.wishlist.all()
+
+            serializer = AuthProductCatalogSerializer(
+                results,
+                context={"request": request, "products": products_in_basket, "wishlist": wishlist},
+                many=True
+            )
+        else:
+            serializer = ProductCatalogSerializer(results, context={"request": request}, many=True)
         return self.get_paginated_response(serializer.data)
 
 
@@ -411,6 +422,10 @@ class GetProductsByCategory(viewsets.ViewSet, StandardResultsSetPagination):  # 
             request, products
         )  # get filtered and sorted product
         results = self.paginate_queryset(filtered_products, request, view=self)
+        if request.user.is_authenticated:
+            serializer = AuthProductCatalogSerializer(results, context={"request": request}, many=True)
+        else:
+            serializer = ProductCatalogSerializer(results, context={"request": request}, many=True)
         serializer = ProductCatalogSerializer(results, context={"request": request}, many=True)
         return self.get_paginated_response(serializer.data)
 
@@ -439,7 +454,11 @@ class GetProduct(viewsets.ReadOnlyModelViewSet):
     def list(self, request):
         list_id = request.query_params.getlist("product_id")
         queryset = Product.objects.filter(pk__in=list_id)
-        serializer = ProductCatalogSerializer(queryset, many=True, context={"request": request})
+        if request.user.is_authenticated:
+            serializer = AuthProductCatalogSerializer(queryset, many=True, context={"request": request})
+        else:
+            serializer = ProductCatalogSerializer(queryset, many=True, context={"request": request})
+
         return Response(serializer.data)
 
 
