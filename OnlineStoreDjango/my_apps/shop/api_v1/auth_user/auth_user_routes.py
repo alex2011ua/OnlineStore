@@ -11,5 +11,4 @@ urlpatterns = [
         auth_user_views.AuthComments.as_view(),
         name="auth_comments",
     ),
-    path("search/", auth_user_views.ListSearchGifts.as_view(), name="search"),
 ]

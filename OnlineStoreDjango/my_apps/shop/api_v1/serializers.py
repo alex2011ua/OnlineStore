@@ -31,6 +31,8 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class ProductCatalogSerializer(serializers.ModelSerializer):
     category = serializers.CharField(source="get_category_name")
+    isInCart = serializers.SerializerMethodField()
+    isInWishlist = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
@@ -43,7 +45,15 @@ class ProductCatalogSerializer(serializers.ModelSerializer):
             "price",
             "discount",
             "global_rating",
+            "isInCart",
+            "isInWishlist",
         ]
+
+    def get_isInCart(self, obj):
+        return obj.is_in_cart(self.context["request"].user)
+
+    def get_isInWishlist(self, obj):
+        return obj.is_in_wishlist(self.context["request"].user)
 
 
 class AuthProductCatalogSerializer(serializers.ModelSerializer):
@@ -67,16 +77,18 @@ class AuthProductCatalogSerializer(serializers.ModelSerializer):
         ]
 
     def get_isInCart(self, obj):
-        return True if obj in self.context['products'] else False
+        return True if obj in self.context["products"] else False
 
     def get_isInWishlist(self, obj):
-        return True if obj in self.context['wishlist'] else False
+        return True if obj in self.context["wishlist"] else False
 
 
 class ProductCardSerializer(serializers.ModelSerializer):
     category = serializers.CharField(source="get_category_name")
     code = serializers.CharField(source="slug")
     img = serializers.SerializerMethodField()
+    isInCart = serializers.SerializerMethodField()
+    isInWishlist = serializers.SerializerMethodField()
     # faq = serializers.CharField(source="get_faq_list")
 
     class Meta:
@@ -95,7 +107,15 @@ class ProductCardSerializer(serializers.ModelSerializer):
             # "faq",
             "rate_by_criteria",
             "rate_by_stars",
+            "isInCart",
+            "isInWishlist",
         ]
+
+    def get_isInCart(self, obj):
+        return obj.is_in_cart(self.context["request"].user)
+
+    def get_isInWishlist(self, obj):
+        return obj.is_in_wishlist(self.context["request"].user)
 
     def get_reviews(self, obj):
         serializer = ReviewSerializer(obj.get_reviews(), context=self.context, many=True)
@@ -115,7 +135,6 @@ class ProductCardSerializer(serializers.ModelSerializer):
         for image in list_foto:
             list_link.append(domain + image)
         return list_link
-
 
 
 class CreateReviewSerializer(serializers.ModelSerializer):
@@ -141,6 +160,7 @@ class BannerSerializer(serializers.ModelSerializer):
 class BasketSerializer(serializers.Serializer):
     product_id = serializers.UUIDField()
     amount = serializers.IntegerField()
+    isSecretPresent = serializers.BooleanField(default=False, required=False)
 
 
 class BasketItemSerializer(serializers.ModelSerializer):

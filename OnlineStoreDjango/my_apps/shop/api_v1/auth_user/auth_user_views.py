@@ -64,6 +64,7 @@ class Basket(APIView):
     class InputBasketSerializer(serializers.Serializer):
         product_id = serializers.UUIDField()
         amount = serializers.IntegerField()
+        isSecretPresent = serializers.BooleanField(default=False, required=False)
 
     @extend_schema(
         tags=["Auth_user"],
@@ -71,20 +72,51 @@ class Basket(APIView):
         request=InputBasketSerializer(many=True),
     )
     def post(self, request):
-        serializer = BasketSerializer(data=request.data, many=True)
+        serializer = self.InputBasketSerializer(data=request.data, many=True)
         serializer.is_valid(raise_exception=True)
         for data in serializer.validated_data:
             product_id: str = data.get("product_id")
             amount: int = data.get("amount")
+            is_secret_present: bool = data.get("isSecretPresent", False)
 
             product: Product = Product.get_by_id(product_id)
             user: User = request.user
 
             BasketItem.objects.update_or_create(
                 product=product,
-                defaults={"quantity": amount, "registered_user": user},
+                defaults={
+                    "quantity": amount,
+                    "registered_user": user,
+                    "is_secret_present": is_secret_present,
+                },
             )
         return Response(status=status.HTTP_200_OK)
+
+    class BasketOutputSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Product
+            fields = (
+                "id",
+                "img",
+                "name",
+                "category",
+                "price",
+                "global_rating",
+                "discount",
+                "quantity",
+                "count",
+                "isSecretPresent",
+            )
+
+        id = serializers.UUIDField()
+        name = serializers.CharField()
+        category = serializers.CharField()
+        price = serializers.DecimalField(max_digits=10, decimal_places=2)
+        global_rating = serializers.IntegerField()
+        discount = serializers.DecimalField(max_digits=5, decimal_places=2)
+        quantity = serializers.IntegerField()
+        isSecretPresent = serializers.BooleanField()
+        count = serializers.IntegerField()
 
     @extend_schema(
         tags=["Auth_user"],
@@ -92,9 +124,47 @@ class Basket(APIView):
         request=BasketItemSerializer(many=True),
     )
     def get(self, request):
+        """
+                [
+        {
+          id: string;
+          img: string;
+          name: string;
+          / Category of product (type of product) */
+          category: string;
+          price: number;
+          global_rating: number;
+          discount: number;
+          //  Count of a product in a store
+          quantity: number;
+        // скільки продукту додав у кошик користувач
+          count: number;
+        // чи це секретний подарунок
+          isSecretPresent: boolean;
+        }
+
+        ]
+        """
         user: User = request.user
         basket = user.basket.all()
-        serializer = BasketItemSerializer(basket, many=True)
+        data = []
+        for item in basket:
+            product = Product.get_by_id(item.product_id)
+            data.append(
+                {
+                    "id": product.id,
+                    "img": product.img,
+                    "name": product.name,
+                    "category": product.get_category_name(),
+                    "price": product.price,
+                    "global_rating": product.global_rating,
+                    "discount": product.discount,
+                    "quantity": product.quantity,
+                    "isSecretPresent": item.is_secret_present,
+                    "count": item.quantity,
+                }
+            )
+        serializer = self.BasketOutputSerializer(data, many=True, context={"request": request})
         return Response(serializer.data)
 
     @extend_schema(
@@ -213,32 +283,3 @@ class AuthComments(APIView):
         )
         return Response(comment.id)
 
-
-class ListSearchGiftsAuth(ListSearchGifts):
-    class ProductCatalogSerializer(serializers.ModelSerializer):
-        category = serializers.CharField(source="get_category_name")
-        isInCart = serializers.SerializerMethodField()
-        isInWishlist = serializers.SerializerMethodField()
-
-        class Meta:
-            model = Product
-            fields = [
-                "id",
-                "name",
-                "quantity",
-                "img",
-                "category",
-                "price",
-                "discount",
-                "global_rating",
-                "isInCart",
-                "isInWishlist",
-            ]
-
-        def get_isInCart(self, obj):
-            print(obj)
-            return True
-
-        def get_isInWishlist(self, obj):
-            print(obj)
-            return True

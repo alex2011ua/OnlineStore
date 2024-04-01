@@ -33,6 +33,6 @@ urlpatterns = [
         name="get_product_comments",
     ),
     path("store_info/", guest_user_views.store_info, name="store_info"),
-    path("order_create/", guest_user_views.OrderGuestUserCreate.as_view(), name="order_create"),
+    path("order_create/", guest_user_views.OrderCreate.as_view(), name="order_create"),
 
 ]

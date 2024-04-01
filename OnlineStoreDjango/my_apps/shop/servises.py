@@ -24,3 +24,4 @@ def order_create(*args, **kwargs) -> Order:
         OrderItem(order=obj, product=product, quantity=quantity).save()
 
     return obj
+

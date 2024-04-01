@@ -176,6 +176,17 @@ class Product(models.Model):  # type: ignore
     def __repr__(self) -> str:
         return f"Product ID - {self.pk}"
 
+    def is_in_cart(self, user: User) -> bool | None:
+        if user.is_authenticated:
+            basket = user.basket.all()
+            products_in_basket = [product.product for product in basket]
+            return True if self in products_in_basket else False
+
+    def is_in_wishlist(self, user: User) -> bool | None:
+        if user.is_authenticated:
+            wishlist = user.wishlist.all()
+            return True if self in wishlist else False
+
     def get_category_name(self):
         return self.category.name
 
@@ -246,7 +257,7 @@ class BasketItem(models.Model):
     registered_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="basket")
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="prod_in_basket")
     quantity = models.PositiveIntegerField(_("quantity product"), default=0)
-
+    is_secret_present = models.BooleanField(default=False)
 
 
 class Review(models.Model):
@@ -451,7 +462,7 @@ class Order(models.Model):
 
     @staticmethod
     def get_current_order_id(user):
-        order, _ = Order.objects.get_or_create(customer=user, status=Order.new_order)
+        order, _ = Order.objects.get_or_create(customer=user, status="new_order")
         return order
 
     def __str__(self):
@@ -465,6 +476,8 @@ class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(_("quantity product"), default=0)
+    is_secret_present = models.BooleanField(default=False)
+    # todo add sell price
 
     def save(self, *args, **kwargs):
         """modify total_amount in order (add to order)"""
@@ -483,4 +496,3 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"{self.quantity} x {self.product.name} in Order #{self.order.pk}"
-

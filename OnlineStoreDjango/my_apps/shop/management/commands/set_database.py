@@ -74,12 +74,8 @@ class Command(BaseCommand):
             {"slug": "pens", "name": "Ручки", "name_en": "Pens"},
         ],
         "games": [
-            {"slug": "TDpuzzles", "name": "3d пазли", "name_en": "3D puzzles"},
-            {
-                "slug": "boardGames",
-                "name": "Настільні ігри",
-                "name_en": "Board Games",
-            },
+            {"slug": "TDpuzzles", "name": "3D пазли", "name_en": "3D puzzles"},
+            {"slug": "boardGames", "name": "Настільні ігри", "name_en": "Board Games"},
             {"slug": "puzzles", "name": "Головоломки", "name_en": "Puzzles"},
         ],
     }
@@ -227,7 +223,7 @@ class Command(BaseCommand):
             reader.__next__()
             for row in reader:
                 # Get category
-                category_str = row[3].strip().capitalize()
+                category_str = row[3].strip()
                 name = row[6]
                 name_en = row[13]
                 if len(name) == 0:

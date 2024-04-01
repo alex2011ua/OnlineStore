@@ -454,8 +454,15 @@ class GetProduct(viewsets.ReadOnlyModelViewSet):
     def list(self, request):
         list_id = request.query_params.getlist("product_id")
         queryset = Product.objects.filter(pk__in=list_id)
+
         if request.user.is_authenticated:
-            serializer = AuthProductCatalogSerializer(queryset, many=True, context={"request": request})
+            basket = request.user.basket.all()
+            products_in_basket = [product.product for product in basket]
+            wishlist = request.user.wishlist.all()
+            serializer = AuthProductCatalogSerializer(queryset,
+                                many=True,
+                                context={"request": request, "products": products_in_basket, "wishlist": wishlist}
+                                )
         else:
             serializer = ProductCatalogSerializer(queryset, many=True, context={"request": request})
 
@@ -526,18 +533,18 @@ def store_info(request):
     )
 
 
-class OrderGuestUserCreate(APIView):
+class OrderCreate(APIView):
     class InputItemsSerializer(serializers.ModelSerializer):
         class Meta:
             fields = "__all__"
             model = OrderItem
 
-    class OutputOrderGuestUserSerializer(serializers.ModelSerializer):
+    class OutputOrderSerializer(serializers.ModelSerializer):
         class Meta:
             fields = "__all__"
             model = Order
 
-    class InputOrderGuestUserSerializer(serializers.Serializer):
+    class InputOrderSerializer(serializers.Serializer):
         # Rrequired
         firstName = serializers.CharField(max_length=50)
         lastName = serializers.CharField(max_length=50)
@@ -594,15 +601,19 @@ class OrderGuestUserCreate(APIView):
 
     @extend_schema(
         tags=["Guest_user"],
-        request=InputOrderGuestUserSerializer,
+        request=InputOrderSerializer,
         responses={
-            201: OutputOrderGuestUserSerializer,
+            201: OutputOrderSerializer,
             404: OpenApiResponse(description="detail"),
         },
     )
     def post(self, request):
-        serializer = self.InputOrderGuestUserSerializer(data=request.data)
+        serializer = self.InputOrderSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        order = order_create(**serializer.validated_data)
-        output_serializer = self.OutputOrderGuestUserSerializer(order)
+        if request.user.is_authenticated:
+            user = request.user
+            order = order_create(**serializer.validated_data, customer=user)
+        else:
+            order = order_create(**serializer.validated_data)
+        output_serializer = self.OutputOrderSerializer(order)
         return Response(status=status.HTTP_201_CREATED, data=output_serializer.data)
