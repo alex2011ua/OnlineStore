@@ -469,6 +469,60 @@ class GetProduct(viewsets.ReadOnlyModelViewSet):
         return Response(serializer.data)
 
 
+class GetProductsByID(APIView):
+    class InputSerializer(serializers.Serializer):
+        product_id = serializers.ListSerializer(child=serializers.UUIDField())
+
+    class OutputSerializer(serializers.ModelSerializer):
+        category = serializers.CharField(source="get_category_name")
+        isInCart = serializers.SerializerMethodField()
+        isInWishlist = serializers.SerializerMethodField()
+
+        class Meta:
+            model = Product
+            fields = [
+                "id",
+                "name",
+                "quantity",
+                "img",
+                "category",
+                "price",
+                "discount",
+                "global_rating",
+                "isInCart",
+                "isInWishlist",
+            ]
+
+        def get_isInCart(self, obj):
+            return obj.is_in_cart(self.context["request"].user)
+
+        def get_isInWishlist(self, obj):
+            return obj.is_in_wishlist(self.context["request"].user)
+
+    @extend_schema(tags=["Guest_user"],
+                   summary="get products by id",
+                   request=InputSerializer,
+                   responses={200: OutputSerializer},)
+    def post(self, request, *args, **kwargs):
+        serializer = self.InputSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        list_id = serializer.validated_data["product_id"]
+        queryset = Product.objects.filter(pk__in=list_id)
+
+        if request.user.is_authenticated:
+            basket = request.user.basket.all()
+            products_in_basket = [product.product for product in basket]
+            wishlist = request.user.wishlist.all()
+            serializer = self.OutputSerializer(queryset,
+                                                      many=True,
+                                                      context={"request": request, "products": products_in_basket, "wishlist": wishlist}
+                                                      )
+        else:
+            serializer = self.OutputSerializer(queryset, many=True, context={"request": request})
+
+        return Response(serializer.data)
+
+
 @extend_schema(
     tags=["Guest_user"],
     responses={

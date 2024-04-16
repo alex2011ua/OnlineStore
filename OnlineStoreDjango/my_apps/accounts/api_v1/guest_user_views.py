@@ -92,9 +92,11 @@ class CreateUserView(APIView):
 
 
 SCOPES = [
-    "https://www.googleapis.com/auth/userinfo.email",
-    "https://www.googleapis.com/auth/userinfo.profile",
+    "email",
+    "profile",
     "openid",
+    "https://www.googleapis.com/auth/userinfo.profile",
+    "https://www.googleapis.com/auth/userinfo.email",
 ]
 
 
@@ -122,33 +124,37 @@ class GoogleAuthURL(APIView):
             scopes=SCOPES,
         )
 
-        # Indicate where the API server will redirect the user after the user completes
-        # the authorization flow. The redirect URI is required. The value must exactly
-        # match one of the authorized redirect URIs for the OAuth 2.0 client, which you
-        # configured in the API Console. If this value doesn't match an authorized URI,
-        # you will get a 'redirect_uri_mismatch' error.
         BASE_URL = os.getenv("BASE_URL")
-        print("redirect_uri:", f"{BASE_URL}api/v1/accounts/google_mail")
-        flow.redirect_uri = f"{BASE_URL}api/v1/accounts/google_mail"
+        print("redirect_uri:", f"{BASE_URL}api/v1/accounts/google_auth")
+        flow.redirect_uri = f"{BASE_URL}api/v1/accounts/google_auth"
 
         # Generate URL for request to Google's OAuth 2.0 server.
         # Use kwargs to set optional request parameters.
         authorization_url, state = flow.authorization_url(
-            # Enable offline access so that you can refresh an access token without
-            # re-prompting the user for permission. Recommended for web server apps.
-            access_type="offline",
-            # Enable incremental authorization. Recommended as a best practice.
-            include_granted_scopes="true",
+
         )
 
-        # return redirect(authorization_url)
         return Response(data={"authorization_url": authorization_url})
 
 
 class GoogleAuth(APIView):
     class InputGoogleAuthSerializer(serializers.Serializer):
-        state = serializers.CharField(max_length=1000)
+        # state = serializers.CharField(max_length=1000, required=False)
         code = serializers.CharField(max_length=1000)
+
+    @extend_schema(
+        summary="Get an code using Google authorization.",
+        tags=["Accounts"],
+    )
+    def get(self, request):
+        code = request.GET.get("code")
+        return Response(data={"code": code})
+
+
+class GoogleAuthCode(APIView):
+    class InputGoogleAuthSerializer(serializers.Serializer):
+        code = serializers.CharField(max_length=1000)
+        redirect_uri = serializers.CharField(max_length=1000, required=False)
 
     class OutputGoogleAuthSerializer(serializers.Serializer):
         first_name = serializers.CharField(max_length=150)
@@ -157,7 +163,7 @@ class GoogleAuth(APIView):
         token = serializers.CharField(max_length=150)
 
     @extend_schema(
-        summary="Get an access token using Google authorization.",
+        summary="Change code to authenticate user.",
         tags=["Accounts"],
         request=InputGoogleAuthSerializer,
         responses=OutputGoogleAuthSerializer,
@@ -166,7 +172,9 @@ class GoogleAuth(APIView):
         serializer = self.InputGoogleAuthSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         code = serializer.validated_data["code"]
-        state = serializer.validated_data["state"]
+        print(request.data)
+        state = serializer.validated_data.get("state")
+        redirect_uri = serializer.validated_data.get("redirect_uri")
 
         flow = google_auth_oauthlib.flow.Flow.from_client_config(
             client_config={
@@ -179,13 +187,26 @@ class GoogleAuth(APIView):
                     "client_secret": os.getenv("GOOGLE_CLIENT_SECRET"),
                 }
             },
-            scopes=SCOPES,
-            state=state,
+            scopes=None,
+            state=None,
         )
-        BASE_URL = os.getenv("BASE_URL")
-        flow.redirect_uri = f"{BASE_URL}api/v1/accounts/google_mail"
+
+        if redirect_uri:
+            flow.redirect_uri = redirect_uri
+        else:
+            BASE_URL = os.getenv("BASE_URL")
+            flow.redirect_uri = f"{BASE_URL}api/v1/accounts/google_auth"
         # get token from code
-        access_credentials_payload = flow.fetch_token(code=code)
+        try:
+            access_credentials_payload = flow.fetch_token(code=code)
+        except Exception as e:
+            detail = {
+                "code": code,
+                "redirect_uri": flow.redirect_uri,
+            }
+            return Response(
+                data={"error": str(e), "detail": detail}, status=status.HTTP_400_BAD_REQUEST
+            )
 
         credentials = flow.credentials
         credentials = {
@@ -200,17 +221,17 @@ class GoogleAuth(APIView):
         response = requests.get(GOOGLE_USER_INFO_URL, params={"access_token": credentials["token"]})
         response_dict = response.json()
         """{
-        'sub': '115165345443703227013', 
-        'name': 'OleksiiKovalenkoDeveloper', 
-        'given_name': 'OleksiiKovalenkoDeveloper', 
-        'picture': 'https://lh3.googleusercontent.com/a/ACg8ocLoxKHmKvyi82r-EpjfPa9qRXakUq7Qg0kDaMR7hRfC=s96-c', 
-        'email': 'oleksiikovalenkodeveloper@gmail.com', 
+        'sub': '11516534...', 
+        'name': 'Oleksii...', 
+        'given_name': 'Oleksii...', 
+        'picture': 'https://lh3.googleusercontent.com/a/...', 
+        'email': 'oleksii...@gmail.com', 
         'email_verified': True, 
         'locale': 'uk'
 
-        'name': 'Oleksii Kovalenko', 
-        'given_name': 'Oleksii', 
-        'family_name': 'Kovalenko',
+        'name': 'Oleksii...', 
+        'given_name': 'Oleksii...', 
+        'family_name': 'Kovalenko...',
         }"""
         try:
             user = get_user_by_email(response_dict["email"])
@@ -222,12 +243,14 @@ class GoogleAuth(APIView):
                 last_name=response_dict.get("family_name", None),
             )
         token = get_tokens_for_user(user)
+
         return Response(
             data={
                 "first_name": user.first_name,
                 "last_name": user.last_name,
                 "role": user.get_role_display(),
                 "email": user.email,
-                "token": token.get("access"),
+                "access": token.get("access"),
+                "refresh": token.get("refresh"),
             }
         )

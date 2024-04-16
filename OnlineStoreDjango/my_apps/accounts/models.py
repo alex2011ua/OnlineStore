@@ -74,7 +74,17 @@ class User(AbstractUser):  # type: ignore
     email = models.EmailField(_("email address"), unique=True)
     mobile = PhoneNumberField(null=True, blank=True, unique=True)
 
-    address = models.CharField(_("delivery address"), max_length=255, blank=True)
+    nova_poshta_town = models.CharField(_("nova_poshta town"), max_length=100, blank=True)
+    nova_poshta_post_office = models.CharField(_("nova_poshta post office"), max_length=100, blank=True)
+
+    ukr_poshta_town = models.CharField(_("nova_poshta town"), max_length=100, blank=True)
+    ukr_poshta_post_office = models.CharField(_("nova_poshta post office"), max_length=100, blank=True)
+
+    address_town = models.CharField(_("delivery address"), max_length=255, blank=True)
+    address_street = models.CharField(_("delivery address"), max_length=255, blank=True)
+    address_building = models.CharField(_("delivery address"), max_length=255, blank=True)
+    address_flat = models.CharField(_("delivery address"), max_length=255, blank=True)
+
     dob = models.DateField(_("Date of birthday"), blank=True, null=True)
     created_at = models.DateTimeField(_("created"), auto_now_add=True)
     updated_at = models.DateTimeField(_("update"), auto_now=True)

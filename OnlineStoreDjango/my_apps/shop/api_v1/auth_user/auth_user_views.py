@@ -193,6 +193,19 @@ class Basket(APIView):
 
 @extend_schema(
     tags=["Auth_user"],
+    summary="removing all products from the basket for an authorized user",
+)
+class BasketClear(APIView):
+    permission_classes = [IsAuthenticated, AuthUserPermission]
+
+    def delete(self, request):
+        user: User = request.user
+        user.basket.filter(registered_user=user).delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@extend_schema(
+    tags=["Auth_user"],
     request=ProductIdSerializer,
 )
 @extend_schema_view(
@@ -265,6 +278,29 @@ class Wishlist(APIView):
             user.wishlist.remove(product)  # type: ignore
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+class DelListProducts(APIView):
+    class InputSerializer(serializers.Serializer):
+        product_id = serializers.ListSerializer(child=serializers.UUIDField())
+
+    @extend_schema(
+        tags=["Auth_user"],
+        summary="delete products from wishlist",
+        request=InputSerializer,
+        responses={
+            204: []
+        }
+    )
+    def post(self, request):
+        serializer = self.InputSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        list_id = serializer.validated_data["product_id"]
+        for id_value in list_id:
+            serializer = ProductIdSerializer(data={"id": id_value})
+            serializer.is_valid(raise_exception=True)
+            product = Product.get_by_id(serializer.validated_data["id"])
+            user.wishlist.remove(product)  # type: ignore
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 @extend_schema(
     tags=["Auth_user"],
@@ -282,4 +318,3 @@ class AuthComments(APIView):
             author=request.user, product=product, **serializer.validated_data
         )
         return Response(comment.id)
-
