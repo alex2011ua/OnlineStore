@@ -23,6 +23,7 @@ urlpatterns = [
 
     path("guest_user/", include("my_apps.accounts.api_v1.guest_user_routes")),
     path("auth_user/", include("my_apps.accounts.api_v1.auth_user_routes")),
+    path("admin_user/", include("my_apps.accounts.api_v1.admin_user_routes")),
     path("token/", MyTokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("token/verify/", TokenVerifyView.as_view(), name="token_verify"),

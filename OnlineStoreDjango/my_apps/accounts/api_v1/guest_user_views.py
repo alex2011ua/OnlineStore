@@ -172,8 +172,6 @@ class GoogleAuthCode(APIView):
         serializer = self.InputGoogleAuthSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         code = serializer.validated_data["code"]
-        print(request.data)
-        state = serializer.validated_data.get("state")
         redirect_uri = serializer.validated_data.get("redirect_uri")
 
         flow = google_auth_oauthlib.flow.Flow.from_client_config(
@@ -194,8 +192,9 @@ class GoogleAuthCode(APIView):
         if redirect_uri:
             flow.redirect_uri = redirect_uri
         else:
-            BASE_URL = os.getenv("BASE_URL")
-            flow.redirect_uri = f"{BASE_URL}api/v1/accounts/google_auth"
+            flow.redirect_uri = "postmessage"
+            # BASE_URL = os.getenv("BASE_URL")
+            # flow.redirect_uri = f"{BASE_URL}api/v1/accounts/google_auth"
         # get token from code
         try:
             access_credentials_payload = flow.fetch_token(code=code)

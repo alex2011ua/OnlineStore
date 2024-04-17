@@ -1,3 +1,4 @@
+from typing import Any
 from uuid import UUID
 
 from django.contrib.auth import get_user
@@ -13,6 +14,7 @@ from rest_framework.exceptions import NotFound, ParseError
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.utils.serializer_helpers import ReturnDict
 from rest_framework.views import APIView
 
 from my_apps.accounts.models import User
@@ -278,6 +280,7 @@ class Wishlist(APIView):
             user.wishlist.remove(product)  # type: ignore
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 class DelListProducts(APIView):
     class InputSerializer(serializers.Serializer):
         product_id = serializers.ListSerializer(child=serializers.UUIDField())
@@ -286,9 +289,7 @@ class DelListProducts(APIView):
         tags=["Auth_user"],
         summary="delete products from wishlist",
         request=InputSerializer,
-        responses={
-            204: []
-        }
+        responses={204: []},
     )
     def post(self, request):
         serializer = self.InputSerializer(data=request.data)
@@ -318,3 +319,4 @@ class AuthComments(APIView):
             author=request.user, product=product, **serializer.validated_data
         )
         return Response(comment.id)
+

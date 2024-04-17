@@ -1,10 +1,13 @@
+from typing import Any
+
 from django.core.mail import send_mail
 from django.shortcuts import render
 from django.utils.html import strip_tags
 from django.template.loader import render_to_string
 import jwt
-from drf_spectacular.utils import extend_schema, OpenApiResponse
+from drf_spectacular.utils import extend_schema, OpenApiResponse, inline_serializer
 from django.conf import settings
+from rest_framework.utils.serializer_helpers import ReturnDict
 from rest_framework.views import APIView
 
 from rest_framework.response import Response
@@ -16,9 +19,10 @@ from my_apps.accounts.models import User
 from django.contrib.auth.views import PasswordResetView
 from rest_framework.request import Request
 from rest_framework_simplejwt.views import TokenObtainPairView
-from my_apps.shop.api_v1.permissions import AdminPermission, GuestUserPermission
+from my_apps.shop.api_v1.permissions import AdminPermission, GuestUserPermission, AuthUserPermission
 from rest_framework import generics, mixins, status
 from rest_framework.permissions import IsAuthenticated
+
 
 class MyTokenObtainPairView(TokenObtainPairView):
     """Custom clas for add user info in tocken response"""
@@ -123,60 +127,16 @@ class ChangePasswordView(APIView):
         return render(request, "accounts/pass_changed.html")
 
 
-@extend_schema(tags=["User"])
-class UserViewSet(
-    mixins.RetrieveModelMixin,
-    mixins.UpdateModelMixin,
-    mixins.DestroyModelMixin,
-    mixins.ListModelMixin,
-    GenericViewSet,
-):
-    """
-    API endpoint that allows users to be viewed.
-    """
-
-    class UserUrlSerializer(serializers.ModelSerializer):
-        class Meta:
-            model = User
-
-            fields = [
-                "id",
-                "url",
-                "email",
-                "first_name",
-                "middle_name",
-                "last_name",
-                "address",
-                "dob",
-                "gender",
-                "role",
-                "notice",
-                "get_age",
-            ]
-
-        gender = serializers.CharField(source="get_gender_display")
-        role = serializers.CharField(source="get_role_display")
-
-    queryset = User.objects.all().order_by("-date_joined")
-    serializer_class = UserUrlSerializer
-    permission_classes = [IsAuthenticated, AdminPermission]
-
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        self.perform_destroy(instance)
-        data = {"detail": "Deleted", "code": "deleted"}
-        return Response(status=status.HTTP_204_NO_CONTENT, data=data)
-
-
 @extend_schema(tags=["Accounts"])
 class CreateUserView(generics.CreateAPIView):
     """
     API endpoint that allows to create user.
     """
 
-    permission_classes = [IsAuthenticated,
-                          # GuestUserPermission
-                          ]
+    permission_classes = [
+        IsAuthenticated,
+        # GuestUserPermission
+    ]
 
     class RegistrationSerializer(serializers.ModelSerializer):
         role = serializers.CharField(source="get_role_display")
@@ -208,8 +168,7 @@ class CreateUserView(generics.CreateAPIView):
             user.save()
             return user
 
-    @extend_schema(tags=["Accounts"],
-                   request=RegistrationSerializer())
+    @extend_schema(tags=["Accounts"], request=RegistrationSerializer())
     def post(self, request):
         serializer = self.RegistrationSerializer(data=request.data)
         if serializer.is_valid():
@@ -240,3 +199,203 @@ class CreateUserView(generics.CreateAPIView):
             return
 
         return True
+
+
+@extend_schema(tags=["Auth_user"])
+class GetAuthUserInfo(APIView):
+    permission_classes = [IsAuthenticated, AuthUserPermission]
+
+    class UserSerializer(serializers.ModelSerializer):
+        class UkrPostaSerializer(serializers.Serializer):
+            class Meta:
+                model = User
+                fields = ["town", "postOffice"]
+
+            town = serializers.CharField(
+                source="ukr_poshta_town",
+            )
+            postOffice = serializers.CharField(source="ukr_poshta_post_office")
+
+            def update(self, instance, validated_data):
+                instance.ukr_poshta_post_office = validated_data.get(
+                    "ukr_poshta_post_office", instance.ukr_poshta_post_office
+                )
+                instance.ukr_poshta_town = validated_data.get(
+                    "ukr_poshta_town", instance.ukr_poshta_town
+                )
+                instance.save()
+                return instance
+
+        class NovaPoshtaSerializer(serializers.Serializer):
+            class Meta:
+                model = User
+                fields = ["town", "postOffice"]
+
+            town = serializers.CharField(source="nova_poshta_town")
+            postOffice = serializers.CharField(source="nova_poshta_post_office")
+
+            def update(self, instance, validated_data):
+                instance.nova_poshta_town = validated_data.get(
+                    "nova_poshta_town", instance.nova_poshta_town
+                )
+                instance.nova_poshta_post_office = validated_data.get(
+                    "nova_poshta_post_office", instance.nova_poshta_post_office
+                )
+                instance.save()
+                return instance
+
+        class AddressSerializer(serializers.ModelSerializer):
+            class Meta:
+                model = User
+                fields = [
+                    "town",
+                    "street",
+                    "building",
+                    "flat",
+                ]
+
+            town = serializers.CharField(source="address_town")
+            street = serializers.CharField(source="address_street")
+            building = serializers.CharField(source="address_building")
+            flat = serializers.CharField(source="address_flat")
+
+            def update(self, instance, validated_data):
+                instance.address_town = validated_data.get("address_town", instance.address_town)
+                instance.address_street = validated_data.get(
+                    "address_street", instance.address_street
+                )
+                instance.address_building = validated_data.get(
+                    "address_building", instance.address_building
+                )
+                instance.address_flat = validated_data.get("address_flat", instance.address_flat)
+                instance.save()
+                return instance
+
+        novaPoshta = serializers.SerializerMethodField()
+        ukrPoshta = serializers.SerializerMethodField()
+        address = serializers.SerializerMethodField()
+        gender = serializers.CharField(source="get_gender_display")
+        role = serializers.CharField(source="get_role_display")
+
+        class Meta:
+            model = User
+            fields = [
+                "first_name",
+                "last_name",
+                "mobile",
+                "dob",
+                "address",
+                "novaPoshta",
+                "ukrPoshta",
+                "gender",
+                "role",
+                "notice",
+                "get_age",
+            ]
+
+        def get_novaPoshta(self, obj) -> ReturnDict[Any, Any]:
+            serializer = self.NovaPoshtaSerializer(obj, context=self.context)
+            return serializer.data
+
+        def get_ukrPoshta(self, obj) -> ReturnDict[Any, Any]:
+            serializer = self.UkrPostaSerializer(obj, context=self.context)
+            return serializer.data
+
+        def get_address(self, obj) -> ReturnDict[Any, Any]:
+            serializer = self.AddressSerializer(obj, context=self.context)
+            return serializer.data
+
+    class OutputAuthUserSerializer(serializers.ModelSerializer):
+        novaPoshta = inline_serializer(
+            name="novaPoshta",
+            required=False,
+            fields={
+                "nova_poshta_town": serializers.CharField(required=False),
+                "nova_poshta_post_office": serializers.CharField(required=False),
+            },
+        )
+        ukrPoshta = inline_serializer(
+            name="ukrPoshta",
+            required=False,
+            fields={
+                "ukr_poshta_town": serializers.CharField(required=False),
+                "ukr_poshta_post_office": serializers.CharField(required=False),
+            },
+        )
+        address = inline_serializer(
+            name="address",
+            required=False,
+            fields={
+                "address_town": serializers.CharField(required=False),
+                "address_street": serializers.CharField(required=False),
+                "address_building": serializers.CharField(required=False),
+                "address_flat": serializers.CharField(required=False),
+            },
+        )
+        gender = serializers.CharField(source="get_gender_display")
+        role = serializers.CharField(source="get_role_display")
+
+        class Meta:
+            model = User
+            fields = [
+
+
+                "first_name",
+                "last_name",
+                "mobile",
+                "dob",
+                "address",
+                "novaPoshta",
+                "ukrPoshta",
+                "gender",
+                "role",
+                "notice",
+                "get_age",
+            ]
+
+    @extend_schema(
+        responses={
+            200: OutputAuthUserSerializer,
+        },
+    )
+    def get(self, request):
+        user: User = request.user
+        return Response(self.UserSerializer(user).data)
+
+    @extend_schema(
+        request=OutputAuthUserSerializer,
+        responses={
+            200: OutputAuthUserSerializer,
+        },
+    )
+    def patch(self, request, *args, **kwargs):
+        user: User = request.user
+        serializer = self.UserSerializer(user, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        nova_poshta_data = serializer.initial_data.get("novaPoshta")
+        if nova_poshta_data:
+            nova_poshta_serializer = self.UserSerializer.NovaPoshtaSerializer(
+                user, data=nova_poshta_data, partial=True
+            )
+            if nova_poshta_serializer.is_valid():
+                nova_poshta_serializer.save()
+
+        ukr_poshta_data = serializer.initial_data.get("ukrPoshta")
+        if ukr_poshta_data:
+            ukr_poshta_serializer = self.UserSerializer.UkrPostaSerializer(
+                user, data=ukr_poshta_data, partial=True
+            )
+            if ukr_poshta_serializer.is_valid():
+                ukr_poshta_serializer.save()
+
+        address_data = serializer.initial_data.get("address")
+        if address_data:
+            address_serializer = self.UserSerializer.AddressSerializer(
+                user, data=address_data, partial=True
+            )
+            if address_serializer.is_valid():
+                address_serializer.save()
+
+        return Response(serializer.data)

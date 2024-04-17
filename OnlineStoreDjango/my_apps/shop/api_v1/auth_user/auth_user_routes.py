@@ -13,4 +13,6 @@ urlpatterns = [
         auth_user_views.AuthComments.as_view(),
         name="auth_comments",
     ),
+
+
 ]
