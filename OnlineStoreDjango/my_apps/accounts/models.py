@@ -115,6 +115,7 @@ class User(AbstractUser):  # type: ignore
             today.year - self.dob.year - ((today.month, today.day) < (self.dob.month, self.dob.day))
         )
 
+
     def __str__(self) -> str:
         """Return full name."""
         return self.get_full_name()

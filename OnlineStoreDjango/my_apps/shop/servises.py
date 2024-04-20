@@ -10,8 +10,8 @@ def order_create(*args, **kwargs) -> Order:
         another_person["another_person_lastName"] = a_p.get("lastName")
         another_person["another_person_tel"] = a_p.get("tel")
 
-    first_name = kwargs.pop("firstName")
-    last_name = kwargs.pop("lastName")
+    first_name = kwargs.pop("firstName", None)
+    last_name = kwargs.pop("lastName", None)
 
     obj = Order(first_name=first_name, last_name=last_name, **kwargs, **another_person)
 
@@ -21,7 +21,11 @@ def order_create(*args, **kwargs) -> Order:
     for item in items:
         product = Product.get_by_id(item.get("product"))
         quantity = item.get("quantity")
-        OrderItem(order=obj, product=product, quantity=quantity).save()
+        is_secret_present = item.get("is_secret_present", False)
+        price = product.discount or product.price
+        img = product.img
+        name = product.name
+        OrderItem(order=obj, product=product, quantity=quantity, is_secret_present=is_secret_present, price=price,
+                  img=img, name=name).save()
 
     return obj
-

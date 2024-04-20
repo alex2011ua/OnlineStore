@@ -588,11 +588,6 @@ def store_info(request):
 
 
 class OrderCreate(APIView):
-    class InputItemsSerializer(serializers.ModelSerializer):
-        class Meta:
-            fields = "__all__"
-            model = OrderItem
-
     class OutputOrderSerializer(serializers.ModelSerializer):
         class Meta:
             fields = "__all__"
@@ -600,8 +595,8 @@ class OrderCreate(APIView):
 
     class InputOrderSerializer(serializers.Serializer):
         # Rrequired
-        firstName = serializers.CharField(max_length=50)
-        lastName = serializers.CharField(max_length=50)
+        firstName = serializers.CharField(max_length=50, required=False)
+        lastName = serializers.CharField(max_length=50, required=False)
         email = serializers.EmailField()
         tel = PhoneNumberField(region="UA")
         delivery_type = serializers.ChoiceField(choices=Order.DELIVERY_TYPE)
@@ -634,6 +629,7 @@ class OrderCreate(APIView):
             fields={
                 "quantity": serializers.IntegerField(),
                 "product": serializers.UUIDField(),
+                "is_secret_present": serializers.BooleanField(required=False),
             },
         )
 

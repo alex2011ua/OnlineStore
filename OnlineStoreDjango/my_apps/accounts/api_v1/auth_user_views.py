@@ -1,27 +1,25 @@
 from typing import Any
 
+import jwt
+from django.conf import settings
 from django.core.mail import send_mail
 from django.shortcuts import render
-from django.utils.html import strip_tags
 from django.template.loader import render_to_string
-import jwt
-from drf_spectacular.utils import extend_schema, OpenApiResponse, inline_serializer
-from django.conf import settings
+from django.utils.html import strip_tags
+from drf_spectacular.utils import OpenApiResponse, extend_schema, inline_serializer
+from rest_framework import generics, mixins, serializers, status
+from rest_framework.exceptions import NotAuthenticated
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.request import Request
+from rest_framework.response import Response
 from rest_framework.utils.serializer_helpers import ReturnDict
 from rest_framework.views import APIView
-
-from rest_framework.response import Response
-from rest_framework import serializers, status
-from rest_framework.exceptions import NotAuthenticated
-from rest_framework.viewsets import GenericViewSet
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 from my_apps.accounts.models import User
-from django.contrib.auth.views import PasswordResetView
-from rest_framework.request import Request
-from rest_framework_simplejwt.views import TokenObtainPairView
-from my_apps.shop.api_v1.permissions import AdminPermission, GuestUserPermission, AuthUserPermission
-from rest_framework import generics, mixins, status
-from rest_framework.permissions import IsAuthenticated
+from my_apps.shop.api_v1.permissions import AdminPermission, AuthUserPermission, GuestUserPermission
+from .services import get_user_order_history
+from ...shop.models import Order, Product, OrderItem
 
 
 class MyTokenObtainPairView(TokenObtainPairView):
@@ -280,6 +278,7 @@ class GetAuthUserInfo(APIView):
         class Meta:
             model = User
             fields = [
+                "email",
                 "first_name",
                 "last_name",
                 "mobile",
@@ -338,8 +337,7 @@ class GetAuthUserInfo(APIView):
         class Meta:
             model = User
             fields = [
-
-
+                "email",
                 "first_name",
                 "last_name",
                 "mobile",
@@ -398,4 +396,66 @@ class GetAuthUserInfo(APIView):
             if address_serializer.is_valid():
                 address_serializer.save()
 
+        return Response(serializer.data)
+
+
+class GetOrdersHistory(APIView):
+    """
+    Return orders history for current user
+    """
+    permission_classes = [IsAuthenticated, AuthUserPermission]
+
+    class OutputSwaggerSerializer(serializers.ModelSerializer):
+        products = inline_serializer(
+            name="product",
+            required=False,
+            fields={
+                "product": serializers.UUIDField(required=False),
+                "name": serializers.CharField(required=False),
+                "img": serializers.CharField(required=False),
+                "quantity": serializers.IntegerField(required=False),
+                "price": serializers.DecimalField(required=False, max_digits=10, decimal_places=2),
+            },
+        )
+
+        class Meta:
+            model = Order
+            fields = (
+                "id",
+                "status",
+                "order_date",
+                "products",
+            )
+
+    class OutputOrdersHistory(serializers.ModelSerializer):
+        class Meta:
+            model = Order
+            fields = (
+                "id",
+                "status",
+                "order_date",
+                "products",
+            )
+
+        class OredrItemSerializer(serializers.ModelSerializer):
+            class Meta:
+                model = OrderItem
+                fields = ("product", "name", "img", "quantity", "price")
+
+        products = serializers.SerializerMethodField()
+
+        def get_products(self, obj):
+            serializer = self.OredrItemSerializer(
+                obj.orderitem_set.all(), many=True, context={"request": self.context.get("request")}
+            )
+            return serializer.data
+
+    @extend_schema(
+        tags=["Auth_user"],
+        responses={200: OutputSwaggerSerializer},
+    )
+    def get(self, request):
+        user: User = request.user
+        orders = Order.objects.filter(customer=user)
+        serializer = self.OutputOrdersHistory(orders, many=True, context={"request": request})
         return Response(serializer.data)

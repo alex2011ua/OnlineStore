@@ -108,6 +108,8 @@ class Basket(APIView):
                 "quantity",
                 "count",
                 "isSecretPresent",
+                "isInCart",
+                "isInWishlist",
             )
 
         id = serializers.UUIDField()
@@ -119,6 +121,11 @@ class Basket(APIView):
         quantity = serializers.IntegerField()
         isSecretPresent = serializers.BooleanField()
         count = serializers.IntegerField()
+        isInCart = serializers.BooleanField(default=True)
+        isInWishlist = serializers.SerializerMethodField()
+
+        def get_isInWishlist(self, obj):
+            return obj.get("product").is_in_wishlist(self.context["request"].user)
 
     @extend_schema(
         tags=["Auth_user"],
@@ -164,6 +171,7 @@ class Basket(APIView):
                     "quantity": product.quantity,
                     "isSecretPresent": item.is_secret_present,
                     "count": item.quantity,
+                    "product": product,
                 }
             )
         serializer = self.BasketOutputSerializer(data, many=True, context={"request": request})
@@ -255,11 +263,35 @@ class Wishlist(APIView):
 
     permission_classes = [IsAuthenticated, AuthUserPermission]
 
+    class ProductWishlilstSerializer(serializers.ModelSerializer):
+        category = serializers.CharField(source="get_category_name")
+        isInCart = serializers.SerializerMethodField()
+        isInWishlist = serializers.SerializerMethodField()
+
+        class Meta:
+            model = Product
+            fields = [
+                "id",
+                "name",
+                "quantity",
+                "img",
+                "category",
+                "price",
+                "discount",
+                "global_rating",
+                "isInCart",
+                "isInWishlist",
+            ]
+
+        def get_isInCart(self, obj):
+            return obj.is_in_cart(self.context["request"].user)
+
+        def get_isInWishlist(self, obj):
+            return obj.is_in_wishlist(self.context["request"].user)
+
     def get(self, request):
         user: User = request.user
-        products = ProductSerializer(user.wishlist.all(), many=True, context={"request": request})  # type: ignore
-        for product in products.data:
-            product["wishlist"] = True
+        products = self.ProductWishlilstSerializer(user.wishlist.all(), many=True, context={"request": request})  # type: ignore
         return Response(products.data)
 
     def post(self, request):
@@ -292,6 +324,7 @@ class DelListProducts(APIView):
         responses={204: []},
     )
     def post(self, request):
+        user: User = request.user
         serializer = self.InputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         list_id = serializer.validated_data["product_id"]
@@ -319,4 +352,3 @@ class AuthComments(APIView):
             author=request.user, product=product, **serializer.validated_data
         )
         return Response(comment.id)
-

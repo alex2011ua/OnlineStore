@@ -104,11 +104,6 @@ class GoogleAuthURL(APIView):
     class OutputGoogleAuthURLSerializer(serializers.Serializer):
         authorization_url = serializers.CharField(max_length=1000)
 
-    @extend_schema(
-        summary="Get url to send request to gogle",
-        tags=["Accounts"],
-        responses=OutputGoogleAuthURLSerializer,
-    )
     def get(self, request):
         flow = google_auth_oauthlib.flow.Flow.from_client_config(
             client_config={
@@ -118,7 +113,6 @@ class GoogleAuthURL(APIView):
                     "auth_uri": os.getenv("GOOGLE_AUTH_URI"),
                     "token_uri": os.getenv("GOOGLE_TOKEN_URI"),
                     "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-                    # "client_secret": os.getenv("GOOGLE_CLIENT_SECRET"),
                 }
             },
             scopes=SCOPES,
@@ -127,12 +121,7 @@ class GoogleAuthURL(APIView):
         BASE_URL = os.getenv("BASE_URL")
         print("redirect_uri:", f"{BASE_URL}api/v1/accounts/google_auth")
         flow.redirect_uri = f"{BASE_URL}api/v1/accounts/google_auth"
-
-        # Generate URL for request to Google's OAuth 2.0 server.
-        # Use kwargs to set optional request parameters.
-        authorization_url, state = flow.authorization_url(
-
-        )
+        authorization_url, state = flow.authorization_url()
 
         return Response(data={"authorization_url": authorization_url})
 
@@ -142,10 +131,6 @@ class GoogleAuth(APIView):
         # state = serializers.CharField(max_length=1000, required=False)
         code = serializers.CharField(max_length=1000)
 
-    @extend_schema(
-        summary="Get an code using Google authorization.",
-        tags=["Accounts"],
-    )
     def get(self, request):
         code = request.GET.get("code")
         return Response(data={"code": code})

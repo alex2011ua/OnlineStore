@@ -104,7 +104,7 @@ class Product(models.Model):  # type: ignore
     description = models.TextField(_("product description"), blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     price = models.DecimalField(_("price"), max_digits=10, decimal_places=2)
-    discount = models.DecimalField(_("discount"), max_digits=5, decimal_places=2, default=0)
+    discount = models.DecimalField(_("discount"), max_digits=10, decimal_places=2, default=0)
     quantity = models.PositiveIntegerField(_("count of product"), default=0)
     img = models.ImageField(_("product image"), upload_to="foto/products/", blank=True, null=True)
     img1 = models.ImageField(
@@ -475,9 +475,11 @@ class Order(models.Model):
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(_("quantity product"), default=0)
+    quantity = models.PositiveIntegerField(_("quantity product"), default=0)  # todo dell default
     is_secret_present = models.BooleanField(default=False)
-    # todo add sell price
+    price = models.DecimalField(_("price"), max_digits=10, decimal_places=2, default=0)  # todo dell default
+    img = models.ImageField(_("product image"), upload_to="foto/products/", blank=True, null=True)
+    name = models.CharField(_("name"), max_length=150, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         """modify total_amount in order (add to order)"""

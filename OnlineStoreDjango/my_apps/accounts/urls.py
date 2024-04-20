@@ -3,8 +3,5 @@ from . import views
 
 
 urlpatterns = [
-    path('', views.google_login),
-    path("ok/", views.ok),
-    path("log/", views.log),
 
 ]

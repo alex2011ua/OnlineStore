@@ -28,8 +28,8 @@ urlpatterns = [
     path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("token/verify/", TokenVerifyView.as_view(), name="token_verify"),
 
-    path("google_auth_url/", GoogleAuthURL.as_view()),
-    path("google_auth/", GoogleAuth.as_view()),
+    #path("google_auth_url/", GoogleAuthURL.as_view()),
+    #path("google_auth/", GoogleAuth.as_view()),
     path("google_auth_code/", GoogleAuthCode.as_view()),
     # path(
     #     "password-reset/",
