@@ -6,7 +6,12 @@ from django.core.mail import send_mail
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
-from drf_spectacular.utils import OpenApiResponse, extend_schema, inline_serializer
+from drf_spectacular.utils import (
+    OpenApiResponse,
+    extend_schema,
+    inline_serializer,
+    OpenApiParameter,
+)
 from rest_framework import generics, mixins, serializers, status
 from rest_framework.exceptions import NotAuthenticated
 from rest_framework.permissions import IsAuthenticated
@@ -20,6 +25,7 @@ from my_apps.accounts.models import User
 from my_apps.shop.api_v1.permissions import AdminPermission, AuthUserPermission, GuestUserPermission
 from .services import get_user_order_history
 from ...shop.models import Order, Product, OrderItem
+from my_apps.shop.api_v1.paginators import StandardResultsSetPagination
 
 
 class MyTokenObtainPairView(TokenObtainPairView):
@@ -399,33 +405,42 @@ class GetAuthUserInfo(APIView):
         return Response(serializer.data)
 
 
-class GetOrdersHistory(APIView):
+class GetOrdersHistory(APIView, StandardResultsSetPagination):
     """
     Return orders history for current user
     """
+
     permission_classes = [IsAuthenticated, AuthUserPermission]
 
-    class OutputSwaggerSerializer(serializers.ModelSerializer):
-        products = inline_serializer(
-            name="product",
-            required=False,
+    class BaseOutputSerializer(serializers.Serializer):
+        """For SWAGGER representation"""
+
+        count = serializers.IntegerField()
+        next = serializers.CharField(max_length=1000)
+        previous = serializers.CharField(max_length=1000)
+
+        results = inline_serializer(
+            many=True,
+            name="results",
             fields={
-                "product": serializers.UUIDField(required=False),
-                "name": serializers.CharField(required=False),
-                "img": serializers.CharField(required=False),
-                "quantity": serializers.IntegerField(required=False),
-                "price": serializers.DecimalField(required=False, max_digits=10, decimal_places=2),
+                "id": serializers.IntegerField(),
+                "status": serializers.CharField(),
+                "order_date": serializers.DateTimeField(),
+                "products": inline_serializer(
+                    name="product",
+                    required=False,
+                    fields={
+                        "product": serializers.UUIDField(required=False),
+                        "name": serializers.CharField(required=False),
+                        "img": serializers.CharField(required=False),
+                        "quantity": serializers.IntegerField(required=False),
+                        "price": serializers.DecimalField(
+                            required=False, max_digits=10, decimal_places=2
+                        ),
+                    },
+                ),
             },
         )
-
-        class Meta:
-            model = Order
-            fields = (
-                "id",
-                "status",
-                "order_date",
-                "products",
-            )
 
     class OutputOrdersHistory(serializers.ModelSerializer):
         class Meta:
@@ -452,10 +467,30 @@ class GetOrdersHistory(APIView):
 
     @extend_schema(
         tags=["Auth_user"],
-        responses={200: OutputSwaggerSerializer},
+        responses={
+            200: BaseOutputSerializer,
+            401: OpenApiResponse(description="Authentication credentials were not provided."),
+        },
+        parameters=[
+            OpenApiParameter(
+                name="page",
+                location=OpenApiParameter.QUERY,
+                description="page",
+                required=False,
+                type=int,
+            ),
+            OpenApiParameter(
+                name="page_size",
+                location=OpenApiParameter.QUERY,
+                description="page",
+                required=False,
+                type=int,
+            ),
+        ],
     )
     def get(self, request):
         user: User = request.user
         orders = Order.objects.filter(customer=user)
-        serializer = self.OutputOrdersHistory(orders, many=True, context={"request": request})
-        return Response(serializer.data)
+        results = self.paginate_queryset(orders, request, view=self)
+        serializer = self.OutputOrdersHistory(results, many=True, context={"request": request})
+        return self.get_paginated_response(serializer.data)
