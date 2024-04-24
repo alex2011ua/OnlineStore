@@ -355,10 +355,10 @@ class Order(models.Model):
     id = models.AutoField(primary_key=True, editable=False)
 
     STATUS_CHOICES = (
-        ("new_order", "new order"),
-        ("ready", "ready"),
-        ("on_its_way", "on its way"),
-        ("delivered", "delivered"),
+        ("staffing", "staffing"),
+        ("sending", "sending"),
+        ("returning", "returning"),
+        ("completing", "completing"),
     )
     DELIVERY_TYPE = [
         ("self", "self"),
@@ -369,7 +369,7 @@ class Order(models.Model):
         ("courier", "courier"),
         ("post_office", "post_office"),
     ]
-    status = models.CharField(choices=STATUS_CHOICES, default="new_order", max_length=11)
+    status = models.CharField(choices=STATUS_CHOICES, default="staffing", max_length=11)
 
     customer = models.ForeignKey(
         User, related_name="customer", on_delete=models.CASCADE, blank=True, null=True
