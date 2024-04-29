@@ -97,6 +97,7 @@ class Category(models.Model):  # type: ignore
 
 
 class Product(models.Model):  # type: ignore
+    RATING = [(i, i) for i in range(0, 6)]
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(_("product name"), max_length=200)
     slug = models.SlugField(_("product slug"), unique=True)
@@ -130,19 +131,19 @@ class Product(models.Model):  # type: ignore
     )  # add products to user wishlist
     basket = models.ManyToManyField(User, through="BasketItem")  # type: ignore
     global_rating = models.IntegerField(
-        _("global rating"), choices=[(i, i) for i in range(0, 6)], default=0
+        _("global rating"), choices=RATING, default=0
     )
     quality = models.IntegerField(
-        _("quality rating"), choices=[(i, i) for i in range(0, 11)], default=0
+        _("quality rating"), choices=RATING, default=0
     )
     rating_price = models.IntegerField(
-        _("price"), choices=[(i, i) for i in range(0, 11)], default=0
+        _("price"), choices=RATING, default=0
     )
     photo_match = models.IntegerField(
-        _("photo_match"), choices=[(i, i) for i in range(0, 11)], default=0
+        _("photo_match"), choices=RATING, default=0
     )
     description_match = models.IntegerField(
-        _("description_match"), choices=[(i, i) for i in range(0, 11)], default=0
+        _("description_match"), choices=RATING, default=0
     )
     _1 = models.IntegerField("number of reviews 1*", blank=True, null=True)
     _2 = models.IntegerField("number of reviews 2*", blank=True, null=True)

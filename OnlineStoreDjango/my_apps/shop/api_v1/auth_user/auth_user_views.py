@@ -7,30 +7,24 @@ from drf_spectacular.utils import (
     OpenApiResponse,
     extend_schema,
     extend_schema_view,
-    inline_serializer,
 )
-from rest_framework import serializers, status, viewsets
-from rest_framework.exceptions import NotFound, ParseError
-from rest_framework.generics import CreateAPIView
+from rest_framework import serializers, status
+from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.utils.serializer_helpers import ReturnDict
 from rest_framework.views import APIView
 
 from my_apps.accounts.models import User
 from my_apps.shop.api_v1.auth_user.serializers_auth_user import (
     ProductIdSerializer,
-    ProductSerializer,
 )
-from my_apps.shop.api_v1.guest_user.guest_user_views import ListSearchGifts
 from my_apps.shop.api_v1.permissions import AuthUserPermission
 from my_apps.shop.api_v1.serializers import (
     BasketItemSerializer,
     BasketSerializer,
-    CreateReviewSerializer,
-    ReviewSerializer,
 )
 from my_apps.shop.models import BasketItem, Product, Review
+from my_apps.shop.utils import inline_serializer
 
 
 @extend_schema(tags=["Auth_user"])
@@ -291,7 +285,8 @@ class Wishlist(APIView):
 
     def get(self, request):
         user: User = request.user
-        products = self.ProductWishlilstSerializer(user.wishlist.all(), many=True, context={"request": request})  # type: ignore
+        products = self.ProductWishlilstSerializer(user.wishlist.all(), many=True,
+                                                   context={"request": request})  # type: ignore
         return Response(products.data)
 
     def post(self, request):
@@ -336,19 +331,53 @@ class DelListProducts(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-@extend_schema(
-    tags=["Auth_user"],
-    request=ReviewSerializer,
-)
 class AuthComments(APIView):
     permission_classes = [IsAuthenticated, AuthUserPermission]
 
+    class InputAuthCommentsSerializer(serializers.Serializer):
+        comment = serializers.CharField()
+        rate = serializers.ChoiceField(choices=Product.RATING)
+        criterias = inline_serializer(
+            name="InputCriterias",
+            fields={
+                "description_match": serializers.ChoiceField(choices=Product.RATING),
+                "photo_match": serializers.ChoiceField(choices=Product.RATING),
+                "price": serializers.ChoiceField(choices=Product.RATING),
+                "quality": serializers.ChoiceField(choices=Product.RATING),
+            },
+        )
+
+    class OutputAuthCommentsSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Review
+            fields = [
+                "id",
+            ]
+
+    @extend_schema(
+        tags=["Auth_user"],
+        request=InputAuthCommentsSerializer,
+        responses={201: OutputAuthCommentsSerializer,
+                   404: OpenApiResponse(description="detail"),
+                   },
+    )
     def post(self, request, pk):
         product = Product.get_by_id(pk)
-        data = request.data.copy()
-        serializer = CreateReviewSerializer(data=data)
+        #todo add verifycation that user by that product and not leave another comment
+        serializer = self.InputAuthCommentsSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        comment = serializer.validated_data["comment"]
+        rate_by_stars = serializer.validated_data["rate"]
+        criterias = serializer.validated_data["criterias"]
+
         comment = Review.objects.create(
-            author=request.user, product=product, **serializer.validated_data
+            author=request.user,
+            product=product,
+            text=comment,
+            rate_by_stars=rate_by_stars,
+            quality=criterias.pop("quality"),
+            price=criterias.pop("price"),
+            photo_match=criterias.pop("photo_match"),
+            description_match=criterias.pop("description_match"),
         )
-        return Response(comment.id)
+        return Response(status=status.HTTP_201_CREATED, data={"id": comment.id})

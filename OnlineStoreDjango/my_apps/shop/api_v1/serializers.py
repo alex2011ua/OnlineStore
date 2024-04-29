@@ -137,11 +137,6 @@ class ProductCardSerializer(serializers.ModelSerializer):
         return list_link
 
 
-class CreateReviewSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Review
-        fields = ["text", "rate_by_stars", "quality", "description_match", "photo_match", "price"]
-
 
 class ReviewSerializer(serializers.ModelSerializer):
     author = serializers.CharField(source="get_user_name")
