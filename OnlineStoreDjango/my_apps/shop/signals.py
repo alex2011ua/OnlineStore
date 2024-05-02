@@ -20,9 +20,9 @@ def refresh_rating(sender, instance, **kwargs) -> None:
     rating_price: list = []
     quality: list = []
     for i in all_rates:  # todo make more clarify
-        if i.rate_by_stars:
-            global_rating.append(i.rate_by_stars)
-            stars[i.rate_by_stars].append(1)
+        if i.global_rate:
+            global_rating.append(i.global_rate)
+            stars[i.global_rate].append(1)
         if i.description_match:
             description_match.append(i.description_match)
         if i.price:

@@ -98,6 +98,7 @@ class Category(models.Model):  # type: ignore
 
 class Product(models.Model):  # type: ignore
     RATING = [(i, i) for i in range(0, 6)]
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(_("product name"), max_length=200)
     slug = models.SlugField(_("product slug"), unique=True)
@@ -262,6 +263,9 @@ class BasketItem(models.Model):
 
 
 class Review(models.Model):
+
+    RATING = [(i, i) for i in range(0, 6)]
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="reviews")
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="reviews")
@@ -271,18 +275,18 @@ class Review(models.Model):
     updated_at = models.DateTimeField(_("update"), auto_now=True)
 
     global_rate = models.IntegerField(
-        _("rate by stars"), choices=[(i, i) for i in range(0, 6)], default=0
+        _("global_rating"), choices=RATING, default=0
     )
 
     quality = models.IntegerField(
-        _("quality rating"), choices=[(i, i) for i in range(0, 11)], default=0
+        _("quality rating"), choices=RATING, default=0
     )
-    price = models.IntegerField(_("price"), choices=[(i, i) for i in range(0, 11)], default=0)
+    price = models.IntegerField(_("price"), choices=RATING, default=0)
     photo_match = models.IntegerField(
-        _("foto quality rating"), choices=[(i, i) for i in range(0, 11)], default=0
+        _("foto quality rating"), choices=RATING, default=0
     )
     description_match = models.IntegerField(
-        _("description match"), choices=[(i, i) for i in range(0, 11)], default=0
+        _("description match"), choices=RATING, default=0
     )
 
     def get_user_name(self):
