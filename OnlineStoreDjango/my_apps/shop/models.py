@@ -270,7 +270,7 @@ class Review(models.Model):
     date = models.DateTimeField(_("create"), auto_now_add=True)
     updated_at = models.DateTimeField(_("update"), auto_now=True)
 
-    rate_by_stars = models.IntegerField(
+    global_rate = models.IntegerField(
         _("rate by stars"), choices=[(i, i) for i in range(0, 6)], default=0
     )
 
@@ -307,7 +307,7 @@ class Review(models.Model):
         }
 
     def __str__(self):
-        return f"{self.rate_by_stars} stars - {self.product.name}"
+        return f"{self.global_rate} stars - {self.product.name}"
 
 
 class Banner(models.Model):  # type: ignore

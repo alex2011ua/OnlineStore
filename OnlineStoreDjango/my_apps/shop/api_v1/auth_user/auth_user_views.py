@@ -367,14 +367,14 @@ class AuthComments(APIView):
         serializer = self.InputAuthCommentsSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         comment = serializer.validated_data["comment"]
-        rate_by_stars = serializer.validated_data["rate"]
+        global_rate = serializer.validated_data["rate"]
         criterias = serializer.validated_data["criterias"]
 
         comment = Review.objects.create(
             author=request.user,
             product=product,
             text=comment,
-            rate_by_stars=rate_by_stars,
+            global_rate=global_rate,
             quality=criterias.pop("quality"),
             price=criterias.pop("price"),
             photo_match=criterias.pop("photo_match"),

@@ -143,7 +143,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Review
-        fields = ["id", "author", "text", "rate_by_stars", "rate_by_criteria"]
+        fields = ["id", "author", "text", "global_rate", "rate_by_criteria"]
 
 
 class BannerSerializer(serializers.ModelSerializer):

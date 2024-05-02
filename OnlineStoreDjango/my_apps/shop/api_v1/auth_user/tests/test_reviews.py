@@ -45,7 +45,7 @@ class TestReviewProduct:
             reverse("auth_comments", kwargs={"pk": product.id}),
             {
                 "text": "string1",
-                "rate_by_stars": 2,
+                "global_rate": 2,
                 "quality": 2,
                 "description_match": "2",
                 "photo_match": 2,
@@ -69,7 +69,7 @@ class TestReviewProduct:
             reverse("auth_comments", kwargs={"pk": product.id}),
             {
                 "text": "string1",
-                "rate_by_stars": 4,
+                "global_rate": 4,
                 "quality": 4,
                 "description_match": "4",
                 "photo_match": 4,

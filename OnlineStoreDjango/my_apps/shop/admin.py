@@ -76,7 +76,7 @@ class ReviewAdmin(admin.ModelAdmin):
         "product",
         "author",
         "text",
-        "rate_by_stars",
+        "global_rate",
         "quality",
         "description_match",
         "photo_match",
