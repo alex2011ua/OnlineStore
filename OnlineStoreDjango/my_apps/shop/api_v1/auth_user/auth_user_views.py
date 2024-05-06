@@ -381,3 +381,4 @@ class AuthComments(APIView):
             description_match=criterias.pop("description_match"),
         )
         return Response(status=status.HTTP_201_CREATED, data={"id": comment.id})
+

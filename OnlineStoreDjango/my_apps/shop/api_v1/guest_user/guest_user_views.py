@@ -21,11 +21,12 @@ from my_apps.shop.models import Banner, Category, Order, OrderItem, Product, Set
 
 from ..paginators import StandardResultsSetPagination
 from ..serializers import (
+    AuthProductCatalogSerializer,
     BannerSerializer,
     CategorySerializer,
     ProductCardSerializer,
     ProductCatalogSerializer,
-    ReviewSerializer, AuthProductCatalogSerializer,
+    ReviewSerializer,
 )
 from ...servises import order_create
 from ...utils import inline_serializer
@@ -210,7 +211,7 @@ class ListSearchGifts(APIView, StandardResultsSetPagination):  # type: ignore
             serializer = AuthProductCatalogSerializer(
                 results,
                 context={"request": request, "products": products_in_basket, "wishlist": wishlist},
-                many=True
+                many=True,
             )
         else:
             serializer = ProductCatalogSerializer(results, context={"request": request}, many=True)
@@ -423,11 +424,45 @@ class GetProductsByCategory(viewsets.ViewSet, StandardResultsSetPagination):  # 
         )  # get filtered and sorted product
         results = self.paginate_queryset(filtered_products, request, view=self)
         if request.user.is_authenticated:
-            serializer = AuthProductCatalogSerializer(results, context={"request": request}, many=True)
+            serializer = AuthProductCatalogSerializer(
+                results, context={"request": request}, many=True
+            )
         else:
             serializer = ProductCatalogSerializer(results, context={"request": request}, many=True)
         serializer = ProductCatalogSerializer(results, context={"request": request}, many=True)
         return self.get_paginated_response(serializer.data)
+
+
+class OutputGetProductSerializer(serializers.ModelSerializer):
+    category = serializers.CharField(source="get_category_name")
+    isInCart = serializers.SerializerMethodField()
+    isInWishlist = serializers.SerializerMethodField()
+    category_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Product
+        fields = [
+            "id",
+            "name",
+            "quantity",
+            "img",
+            "category",
+            "category_url",
+            "price",
+            "discount",
+            "global_rating",
+            "isInCart",
+            "isInWishlist",
+        ]
+
+    def get_isInCart(self, obj):
+        return obj.is_in_cart(self.context["request"].user)
+
+    def get_isInWishlist(self, obj):
+        return obj.is_in_wishlist(self.context["request"].user)
+
+    def get_category_url(self, obj):
+        return obj.category.slug
 
 
 @extend_schema(tags=["Guest_user"])
@@ -435,12 +470,12 @@ class GetProduct(viewsets.ReadOnlyModelViewSet):
     """Get product by ID."""
 
     queryset = Product.objects.all()
-    serializer_class = ProductCardSerializer
+    serializer_class = OutputGetProductSerializer
     pagination_class = None
 
     @extend_schema(
         tags=["Guest_user"],
-        responses={200: ProductCatalogSerializer},
+        responses={200: OutputGetProductSerializer},
         parameters=[
             OpenApiParameter(
                 name="product_id",
@@ -459,12 +494,15 @@ class GetProduct(viewsets.ReadOnlyModelViewSet):
             basket = request.user.basket.all()
             products_in_basket = [product.product for product in basket]
             wishlist = request.user.wishlist.all()
-            serializer = AuthProductCatalogSerializer(queryset,
-                                many=True,
-                                context={"request": request, "products": products_in_basket, "wishlist": wishlist}
-                                )
+            serializer = AuthProductCatalogSerializer(
+                queryset,
+                many=True,
+                context={"request": request, "products": products_in_basket, "wishlist": wishlist},
+            )
         else:
-            serializer = ProductCatalogSerializer(queryset, many=True, context={"request": request})
+            serializer = OutputGetProductSerializer(
+                queryset, many=True, context={"request": request}
+            )
 
         return Response(serializer.data)
 
@@ -477,6 +515,7 @@ class GetProductsByID(APIView):
         category = serializers.CharField(source="get_category_name")
         isInCart = serializers.SerializerMethodField()
         isInWishlist = serializers.SerializerMethodField()
+        category_url = serializers.SerializerMethodField()
 
         class Meta:
             model = Product
@@ -486,6 +525,7 @@ class GetProductsByID(APIView):
                 "quantity",
                 "img",
                 "category",
+                "category_url",
                 "price",
                 "discount",
                 "global_rating",
@@ -499,10 +539,16 @@ class GetProductsByID(APIView):
         def get_isInWishlist(self, obj):
             return obj.is_in_wishlist(self.context["request"].user)
 
-    @extend_schema(tags=["Guest_user"],
-                   summary="get products by id",
-                   request=InputSerializer,
-                   responses={200: OutputSerializer},)
+        @staticmethod
+        def get_category_url(obj):
+            return obj.category.slug
+
+    @extend_schema(
+        tags=["Guest_user"],
+        summary="get products by id",
+        request=InputSerializer,
+        responses={200: OutputSerializer},
+    )
     def post(self, request, *args, **kwargs):
         serializer = self.InputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -513,10 +559,11 @@ class GetProductsByID(APIView):
             basket = request.user.basket.all()
             products_in_basket = [product.product for product in basket]
             wishlist = request.user.wishlist.all()
-            serializer = self.OutputSerializer(queryset,
-                                                      many=True,
-                                                      context={"request": request, "products": products_in_basket, "wishlist": wishlist}
-                                                      )
+            serializer = self.OutputSerializer(
+                queryset,
+                many=True,
+                context={"request": request, "products": products_in_basket, "wishlist": wishlist},
+            )
         else:
             serializer = self.OutputSerializer(queryset, many=True, context={"request": request})
 

@@ -238,3 +238,58 @@ class GoogleAuthCode(APIView):
                 "refresh": token.get("refresh"),
             }
         )
+
+class FacebookAuthCode(APIView):
+    class InputFacebookAuthSerializer(serializers.Serializer):
+        code = serializers.CharField(max_length=1000)
+        redirect_uri = serializers.CharField(max_length=1000, required=False)
+
+    class OutputFacebookAuthSerializer(serializers.Serializer):
+        first_name = serializers.CharField(max_length=150)
+        last_name = serializers.CharField(max_length=150)
+        email = serializers.EmailField()
+        token = serializers.CharField(max_length=150)
+
+    def get(self, request):
+        code = request.GET.get("code")
+        print(code)
+        return Response(data={"code": code})
+
+    @extend_schema(
+        summary="Change code to authenticate user.",
+        tags=["Accounts"],
+        request=InputFacebookAuthSerializer,
+        responses=OutputFacebookAuthSerializer,
+    )
+    def post(self, request):
+        def get_user_data(access_token):
+            user_url = 'https://graph.facebook.com/v19.0/me'
+            params = {'access_token': access_token, 'fields': 'id,name,email,first_name,last_name'}
+            response = requests.get(user_url, params=params)
+            if response.ok:
+                return response.json()
+            else:
+                raise Exception("Ошибка получения данных пользователя")
+
+        serializer = self.InputFacebookAuthSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        code = serializer.validated_data["code"]
+        redirect_uri = serializer.validated_data.get("redirect_uri")
+        token_url = 'https://graph.facebook.com/v19.0/oauth/access_token'
+        payload = {
+            'client_id': os.getenv("FACEBOOK_ID"),
+            'client_secret': os.getenv("FACEBOOK_SECRET"),
+            'code': code,
+            'redirect_uri': redirect_uri
+        }
+        response = requests.get(token_url, params=payload)
+        if response.ok:
+            return response.json()  # Возвращает объект с токеном доступа и другими данными
+        else:
+            raise Exception(f"Ошибка при обмене кода авторизации: {response.text}")
+
+
+from django.shortcuts import render
+
+def facebook(request):
+    return render(request, "oauth/facebook_start.html")
