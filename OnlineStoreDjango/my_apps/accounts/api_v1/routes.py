@@ -6,8 +6,7 @@ from .guest_user_views import (
     GoogleAuth,
     GoogleAuthCode,
     GoogleAuthURL,
-    FacebookAuthCode,
-    facebook,
+    FacebookToken,
 )
 from .auth_user_views import (
     MyTokenObtainPairView,
@@ -33,8 +32,8 @@ urlpatterns = [
     #path("google_auth_url/", GoogleAuthURL.as_view()),
     #path("google_auth/", GoogleAuth.as_view()),
     path("google_auth_code/", GoogleAuthCode.as_view()),
-    path("facebook_auth_code/", FacebookAuthCode.as_view()),
-    path("facebook/", facebook),
+    path("facebook_token/", FacebookToken.as_view()),
+
     # path(
     #     "password-reset/",
     #     PasswordResetAPI.as_view(template_name="accounts/password_reset.html"),

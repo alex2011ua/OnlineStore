@@ -469,8 +469,62 @@ class OutputGetProductSerializer(serializers.ModelSerializer):
 class GetProduct(viewsets.ReadOnlyModelViewSet):
     """Get product by ID."""
 
+    class ProductCardSerializer2(serializers.ModelSerializer):
+        category = serializers.CharField(source="get_category_name")
+        code = serializers.CharField(source="slug")
+        img = serializers.SerializerMethodField()
+        isInCart = serializers.SerializerMethodField()
+        isInWishlist = serializers.SerializerMethodField()
+
+        # faq = serializers.CharField(source="get_faq_list")
+
+        class Meta:
+            model = Product
+            fields = [
+                "id",
+                "name",
+                "category",
+                "price",
+                "discount",
+                "img",
+                "quantity",
+                "code",
+                "global_rating",
+                "description",
+                # "faq",
+                "rate_by_criteria",
+                "rate_by_stars",
+                "isInCart",
+                "isInWishlist",
+            ]
+
+        def get_isInCart(self, obj):
+            return obj.is_in_cart(self.context["request"].user)
+
+        def get_isInWishlist(self, obj):
+            return obj.is_in_wishlist(self.context["request"].user)
+
+        def get_reviews(self, obj):
+            serializer = ReviewSerializer(obj.get_reviews(), context=self.context, many=True)
+            return serializer.data
+
+        #
+        # def get_faq(self, obj) -> str:
+        #     list_faq: list = obj.get_list_faq()
+        #     return json.dumps(list_faq)
+
+        def get_img(self, obj):
+            request = self.context.get("request")
+            domain = request.build_absolute_uri("/")
+
+            list_foto = obj.images()
+            list_link = []
+            for image in list_foto:
+                list_link.append(domain + image)
+            return list_link
+
     queryset = Product.objects.all()
-    serializer_class = OutputGetProductSerializer
+    serializer_class = ProductCardSerializer2
     pagination_class = None
 
     @extend_schema(
