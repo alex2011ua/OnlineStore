@@ -470,6 +470,7 @@ class GetProduct(viewsets.ReadOnlyModelViewSet):
     """Get product by ID."""
 
     class ProductCardSerializer2(serializers.ModelSerializer):
+        categoryUrl = serializers.CharField(source="get_category_slug")
         category = serializers.CharField(source="get_category_name")
         code = serializers.CharField(source="slug")
         img = serializers.SerializerMethodField()
@@ -484,6 +485,7 @@ class GetProduct(viewsets.ReadOnlyModelViewSet):
                 "id",
                 "name",
                 "category",
+                "categoryUrl",
                 "price",
                 "discount",
                 "img",

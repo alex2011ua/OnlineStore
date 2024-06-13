@@ -192,6 +192,9 @@ class Product(models.Model):  # type: ignore
     def get_category_name(self):
         return self.category.name
 
+    def get_category_slug(self) -> str:
+        return self.category.slug
+
     def get_reviews(self):
         return self.reviews.select_related("customer").all()
 

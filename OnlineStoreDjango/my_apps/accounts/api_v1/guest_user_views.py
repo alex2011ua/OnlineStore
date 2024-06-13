@@ -269,8 +269,7 @@ class FacebookToken(APIView):
             if response.ok:
                 return response.json()
             else:
-                raise Exception("Ошибка получения данных пользователя")
-
+                raise NotFound(response.text)
         serializer = self.InputFacebookAuthSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         access_token = serializer.validated_data["accessToken"]
