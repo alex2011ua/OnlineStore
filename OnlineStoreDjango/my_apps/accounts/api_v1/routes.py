@@ -1,5 +1,5 @@
 from django.urls import include, path
-
+from django.contrib.auth import views as auth_views
 from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView
 
 from .guest_user_views import (
@@ -12,13 +12,14 @@ from .auth_user_views import (
     MyTokenObtainPairView,
 )
 
-#
-# from django.contrib.auth.views import (
-#
-#     PasswordResetDoneView,
-#     PasswordResetConfirmView,
-#     PasswordResetCompleteView,
-# )
+from .views import ResetPasswordView
+from django.contrib.auth.views import (
+
+    PasswordResetDoneView,
+    PasswordResetConfirmView,
+    PasswordResetCompleteView,
+
+)
 
 urlpatterns = [
 
@@ -34,24 +35,24 @@ urlpatterns = [
     path("google_auth_code/", GoogleAuthCode.as_view()),
     path("facebook_token/", FacebookToken.as_view()),
 
-    # path(
-    #     "password-reset/",
-    #     PasswordResetAPI.as_view(template_name="accounts/password_reset.html"),
-    #     name="password-reset",
-    # ),
-    # path(
-    #     "password-reset/done/",
-    #     PasswordResetDoneView.as_view(template_name="accounts/password_reset_done.html"),
-    #     name="password_reset_done",
-    # ),
-    # path(
-    #     "password-reset-confirm/<uidb64>/<token>/",
-    #     PasswordResetConfirmView.as_view(template_name="accounts/password_reset_confirm.html"),
-    #     name="password_reset_confirm",
-    # ),
-    # path(
-    #     "password-reset-complete/",
-    #     PasswordResetCompleteView.as_view(template_name="accounts/password_reset_complete.html"),
-    #     name="password_reset_complete",
-    # ),
+    path(
+        "password-reset/",
+        ResetPasswordView.as_view(template_name="accounts/password_reset.html"),
+        name="password-reset",
+    ),
+    path(
+        "password-reset/done/",
+        PasswordResetDoneView.as_view(template_name="accounts/password_reset_done.html"),
+        name="password_reset_done",
+    ),
+    path(
+        "password-reset-confirm/<uidb64>/<token>/",
+        PasswordResetConfirmView.as_view(template_name="accounts/password_reset_confirm.html"),
+        name="password_reset_confirm",
+    ),
+    path(
+        "password-reset-complete/",
+        PasswordResetCompleteView.as_view(template_name="accounts/password_reset_complete.html"),
+        name="password_reset_complete",
+    ),
 ]
